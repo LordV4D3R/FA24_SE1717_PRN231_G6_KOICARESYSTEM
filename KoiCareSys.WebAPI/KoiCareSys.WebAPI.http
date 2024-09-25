@@ -1,0 +1,6 @@
+@KoiCareSys.WebAPI_HostAddress = http://localhost:5014
+
+GET {{KoiCareSys.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

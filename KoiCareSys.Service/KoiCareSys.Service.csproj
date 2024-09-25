@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KoiCareSys.Common\KoiCareSys.Common.csproj" />
+    <ProjectReference Include="..\KoiCareSys.Data\KoiCareSys.Data.csproj" />
+  </ItemGroup>
+
+</Project>
