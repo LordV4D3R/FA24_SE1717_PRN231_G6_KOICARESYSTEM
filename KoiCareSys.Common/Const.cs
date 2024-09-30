@@ -11,7 +11,7 @@
         #region Success Codes
 
         public static int SUCCESS_CREATE_CODE = 1;
-        public static string SUCCESS_CREATE_MSG = "Save data success";
+        public static string SUCCESS_CREATE_MSG = "Create data success";
         public static int SUCCESS_READ_CODE = 1;
         public static string SUCCESS_READ_MSG = "Get data success";
         public static int SUCCESS_UPDATE_CODE = 1;
@@ -25,7 +25,7 @@
         #region Fail code
 
         public static int FAIL_CREATE_CODE = -1;
-        public static string FAIL_CREATE_MSG = "Save data fail";
+        public static string FAIL_CREATE_MSG = "Create data fail";
         public static int FAIL_READ_CODE = -1;
         public static string FAIL_READ_MSG = "Get data fail";
         public static int FAIL_UPDATE_CODE = -1;
