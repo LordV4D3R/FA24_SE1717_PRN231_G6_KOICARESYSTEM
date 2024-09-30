@@ -10,16 +10,18 @@ namespace KoiCareSys.Data.Base
 {
     public class GenericRepository<T> where T : class
     {
-        protected ApplicationDbContext _context;
-
+        protected readonly ApplicationDbContext _context;
+        protected readonly DbSet<T> _dbSet;
         public GenericRepository()
         {
             _context ??= new ApplicationDbContext();
+            _dbSet = _context.Set<T>();
         }
 
         public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
+            _dbSet = _context.Set<T>();
         }
 
         public List<T> GetAll()
