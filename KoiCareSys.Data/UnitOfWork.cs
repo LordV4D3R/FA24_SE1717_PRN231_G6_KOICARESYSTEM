@@ -12,15 +12,34 @@ namespace KoiCareSys.Data
     {
         private ApplicationDbContext _unitOfWorkContext;
         private KoiReposiory koiReposiory;
+        private FeedingScheduleRepository feedingScheduleRepository;
+        private PondRepository pondRepository;
+        private UserRepository userRepository;
         public UnitOfWork()
         {
-            _unitOfWorkContext = new ApplicationDbContext();
         }
 
+        public UserRepository User
+        {
+            get { return userRepository ??= new UserRepository(); }
 
+        }
+      
         public KoiReposiory Koi
         {
-            get { return koiReposiory ??= new KoiReposiory(_unitOfWorkContext); }
+            get { return koiReposiory ??= new KoiReposiory(); }
+
+        }
+
+        public PondRepository Pond
+        {
+            get { return pondRepository ??= new PondRepository(); }
+
+        }
+
+        public FeedingScheduleRepository FeedingSchedule
+        {
+            get { return feedingScheduleRepository ??= new FeedingScheduleRepository(); }
 
         }
 
