@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using KoiCareSys.Data.Models;
 using KoiCareSys.Service.Service.Interface;
 using KoiCareSys.Service.Service;
 using KoiCareSys.Data.DTO;
@@ -19,27 +18,27 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Unit>>> getAll()
+        public async Task<ActionResult<IEnumerable<UnitDTO>>> getAll()
         {
             return NoContent();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Unit>> getById(Guid id)
+        public async Task<ActionResult<UnitDTO>> getById(Guid id)
         {
             return NoContent();
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, User user)
+        public async Task<IActionResult> Update(Guid id, UnitDTO request)
         {
             return NoContent();
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> Create([FromBody] RegisterNewUserDTO request)
+        public async Task<ActionResult<UnitDTO>> Create([FromBody] UnitDTO request)
         {
             return NoContent();
         }

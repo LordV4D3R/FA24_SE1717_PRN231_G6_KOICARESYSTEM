@@ -18,7 +18,7 @@ public partial class Measurement
     public DateTime DateRecord { get; set; }
 
     [Column("note")]
-    public string Note { get; set; }
+    public string? Note { get; set; }
 
     [Column("pond_id")]
     [ForeignKey("Pond")]
