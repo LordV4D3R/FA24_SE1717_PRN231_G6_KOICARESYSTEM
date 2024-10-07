@@ -1,5 +1,6 @@
 using KoiCareSys.Data.Repository;
 using KoiCareSys.Data.Repository.Interface;
+using KoiCareSys.Service.Mappings;
 using KoiCareSys.WebAPI.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,9 @@ builder.Services.AddCors(options =>
                   .AllowCredentials();
         });
 });
+
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 

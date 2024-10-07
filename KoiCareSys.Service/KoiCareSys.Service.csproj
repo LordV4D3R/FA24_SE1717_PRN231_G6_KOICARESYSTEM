@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\KoiCareSys.Common\KoiCareSys.Common.csproj" />
     <ProjectReference Include="..\KoiCareSys.Data\KoiCareSys.Data.csproj" />
   </ItemGroup>

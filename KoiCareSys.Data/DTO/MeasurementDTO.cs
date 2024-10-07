@@ -16,7 +16,7 @@ namespace KoiCareSys.Data.DTO
         
         public DateTime DateRecord { get; set; }
 
-        public List<MeasureDataDTO> MeasureDataList { get; set; }
+        public List<MeasureDataDTO> MeasureData { get; set; }
 
         public string? Note { get; set; }
 

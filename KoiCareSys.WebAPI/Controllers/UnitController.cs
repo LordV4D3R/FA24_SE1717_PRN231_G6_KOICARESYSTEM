@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using KoiCareSys.Service.Service.Interface;
-using KoiCareSys.Service.Service;
 using KoiCareSys.Data.DTO;
+using KoiCareSys.Serivice.Base;
 
 namespace KoiCareSys.WebAPI.Controllers
 {
@@ -9,44 +9,44 @@ namespace KoiCareSys.WebAPI.Controllers
     [ApiController]
     public class UnitController : ControllerBase
     {
-        private readonly IUnitService unitService;
+        private readonly IUnitService _unitService;
 
 
-        public UnitController()
+        public UnitController(IUnitService unitService)
         {
-            unitService = new UnitService();
+            _unitService = unitService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UnitDTO>>> getAll()
+        public async Task<IBusinessResult> GetAll()
         {
-            return NoContent();
+            return await _unitService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UnitDTO>> getById(Guid id)
+        public async Task<IBusinessResult> GetById(string id)
         {
-            return NoContent();
+            return await _unitService.GetById(id);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, UnitDTO request)
+        public async Task<IBusinessResult> Update(UnitDTO request)
         {
-            return NoContent();
+            return await _unitService.Save(request);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UnitDTO>> Create([FromBody] UnitDTO request)
+        public async Task<IBusinessResult> Create([FromBody] UnitDTO request)
         {
-            return NoContent();
+            return await _unitService.Save(request);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IBusinessResult> Delete(string id)
         {
-            return NoContent();
+            return await _unitService.DeleteById(id);
         }
         
     }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using KoiCareSys.Data.Models;
 using KoiCareSys.Service.Service.Interface;
-using KoiCareSys.Service.Service;
 using KoiCareSys.Data.DTO;
+using KoiCareSys.Serivice.Base;
 
 namespace KoiCareSys.WebAPI.Controllers
 {
@@ -10,44 +9,44 @@ namespace KoiCareSys.WebAPI.Controllers
     [ApiController]
     public class MeasurementController : ControllerBase
     {
-        private readonly IMeasurementService measurementService;
+        private readonly IMeasurementService _measurementService;
 
 
-        public MeasurementController()
+        public MeasurementController(IMeasurementService measurementService)
         {
-            measurementService = new MeasurementService();
+            _measurementService = measurementService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MeasurementDTO>>> getAll()
+        public async Task<IBusinessResult> GetAll()
         {
-            return NoContent();
+            return await _measurementService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<MeasurementDTO>> getById(Guid id)
+        public async Task<IBusinessResult> GetById(string id)
         {
-            return NoContent();
+            return await _measurementService.GetById(id);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, MeasurementDTO request)
+        public async Task<IBusinessResult> Update(MeasurementDTO request)
         {
-            return NoContent();
+            return await _measurementService.Save(request);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<MeasurementDTO>> Create([FromBody] MeasurementDTO request)
+        public async Task<IBusinessResult> Create([FromBody] MeasurementDTO request)
         {
-            return NoContent();
+            return await _measurementService.Save(request);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IBusinessResult> Delete(string id)
         {
-            return NoContent();
+            return await _measurementService.DeleteById(id);
         }
     }
 }
