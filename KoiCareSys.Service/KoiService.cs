@@ -1,5 +1,4 @@
-﻿
-using KoiCareSys.Common;
+﻿using KoiCareSys.Common;
 using KoiCareSys.Data;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Serivice.Base;

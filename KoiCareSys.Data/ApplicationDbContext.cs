@@ -31,22 +31,24 @@ namespace KoiCareSys.Data
 
 
         #endregion DbSet
+
+        public static string GetConnectionString(string connectionStringName)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            string connectionString = config.GetConnectionString(connectionStringName);
+            return connectionString;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(local);Database=KoiCareDb;uid=sa;pwd=12345;Trusted_Connection=True;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer(GetConnectionString("DefaultConnection"));
             }
-        }
-
-        private string GetConnectionString()
-        {
-            IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-            var strConn = config["ConnectionStrings:DefaultConnection"];
-            return strConn;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
