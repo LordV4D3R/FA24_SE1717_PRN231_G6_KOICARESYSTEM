@@ -1,5 +1,6 @@
 using KoiCareSys.Data.Repository;
 using KoiCareSys.Data.Repository.Interface;
+using KoiCareSys.Service.Mappings;
 using KoiCareSys.WebAPI.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,22 @@ builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository
 //Add Configuration
 builder.Services.ConfigAddDbContext();
 
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7250")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
 var app = builder.Build();
 
 
@@ -25,6 +42,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 

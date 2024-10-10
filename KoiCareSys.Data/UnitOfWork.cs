@@ -15,6 +15,10 @@ namespace KoiCareSys.Data
         private FeedingScheduleRepository feedingScheduleRepository;
         private PondRepository pondRepository;
         private UserRepository userRepository;
+        private MeasurementRepository measurementRepository;
+        private MeasureDataRepository measureDataRepository;
+        private UnitRepository unitRepository;
+
         public UnitOfWork()
         {
         }
@@ -41,6 +45,21 @@ namespace KoiCareSys.Data
         {
             get { return feedingScheduleRepository ??= new FeedingScheduleRepository(); }
 
+        }
+
+        public MeasurementRepository Measurement
+        {
+            get { return measurementRepository ??= new MeasurementRepository();}
+        }
+
+        public MeasureDataRepository MeasureData
+        {
+            get { return measureDataRepository ??= new MeasureDataRepository(); }
+        }
+
+        public UnitRepository Unit
+        {
+            get { return unitRepository ??= new UnitRepository(); }
         }
 
         ////TO-DO CODE HERE/////////////////
