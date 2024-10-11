@@ -32,17 +32,46 @@ namespace KoiCareSys.Data
 
         #endregion DbSet
 
+        /*        public static string GetConnectionString(string connectionStringName)
+                {
+                    var config = new ConfigurationBuilder()
+                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                        .AddJsonFile("appsettings.json")
+                        .Build();
+
+                    string connectionString = config.GetConnectionString(connectionStringName);
+                    return connectionString;
+                }*/
         public static string GetConnectionString(string connectionStringName)
         {
+            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var directoryInfo = new DirectoryInfo(basePath);
+
+            while (directoryInfo != null && !File.Exists(Path.Combine(directoryInfo.FullName, "KoiCareSys.WebApi", "appsettings.json")))
+            {
+                directoryInfo = directoryInfo.Parent;
+            }
+
+            if (directoryInfo == null)
+            {
+                throw new FileNotFoundException("The configuration file 'appsettings.json' was not found in the project directory or any parent directories.");
+            }
+
+            var configPath = Path.Combine(directoryInfo.FullName, "KoiCareSys.WebApi", "appsettings.json");
+
             var config = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
+                .SetBasePath(directoryInfo.FullName)
+                .AddJsonFile(configPath, optional: false, reloadOnChange: true)
                 .Build();
 
-            string connectionString = config.GetConnectionString(connectionStringName);
+            string? connectionString = config.GetConnectionString(connectionStringName);
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException($"Connection string '{connectionStringName}' is not found in the configuration.");
+            }
+
             return connectionString;
         }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
