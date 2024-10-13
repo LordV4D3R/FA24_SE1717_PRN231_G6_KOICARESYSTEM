@@ -38,6 +38,12 @@ public partial class Pond
     [Column("img_url")]
     [Url]
     public string ImgUrl { get; set; }
+    
+    [Column("note")]
+    public string Note { get; set; }
+
+    [Column("description")]
+    public string Description { get; set; }
 
     [Column("status")]
     [EnumDataType(typeof(Enums.PondStatus))]

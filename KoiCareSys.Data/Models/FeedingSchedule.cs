@@ -20,6 +20,12 @@ public partial class FeedingSchedule
     [Column("food_amount")]
     public decimal? FoodAmount { get; set; }
 
+    [Column("food_type")]
+    public string? FoodType { get; set; }
+
+    [Column("note")]
+    public string? Note { get; set; }
+
     [Column("koi_id")]
     [ForeignKey("Koi")]
     public Guid KoiId { get; set; }

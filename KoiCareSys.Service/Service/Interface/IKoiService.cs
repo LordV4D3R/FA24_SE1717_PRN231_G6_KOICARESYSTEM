@@ -1,4 +1,4 @@
-﻿using KoiCareSys.Data.DTO;
+using KoiCareSys.Data.DTO;
 using KoiCareSys.Serivice.Base;
 using System;
 using System.Collections.Generic;
