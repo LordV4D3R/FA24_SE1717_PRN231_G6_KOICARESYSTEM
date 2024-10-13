@@ -23,26 +23,25 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IBusinessResult> GetById(string id)
+        public async Task<IBusinessResult> GetById(Guid id)
         {
             return await _koiService.GetById(id);
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IBusinessResult> Update(MeasurementDTO request)
-        //{
-        //    return await _koiService.Save(request);
-        //}
+        [HttpPut("{id}")]
+        public async Task<IBusinessResult> Update([FromBody] KoiDTO request)
+        {
+            return await _koiService.Save(request);
+        }
 
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IBusinessResult> Create([FromBody] AddNewKoiDTO request)
+        public async Task<IBusinessResult> Create([FromBody] KoiDTO request)
         {
             return await _koiService.Save(request);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IBusinessResult> Delete(string id)
+        public async Task<IBusinessResult> Delete(Guid id)
         {
             return await _koiService.DeleteById(id);
         }

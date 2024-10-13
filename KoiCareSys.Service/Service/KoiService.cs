@@ -22,7 +22,7 @@ namespace KoiCareSys.Service.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IBusinessResult> DeleteById(string id)
+        public async Task<IBusinessResult> DeleteById(Guid id)
         {
             #region Business rule
 
@@ -70,12 +70,11 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        public async Task<IBusinessResult> GetById(string id)
+        public async Task<IBusinessResult> GetById(Guid id)
         {
             #region Business ruke
             #endregion
-            Guid.TryParse(id, out var result);
-            var koi = await _unitOfWork.Koi.GetByIdAsync(result);
+            var koi = await _unitOfWork.Koi.GetByIdAsync(id);
             if (koi == null)
             {
                 return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
@@ -88,36 +87,37 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        public async Task<IBusinessResult> Save(AddNewKoiDTO addNewKoiDTO)
+        public async Task<IBusinessResult> Save(KoiDTO koiDTO)
         {
             //Unit unit = _mapper.Map<Unit>(unitDTO);
             var koi = new Koi
             {
-                Name = addNewKoiDTO.Name,
-                Physique = addNewKoiDTO.Physique,
-                Age = addNewKoiDTO.Age,
-                Length = addNewKoiDTO.Length,
-                Sex = addNewKoiDTO.Sex,
-                Category = addNewKoiDTO.Category,
-                InPondSince = addNewKoiDTO.InPondSince, // May 15, 2022
-                PurchasePrice = addNewKoiDTO.PurchasePrice,
-                Status = addNewKoiDTO.Status,
-                ImgUrl = addNewKoiDTO.ImgUrl,
-                Origin = addNewKoiDTO.Origin,
-                Breed = addNewKoiDTO.Breed,
-                PondId = addNewKoiDTO.PondId,
+                Name = koiDTO.Name,
+                Physique = koiDTO.Physique,
+                Age = koiDTO.Age,
+                Length = koiDTO.Length,
+                Sex = koiDTO.Sex,
+                Category = koiDTO.Category,
+                InPondSince = koiDTO.InPondSince, // May 15, 2022
+                PurchasePrice = koiDTO.PurchasePrice,
+                Status = koiDTO.Status,
+                ImgUrl = koiDTO.ImgUrl,
+                Origin = koiDTO.Origin,
+                Breed = koiDTO.Breed,
+                PondId = koiDTO.PondId,
             };
 
             try
             {
                 int result = -1;
 
-                var koiTmp = _unitOfWork.Koi.GetById(koi.Id);
+                var koiTmp = _unitOfWork.Koi.GetById(koiDTO.Id);
                 if (koiTmp != null)
                 {
                     #region Business rule
                     #endregion Business rule
-                    result = await _unitOfWork.Koi.UpdateAsync(koi);
+                    _unitOfWork.Koi.Update(koi);
+                    result = await _unitOfWork.SaveChangesWithTransactionAsync();
                     if (result > 0)
                     {
                         return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
@@ -132,7 +132,8 @@ namespace KoiCareSys.Service.Service
                     #region Business rule
                     #endregion Business rule
 
-                    result = await _unitOfWork.Koi.CreateAsync(koi);
+                    _unitOfWork.Koi.Create(koi);
+                    result = await _unitOfWork.SaveChangesWithTransactionAsync();
                     if (result > 0)
                     {
                         return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);

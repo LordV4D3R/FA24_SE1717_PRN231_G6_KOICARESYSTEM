@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KoiCareSys.Data.DTO
 {
-    public class AddNewKoiDTO
+    public class KoiDTO
     {
+        [AllowNull]
+        public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
 

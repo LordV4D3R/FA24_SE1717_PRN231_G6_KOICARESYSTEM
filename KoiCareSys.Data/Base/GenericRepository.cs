@@ -48,7 +48,7 @@ namespace KoiCareSys.Data.Base
         {
             var tracker = _context.Attach(entity);
             tracker.State = EntityState.Modified;
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public async Task<int> UpdateAsync(T entity)

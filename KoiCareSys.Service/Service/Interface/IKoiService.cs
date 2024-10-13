@@ -11,8 +11,8 @@ namespace KoiCareSys.Service.Service.Interface
     public interface IKoiService
     {
         Task<IBusinessResult> GetAll();
-        Task<IBusinessResult> GetById(string id);
-        Task<IBusinessResult> Save(AddNewKoiDTO addNewKoiDTO);
-        Task<IBusinessResult> DeleteById(string id);
+        Task<IBusinessResult> GetById(Guid id);
+        Task<IBusinessResult> Save(KoiDTO koiDTO);
+        Task<IBusinessResult> DeleteById(Guid id);
     }
 }
