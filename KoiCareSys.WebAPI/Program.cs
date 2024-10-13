@@ -1,5 +1,8 @@
+using KoiCareSys.Data;
 using KoiCareSys.Data.Repository;
 using KoiCareSys.Data.Repository.Interface;
+using KoiCareSys.Service.Service;
+using KoiCareSys.Service.Service.Interface;
 using KoiCareSys.WebAPI.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add Repository
+builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
+builder.Services.AddScoped<IKoiRepository, KoiReposiory>();
+
+// Add Service
+builder.Services.AddScoped<IKoiService, KoiService>();
 
 //Add Configuration
 builder.Services.ConfigAddDbContext();
