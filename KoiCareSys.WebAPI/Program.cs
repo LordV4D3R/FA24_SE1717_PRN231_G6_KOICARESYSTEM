@@ -13,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 //Add Configuration
 builder.Services.ConfigAddDbContext();

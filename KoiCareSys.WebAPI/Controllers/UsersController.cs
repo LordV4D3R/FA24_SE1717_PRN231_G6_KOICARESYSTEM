@@ -34,7 +34,7 @@ namespace KoiCareSys.WebAPI.Controllers
                 var result = await userService.GetAll(search);
                 if (result.Status > 0)
                 {
-                    return Ok(result.Data as List<User>);
+                    return Ok(result.Data as IEnumerable<User>);
                 }
                 else { return NotFound(result.Message); }
             }
