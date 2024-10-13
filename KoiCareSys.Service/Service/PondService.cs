@@ -16,8 +16,9 @@ namespace KoiCareSys.Service.Service
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public PondService()
+        public PondService(UnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IBusinessResult> GetAll(String? search)
@@ -58,7 +59,7 @@ namespace KoiCareSys.Service.Service
                     Status = dto.Status,
                     IsQualified = dto.IsQualified,
                     UserId = dto.UserId
-                    
+
                 };
                 if (await _unitOfWork.Pond.CreateAsync(create) > 0)
                     return new BusinessResult(Const.SUCCESS_CREATE_CODE, "Create pond success", create);

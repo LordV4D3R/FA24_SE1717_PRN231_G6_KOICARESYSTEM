@@ -56,13 +56,13 @@ namespace KoiCareSys.Service.Service
             var kois = await _unitOfWork.Koi.GetAllAsync();
             if (kois == null)
             {
-                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG);
+                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
             }
             else
             {
                 //var measurementDTOs = _mapper.Map<MeasurementDTO>(kois);
                 //return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, measurementDTOs);
-                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, kois);
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, kois);
             }
         }
 

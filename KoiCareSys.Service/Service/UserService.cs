@@ -15,16 +15,18 @@ namespace KoiCareSys.Service.Service
     public class UserService : IUserService
     {
         private readonly UnitOfWork _unitOfWork;
-        public UserService()
+
+        public UserService(UnitOfWork unitOfWork)
         {
-            _unitOfWork ??= new UnitOfWork();
+            _unitOfWork = unitOfWork;
         }
+
         public async Task<IBusinessResult> GetAll(String? search)
         {
             try
             {
                 var users = _unitOfWork.User.GetAllUser(search ?? "");
-                if (users == null)               
+                if (users == null)
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, "User not found");
                 else
                     return new BusinessResult(Const.SUCCESS_READ_CODE, "Success", users);
@@ -45,12 +47,12 @@ namespace KoiCareSys.Service.Service
                 }
                 User create = new User()
                 {
-                     Email = request.Email,
-                     Password = request.Password,
-                     FullName = request.FullName,
-                     PhoneNumber = request.PhoneNumber,
-                     Role = request.Role,
-                     Status = request.Status,
+                    Email = request.Email,
+                    Password = request.Password,
+                    FullName = request.FullName,
+                    PhoneNumber = request.PhoneNumber,
+                    Role = request.Role,
+                    Status = request.Status,
 
                 };
                 if (await _unitOfWork.User.CreateAsync(create) > 0)

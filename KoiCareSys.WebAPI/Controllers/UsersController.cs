@@ -12,10 +12,9 @@ namespace KoiCareSys.WebAPI.Controllers
     {
         private readonly IUserService userService;
 
-
-        public UsersController()
+        public UsersController(IUserService userService)
         {
-            userService = new UserService();
+            this.userService = userService;
         }
 
         // GET: api/Users
@@ -99,7 +98,7 @@ namespace KoiCareSys.WebAPI.Controllers
                     return Ok(result.Data as User);
                 }
                 else { return NotFound(result.Message); }
-            } 
+            }
             catch
             {
                 return BadRequest();
