@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KoiCareSys.Data.Models;
 
@@ -20,6 +21,7 @@ public partial class MeasureData
     [Column("measurement_id")]
     [ForeignKey("Measurement")]
     public Guid MeasurementId { get; set; }
+    [JsonIgnore]
     public virtual Measurement Measurement { get; set; }
 
     [Column("unit_id")]

@@ -24,7 +24,7 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IBusinessResult> GetById(string id)
+        public async Task<IBusinessResult> GetById(Guid id)
         {
             return await _measurementService.GetById(id);
         }
@@ -44,7 +44,7 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IBusinessResult> Delete(string id)
+        public async Task<IBusinessResult> Delete(Guid id)
         {
             return await _measurementService.DeleteById(id);
         }

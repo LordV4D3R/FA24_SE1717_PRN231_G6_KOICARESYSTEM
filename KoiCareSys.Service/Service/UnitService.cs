@@ -34,7 +34,7 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        public async Task<IBusinessResult> GetById(string unitId)
+        public async Task<IBusinessResult> GetById(Guid unitId)
         {
             #region Business ruke
             #endregion
@@ -93,14 +93,14 @@ namespace KoiCareSys.Service.Service
                 return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
-        public async Task<IBusinessResult> DeleteById(string UnitNo)
+        public async Task<IBusinessResult> DeleteById(Guid unitId)
         {
             #region Business rule
 
             #endregion Business rule
             try
             {
-                var unit = await _unitOfWork.Unit.GetByIdAsync(UnitNo);
+                var unit = await _unitOfWork.Unit.GetByIdAsync(unitId);
                 if (unit == null)
                 {
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
