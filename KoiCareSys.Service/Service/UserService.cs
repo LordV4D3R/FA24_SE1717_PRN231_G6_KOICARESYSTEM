@@ -23,7 +23,7 @@ namespace KoiCareSys.Service.Service
         {
             try
             {
-                var users = _unitOfWork.User.GetAllUser(search ?? "");
+                var users = await _unitOfWork.User.GetAllUser(search ?? "");
                 if (users == null)               
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, "User not found");
                 else
