@@ -88,11 +88,22 @@ namespace KoiCareSys.Data.Base
             return await _context.SaveChangesAsync();
         }
 
-        public void Update(T entity)
+        //public void Update(T entity)
+        //{
+        //    var tracker = _context.Attach(entity);
+        //    tracker.State = EntityState.Modified;
+        //    _context.SaveChanges();
+        //}
+
+        public virtual void Update(T entityToUpdate)
         {
-            var tracker = _context.Attach(entity);
-            tracker.State = EntityState.Modified;
-            _context.SaveChanges();
+            var trackedEntities = _context.ChangeTracker.Entries<T>().ToList();
+            foreach (var trackedEntity in trackedEntities)
+            {
+                trackedEntity.State = EntityState.Detached;
+            }
+            _dbSet.Attach(entityToUpdate);
+            _context.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
         public async Task<int> UpdateAsync(T entity)

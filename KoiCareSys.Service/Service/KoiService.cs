@@ -10,9 +10,9 @@ namespace KoiCareSys.Service.Service
     public class KoiService : IKoiService
     {
         private readonly UnitOfWork _unitOfWork;
-        public KoiService()
+        public KoiService(UnitOfWork unitOfWork)
         {
-            _unitOfWork = new UnitOfWork();
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IBusinessResult> GetAll()

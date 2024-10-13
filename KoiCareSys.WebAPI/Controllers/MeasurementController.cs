@@ -30,7 +30,7 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IBusinessResult> Update(MeasurementDTO request)
         {
             return await _measurementService.Save(request);

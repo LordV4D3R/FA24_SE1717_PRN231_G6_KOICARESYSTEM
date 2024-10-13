@@ -29,7 +29,7 @@ builder.Services.AddScoped<IMeasurementRepository, MeasurementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Add Configuration
-builder.Services.ConfigAddDbContext();
+//builder.Services.ConfigAddDbContext();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

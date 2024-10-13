@@ -13,9 +13,9 @@ namespace KoiCareSys.Service.Service
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public MeasurementService(UnitOfWork measurementOfWork, IMapper mapper)
+        public MeasurementService(UnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = measurementOfWork;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -26,12 +26,12 @@ namespace KoiCareSys.Service.Service
             var measurements = await _unitOfWork.Measurement.GetAllAsync(includeProperties: "MeasureData");
             if (measurements == null)
             {
-                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG);
+                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
             }
             else
             {
                 var measurementDTOs = _mapper.Map<List<MeasurementDTO>>(measurements);
-                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, measurementDTOs);
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, measurementDTOs);
             }
         }
 
