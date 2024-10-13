@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KoiCareSys.Service.Service.Interface
+namespace KoiCareSys.Data.Repository.Interface
 {
-    public interface IPondService
+    public interface IMeasurementRepository
     {
 
     }

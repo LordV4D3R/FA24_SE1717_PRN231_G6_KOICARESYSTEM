@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using KoiCareSys.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Service.Service.Interface;
 using KoiCareSys.Service.Service;
@@ -29,8 +22,19 @@ namespace KoiCareSys.WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] string? search)
         {
-            var result = await userService.GetAll(search);
-            return Ok(result.Data);
+            try
+            {
+                var result = await userService.GetAll(search);
+                if (result.Status > 0)
+                {
+                    return Ok(result.Data as List<User>);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // GET: api/Users/5
@@ -78,8 +82,30 @@ namespace KoiCareSys.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser([FromBody] RegisterNewUserDTO request)
         {
-            var result = await userService.Create(request);
-            return Created("", result.Data);
+            try
+            {
+                var profile = new RegisterNewUserDTO
+                {
+                    Email = request.Email,
+                    Password = request.Password,
+                    FullName = request.FullName,
+                    PhoneNumber = request.PhoneNumber,
+                    Role = request.Role,
+                    Status = request.Status
+                };
+                var result = await userService.Create(profile);
+                if (result.Status > 0)
+                {
+                    return Ok(result.Data as User);
+                }
+                else { return NotFound(result.Message); }
+            } 
+            catch
+            {
+                return BadRequest();
+            }
+
+
         }
 
         /*
