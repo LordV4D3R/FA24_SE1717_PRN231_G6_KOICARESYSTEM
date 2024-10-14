@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KoiCareSys.Data.DTO;
+using KoiCareSys.Serivice.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,9 @@ namespace KoiCareSys.Service.Service.Interface
 {
     public interface IFeedingScheduleService
     {
+        Task<IBusinessResult> GetAll(String? search);
+        Task<IBusinessResult> Create(FeedingScheduleDTO request);
+        Task<IBusinessResult> GetById(Guid code);
+
     }
 }

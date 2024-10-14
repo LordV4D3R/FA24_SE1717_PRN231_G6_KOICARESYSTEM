@@ -30,7 +30,7 @@ namespace KoiCareSys.Data.Repository
             return await GetAllAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllUser(string search)
+        public async Task<IEnumerable<User>> GetAllUser(string? search)
         {
             Expression<Func<User, bool>> predicate = x => x.FullName.Contains(search) || x.Email.Contains(search);
             IQueryable<User> query = _dbSet.Where(predicate);

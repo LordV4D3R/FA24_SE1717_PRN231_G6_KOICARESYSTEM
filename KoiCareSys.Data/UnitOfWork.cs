@@ -24,6 +24,10 @@ namespace KoiCareSys.Data
             _unitOfWorkContext = unitOfWorkContext;
         }
 
+        public UnitOfWork()
+        {
+        }
+
         public UserRepository User
         {
             get { return userRepository ??= new UserRepository(); }

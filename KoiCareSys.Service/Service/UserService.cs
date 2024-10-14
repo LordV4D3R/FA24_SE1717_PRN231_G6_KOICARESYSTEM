@@ -17,13 +17,14 @@ namespace KoiCareSys.Service.Service
         private readonly UnitOfWork _unitOfWork;
         public UserService()
         {
+            _unitOfWork = new UnitOfWork();
         }
         public async Task<IBusinessResult> GetAll(String? search)
         {
             try
             {
                 var users = await _unitOfWork.User.GetAllUser(search ?? "");
-                if (users == null)               
+                if (users == null)                
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, "User not found");
                 else
                     return new BusinessResult(Const.SUCCESS_READ_CODE, "Success", users);
@@ -78,7 +79,6 @@ namespace KoiCareSys.Service.Service
                 return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
-
 
     }
 }

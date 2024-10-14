@@ -12,11 +12,12 @@ namespace KoiCareSys.WebAPI.Controllers
     {
         private readonly IUserService userService;
 
-
-        public UsersController()
+        public UsersController(IUserService userService)
         {
-            userService = new UserService();
+            this.userService = userService;
         }
+
+
 
         // GET: api/Users
         [HttpGet]

@@ -18,6 +18,7 @@ namespace KoiCareSys.Service.Service
 
         public PondService()
         {
+            _unitOfWork = new UnitOfWork();
         }
 
         public async Task<IBusinessResult> GetAll(String? search)
