@@ -1,0 +1,58 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.DevelopmentStagePage.DevelopmentStageIndexModel
+@{
+    ViewData["Title"] = "Development Stage Page";
+}
+<!-- Container -->
+<div id="container">
+    <div class="shell">
+        <!-- Main -->
+        <div id="main">
+            <div class="cl">&nbsp;</div>
+            <!-- Content -->
+            <div id="content">
+                <!-- Box -->
+                <div class="box">
+                    <!-- Box Head -->
+                    <div class="box-head">
+                        <h2 class="left">Users</h2>
+                        <div class="right">
+                            <label>search users</label>
+                            <input type="text" class="field small-field" />
+                            <input type="submit" class="button" value="search" />
+                        </div>
+                    </div>
+                    <!-- End Box Head -->
+                    <!-- Table -->
+                    <div class="table">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <th>No. </th>
+                                <th>Id</th>
+                                <th>Stage Name</th>
+                                <th>Required Food Amount</th>
+                                <th width="110" class="ac">Content Control</th>
+                            </tr>
+                            @foreach (var item in Model.DevelopmentStages)
+                            {
+                                <tr class="@(Model.DevelopmentStages.IndexOf(item) + 1 % 2 == 0 ? "odd" : "")">
+                                    <td>@(Model.DevelopmentStages.IndexOf(item) + 1)</td>
+                                    <td>@item.Id</td>
+                                    <td>@item.StageName</td>
+                                    <td>@item.RequiredFoodAmount</td>
+                                    <td><a href="#" class="ico del">Delete</a><a href="#" class="ico edit">Edit</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <!-- Table -->
+                </div>
+                <!-- End Box -->
+            </div>
+            <!-- End Content -->
+            <div class="cl">&nbsp;</div>
+        </div>
+        <!-- Main -->
+    </div>
+</div>
+<!-- End Container -->

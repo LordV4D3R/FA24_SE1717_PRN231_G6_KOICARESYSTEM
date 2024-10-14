@@ -1,4 +1,5 @@
 ﻿using KoiCareSys.WebApp.ApiService.Interface;
+using KoiCareSys.WebApp.Model;
 
 namespace KoiCareSys.WebApp.ApiService
 {
@@ -26,5 +27,15 @@ namespace KoiCareSys.WebApp.ApiService
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<T>();
         }
+        public async Task<ApiResponse<T>> MyGetAsync<T>(string endpoint)
+        {
+            var client = _clientFactory.CreateClient("MyAPI");
+            var response = await client.GetAsync(endpoint);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize into the ApiResponse<T> wrapper
+            return await response.Content.ReadFromJsonAsync<ApiResponse<T>>();
+        }
+
     }
 }

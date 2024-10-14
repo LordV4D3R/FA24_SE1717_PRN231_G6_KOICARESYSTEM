@@ -1,9 +1,13 @@
-﻿namespace KoiCareSys.WebApp.ApiService.Interface
+﻿using KoiCareSys.WebApp.Model;
+
+namespace KoiCareSys.WebApp.ApiService.Interface
 {
     public interface IApiService
     {
         Task<T> GetAsync<T>(string endpoint);
         Task<T> PostAsync<T>(string endpoint, object data);
         // Thêm các phương thức khác nếu cần
+        Task<ApiResponse<T>> MyGetAsync<T>(string endpoint);
+
     }
 }
