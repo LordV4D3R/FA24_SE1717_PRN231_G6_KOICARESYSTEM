@@ -1,23 +1,40 @@
+using Autofac.Core;
+using KoiCareSys.Data;
 using KoiCareSys.Data.Repository;
 using KoiCareSys.Data.Repository.Interface;
 using KoiCareSys.Service.Mappings;
+using KoiCareSys.Service.Service;
+using KoiCareSys.Service.Service.Interface;
 using KoiCareSys.WebAPI.Configuration;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add Unit of Work
+builder.Services.AddScoped<UnitOfWork>();
+
+// Add services to the container.
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
+
+builder.Services.AddScoped<IMeasurementRepository, MeasurementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 //Add Configuration
-builder.Services.ConfigAddDbContext();
+//builder.Services.ConfigAddDbContext();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // CORS
 builder.Services.AddCors(options =>

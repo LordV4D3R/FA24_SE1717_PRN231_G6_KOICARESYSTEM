@@ -19,8 +19,9 @@ namespace KoiCareSys.Data
         private MeasureDataRepository measureDataRepository;
         private UnitRepository unitRepository;
 
-        public UnitOfWork()
+        public UnitOfWork(ApplicationDbContext unitOfWorkContext)
         {
+            _unitOfWorkContext = unitOfWorkContext;
         }
 
         public UserRepository User
@@ -28,7 +29,7 @@ namespace KoiCareSys.Data
             get { return userRepository ??= new UserRepository(); }
 
         }
-      
+
         public KoiReposiory Koi
         {
             get { return koiReposiory ??= new KoiReposiory(); }
@@ -49,7 +50,7 @@ namespace KoiCareSys.Data
 
         public MeasurementRepository Measurement
         {
-            get { return measurementRepository ??= new MeasurementRepository();}
+            get { return measurementRepository ??= new MeasurementRepository(); }
         }
 
         public MeasureDataRepository MeasureData

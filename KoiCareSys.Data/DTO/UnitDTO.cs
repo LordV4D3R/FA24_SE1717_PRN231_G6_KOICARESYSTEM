@@ -12,6 +12,8 @@ namespace KoiCareSys.Data.DTO
 {
     public class UnitDTO
     {
+        public Guid UnitId { get; set; }
+
         public string Name { get; set; }
 
         public string UnitOfMeasure { get; set; }

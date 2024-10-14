@@ -23,18 +23,19 @@ namespace KoiCareSys.Service.Service
         {
             #region Business Rule
             #endregion
-            var unit = await _unitOfWork.Unit.GetAllAsync();
-            if (unit == null)
+            var units = await _unitOfWork.Unit.GetAllAsync();
+            if (units == null)
             {
-                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG);
+                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
             }
             else
             {
-                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, unit);
+                var unitDTOs = _mapper.Map<List<UnitDTO>>(units);
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, unitDTOs);
             }
         }
 
-        public async Task<IBusinessResult> GetById(string unitId)
+        public async Task<IBusinessResult> GetById(Guid unitId)
         {
             #region Business ruke
             #endregion
@@ -45,29 +46,33 @@ namespace KoiCareSys.Service.Service
             }
             else
             {
-                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, unit);
+                var unitDTO = _mapper.Map<UnitDTO>(unit);
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, unitDTO);
             }
         }
-        public async Task<IBusinessResult> Save(UnitDTO unitDTO)
+        public async Task<IBusinessResult> Save(UnitDTO request)
         {
-            Unit unit = _mapper.Map<Unit>(unitDTO);
+            Unit unit = _mapper.Map<Unit>(request);
 
             try
             {
                 int result = -1;
 
-                var UnitTmp = _unitOfWork.Unit.GetById(unit.UnitId);
+                var UnitTmp = await _unitOfWork.Unit.GetByIdAsync(unit.UnitId);
                 if (UnitTmp != null)
                 {
                     #region Business rule
                     #endregion Business rule
-                    result = await _unitOfWork.Unit.UpdateAsync(unit);
+                    UnitTmp = _mapper.Map<Unit>(unit);
+                    _unitOfWork.Unit.Update(UnitTmp);
+                    result = await _unitOfWork.SaveChangesWithTransactionAsync();
                     if (result > 0)
                     {
                         return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
                     }
                     else
                     {
+                        var unitDTO = _mapper.Map<UnitDTO>(unit);
                         return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, unit);
                     }
                 }
@@ -93,14 +98,14 @@ namespace KoiCareSys.Service.Service
                 return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
-        public async Task<IBusinessResult> DeleteById(string UnitNo)
+        public async Task<IBusinessResult> DeleteById(Guid unitId)
         {
             #region Business rule
 
             #endregion Business rule
             try
             {
-                var unit = await _unitOfWork.Unit.GetByIdAsync(UnitNo);
+                var unit = await _unitOfWork.Unit.GetByIdAsync(unitId);
                 if (unit == null)
                 {
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);

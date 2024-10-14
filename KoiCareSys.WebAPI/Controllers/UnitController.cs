@@ -24,13 +24,13 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IBusinessResult> GetById(string id)
+        public async Task<IBusinessResult> GetById(Guid id)
         {
             return await _unitService.GetById(id);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IBusinessResult> Update(UnitDTO request)
         {
             return await _unitService.Save(request);
@@ -44,7 +44,7 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IBusinessResult> Delete(string id)
+        public async Task<IBusinessResult> Delete(Guid id)
         {
             return await _unitService.DeleteById(id);
         }

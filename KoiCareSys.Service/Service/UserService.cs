@@ -17,7 +17,6 @@ namespace KoiCareSys.Service.Service
         private readonly UnitOfWork _unitOfWork;
         public UserService()
         {
-            _unitOfWork ??= new UnitOfWork();
         }
         public async Task<IBusinessResult> GetAll(String? search)
         {
