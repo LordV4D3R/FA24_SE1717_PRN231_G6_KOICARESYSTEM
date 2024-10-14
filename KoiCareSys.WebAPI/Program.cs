@@ -25,8 +25,10 @@ builder.Services.AddScoped<UnitOfWork>();
 
 // Add services to the container.
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
+
 builder.Services.AddScoped<IMeasurementRepository, MeasurementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 //Add Configuration
 //builder.Services.ConfigAddDbContext();
