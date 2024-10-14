@@ -1,10 +1,4 @@
-﻿using KoiCareSys.Data.Models;
-using KoiCareSys.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KoiCareSys.Data.Repository;
 
 namespace KoiCareSys.Data
 {
@@ -15,6 +9,8 @@ namespace KoiCareSys.Data
         private FeedingScheduleRepository feedingScheduleRepository;
         private PondRepository pondRepository;
         private UserRepository userRepository;
+        private DevelopmentStageRepo developmentStageRepo;
+        private KoiRecordRepo koiRecordRepo;
         public UnitOfWork()
         {
         }
@@ -24,7 +20,7 @@ namespace KoiCareSys.Data
             get { return userRepository ??= new UserRepository(); }
 
         }
-      
+
         public KoiReposiory Koi
         {
             get { return koiReposiory ??= new KoiReposiory(); }
@@ -41,6 +37,16 @@ namespace KoiCareSys.Data
         {
             get { return feedingScheduleRepository ??= new FeedingScheduleRepository(); }
 
+        }
+
+        public DevelopmentStageRepo DevelopmentStage
+        {
+            get { return developmentStageRepo ??= new DevelopmentStageRepo(); }
+        }
+
+        public KoiRecordRepo KoiRecord
+        {
+            get { return koiRecordRepo ??= new KoiRecordRepo(); }
         }
 
         ////TO-DO CODE HERE/////////////////
