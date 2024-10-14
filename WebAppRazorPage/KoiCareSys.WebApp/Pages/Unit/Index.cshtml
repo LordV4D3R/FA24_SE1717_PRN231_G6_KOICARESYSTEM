@@ -1,0 +1,60 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.Unit.IndexModel
+@{
+    ViewData["Title"] = "Unit Page";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Users</h2>
+                    <div>
+                        <label for="searchUsers" class="sr-only">Search users</label>
+                        <input type="text" id="searchUsers" class="form-control form-control-sm d-inline-block w-auto" placeholder="Search users" />
+                        <button type="button" class="btn btn-sm btn-primary ml-2">Search</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Unit Id</th>
+                                    <th>Name</th>
+                                    <th>Unit Of Measure</th>
+                                    <th>Full Name</th>
+                                    <th>Information</th>
+                                    <th>Min Value</th>
+                                    <th>Max Value</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var unit in Model.Units)
+                                {
+                                    <tr>
+                                        <td>@(Model.Units.IndexOf(unit) + 1)</td>
+                                        <td>@unit.UnitId</td>
+                                        <td>@unit.Name</td>
+                                        <td>@unit.UnitOfMeasure</td>
+                                        <td>@unit.FullName</td>
+                                        <td>@unit.Information</td>
+                                        <td>@unit.MinValue</td>
+                                        <td>@unit.MaxValue</td>
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

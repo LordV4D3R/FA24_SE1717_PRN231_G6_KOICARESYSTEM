@@ -1,7 +1,6 @@
-﻿
-namespace KoiCareSys.Data.DTO
+﻿namespace KoiCareSys.WebApp.Model
 {
-    public class UnitDTO
+    public class UnitDto
     {
         public Guid UnitId { get; set; }
 
