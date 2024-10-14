@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using KoiCareSys.Data;
+using KoiCareSys.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using KoiCareSys.Data;
-using KoiCareSys.Data.Models;
 
 namespace KoiCareSys.WebAPI.Controllers
 {

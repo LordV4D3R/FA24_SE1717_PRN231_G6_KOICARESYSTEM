@@ -1,10 +1,4 @@
-﻿using KoiCareSys.Data.Models;
-using KoiCareSys.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KoiCareSys.Data.Repository;
 
 namespace KoiCareSys.Data
 {
@@ -129,6 +123,5 @@ namespace KoiCareSys.Data
             return result;
         }
         #endregion
-
     }
 }
