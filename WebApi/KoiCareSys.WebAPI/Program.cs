@@ -9,12 +9,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IUnitService, UnitService>();
-builder.Services.AddScoped<IMeasurementService, MeasurementService>();
-builder.Services.AddScoped<IFeedingScheduleService, FeedingScheduleService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPondService, PondService>();
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -23,15 +17,19 @@ builder.Services.AddSwaggerGen();
 // Add Unit of Work
 builder.Services.AddScoped<UnitOfWork>();
 
-// Add services to the container.
+// Add Repository
 builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository>();
-
 builder.Services.AddScoped<IMeasurementRepository, MeasurementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPondRepository, PondRepository>();
 
+// Add Service
+builder.Services.AddScoped<IKoiService, KoiService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<IMeasurementService, MeasurementService>();
+builder.Services.AddScoped<IFeedingScheduleService, FeedingScheduleService>();
+builder.Services.AddScoped<IPondService, PondService>();
 
-//Add Configuration
 //builder.Services.ConfigAddDbContext();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
