@@ -1,7 +1,6 @@
 ﻿using KoiCareSys.Common;
 using KoiCareSys.Data;
 using KoiCareSys.Data.DTO;
-using KoiCareSys.Data.Enums;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Serivice.Base;
 using KoiCareSys.Service.Service.Interface;
