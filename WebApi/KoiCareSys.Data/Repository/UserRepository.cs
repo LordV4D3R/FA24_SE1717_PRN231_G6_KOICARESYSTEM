@@ -4,19 +4,14 @@ using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Data.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoiCareSys.Data.Repository
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
         private readonly UserDAO _dao;
-        public UserRepository() 
+        public UserRepository()
         {
             _dao ??= new UserDAO();
         }
@@ -30,7 +25,7 @@ namespace KoiCareSys.Data.Repository
             return await GetAllAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllUser(string search)
+        public async Task<IEnumerable<User>> GetAllUser(string? search)
         {
             Expression<Func<User, bool>> predicate = x => x.FullName.Contains(search) || x.Email.Contains(search);
             IQueryable<User> query = _dbSet.Where(predicate);
@@ -47,7 +42,7 @@ namespace KoiCareSys.Data.Repository
                 PhoneNumber = user.PhoneNumber,
                 Role = user.Role,
                 Status = user.Status,
-            };;
+            }; ;
             _dao.Create(create);
             return true;
         }

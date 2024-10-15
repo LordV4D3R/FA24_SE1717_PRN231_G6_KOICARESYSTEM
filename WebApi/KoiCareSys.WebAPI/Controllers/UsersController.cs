@@ -17,6 +17,8 @@ namespace KoiCareSys.WebAPI.Controllers
             this.userService = userService;
         }
 
+
+
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] string? search)
@@ -26,7 +28,7 @@ namespace KoiCareSys.WebAPI.Controllers
                 var result = await userService.GetAll(search);
                 if (result.Status > 0)
                 {
-                    return Ok(result.Data as List<User>);
+                    return Ok(result.Data as IEnumerable<User>);
                 }
                 else { return NotFound(result.Message); }
             }
