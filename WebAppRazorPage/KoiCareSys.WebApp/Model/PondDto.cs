@@ -1,6 +1,7 @@
-﻿namespace KoiCareSys.Data.DTO
+﻿namespace KoiCareSys.WebApp.Model
 {
-    public class PondDTO
+    public class PondDto
+
     {
         public Guid Id { get; set; }
         public String PondName { get; set; } = String.Empty;
@@ -12,7 +13,7 @@
         public string ImgUrl { get; set; }
         public string Note { get; set; }
         public string Description { get; set; }
-        public Enums.PondStatus Status { get; set; }
+        public PondStatus Status { get; set; }
         public bool? IsQualified { get; set; }
         public Guid UserId { get; set; }
     }
