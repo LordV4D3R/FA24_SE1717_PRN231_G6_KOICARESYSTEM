@@ -1,8 +1,13 @@
-﻿namespace KoiCareSys.Data.DTO
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace KoiCareSys.Data.DTO
 {
     public class PondDTO
     {
-        public Guid PondId { get; set; }
         public String PondName { get; set; } = String.Empty;
         public decimal? Volume { get; set; }
         public decimal? Depth { get; set; }

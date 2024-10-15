@@ -2,11 +2,9 @@
 using KoiCareSys.Data.DAO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Data.Repository.Interface;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,13 +28,6 @@ namespace KoiCareSys.Data.Repository
             return await GetAllAsync();
         }
 
-        public async Task<IEnumerable<FeedingSchedule>> GetAllFeedingSchedules(string? search)
-        {
-            Expression<Func<FeedingSchedule, bool>> predicate = x => x.FoodType.Contains(search) || x.Note.Contains(search);
-            IQueryable<FeedingSchedule> query = _dbSet.Where(predicate);
-            return query.AsNoTracking().AsEnumerable();
-        }
-
         public bool CreateFeedingSchedule(FeedingSchedule feedingSchedule)
         {
             FeedingSchedule create = new FeedingSchedule()
@@ -50,11 +41,6 @@ namespace KoiCareSys.Data.Repository
             return true;
         }
 
-        public bool DeleteFeedingSchedule(Guid id)
-        {
-            FeedingSchedule found = _dao.GetById(id);
-            if (found is null) return false;
-            return true;
-        }
+
     }
 }
