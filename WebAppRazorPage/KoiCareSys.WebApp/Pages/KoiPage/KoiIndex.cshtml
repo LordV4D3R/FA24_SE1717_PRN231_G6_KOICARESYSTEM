@@ -1,4 +1,56 @@
 ﻿@page
 @model KoiCareSys.WebApp.Pages.KoiPage.KoiIndexModel
 @{
+    ViewData["Title"] = "Koi Page";
 }
+
+<h1 style="color: black;">
+    Koi Board
+</h1>
+<a href="/KoiPage/KoiCreate" class="ico edit">Create</a>
+
+<table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Physique</th>
+            <th>Age</th>
+            <th>Length (cm)</th>
+            <th>Sex</th>
+            <th>Category</th>
+            <th>In Pond Since</th>
+            <th>Purchase Price</th>
+            <th>Status</th>
+            <th>Img Url</th>
+            <th>Origin</th>
+            <th>Breed</th>
+            <th class="text-center" width="110">Content Control</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var koi in Model.Kois)
+        {
+            <tr class="@(Model.Kois.IndexOf(koi) % 2 == 0 ? "odd" : "")">
+                <td>@(Model.Kois.IndexOf(koi) + 1)</td>
+                <td>@koi.Name</td>
+                <td>@koi.Physique</td>
+                <td>@koi.Age</td>
+                <td>@koi.Length</td>
+                <td>@koi.Sex</td>
+                <td>@koi.Category</td>
+                <td>@koi.InPondSince.ToString("yyyy-MM-dd")</td>
+                <td>@koi.PurchasePrice</td>
+                <td>@koi.Status</td>
+                <td><img src="@koi.ImgUrl" alt="@koi.Name" width="50" /></td>
+                <td>@koi.Origin</td>
+                <td>@koi.Breed</td>
+
+                <td class="text-center">
+                    <a asp-page="./KoiDelete" asp-route-id="@koi.Id" class="ico del">Delete</a>
+                    <a asp-page="./KoiEdit" asp-route-id="@koi.Id" class="ico edit">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
