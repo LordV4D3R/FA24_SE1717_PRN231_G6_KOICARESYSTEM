@@ -162,6 +162,11 @@ namespace KoiCareSys.Data.Base
             return await _context.Set<T>().FindAsync(code);
         }
 
+        public async Task<T> GetFirstAsync()
+        {
+            return _context.Set<T>().FirstOrDefault();
+        }
+
         #region Separating asign entity and save operators        
 
         public void PrepareCreate(T entity)

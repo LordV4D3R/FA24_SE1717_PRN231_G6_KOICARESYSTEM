@@ -53,5 +53,10 @@ namespace KoiCareSys.Data.Repository
             if (found is null) return false;
             return true;
         }
+
+        public async Task<User> GetFirstUser()
+        {
+            return await GetFirstAsync();
+        }
     }
 }
