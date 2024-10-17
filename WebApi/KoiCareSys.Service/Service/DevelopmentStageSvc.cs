@@ -11,9 +11,9 @@ namespace KoiCareSys.Service.Service
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public DevelopmentStageSvc()
+        public DevelopmentStageSvc(UnitOfWork unitOfWork)
         {
-            _unitOfWork ??= new UnitOfWork();
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IBusinessResult> AddDevelopmenStage(DevelopmentStageDTO developmenStage)
