@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KoiCareSys.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240925104105_completedb")]
-    partial class completedb
+    [Migration("20241017114401_updatedatabase")]
+    partial class updatedatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace KoiCareSys.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("koicare")
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -61,9 +61,17 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("food_amount");
 
+                    b.Property<string>("FoodType")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("food_type");
+
                     b.Property<Guid>("KoiId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("koi_id");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("note");
 
                     b.HasKey("Id");
 
@@ -249,6 +257,10 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("depth");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
                     b.Property<int?>("DrainCount")
                         .HasColumnType("int")
                         .HasColumnName("drain_count");
@@ -260,6 +272,10 @@ namespace KoiCareSys.Data.Migrations
                     b.Property<bool?>("IsQualified")
                         .HasColumnType("bit")
                         .HasColumnName("is_qualified");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("note");
 
                     b.Property<string>("PondName")
                         .IsRequired()

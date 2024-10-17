@@ -19,7 +19,6 @@ namespace KoiCareSys.WebApp.Pages.PondPage
             try
             {
                 Ponds = await _apiService.GetAsync<List<PondDto>>("api/pond");
-
             }
             catch (Exception ex)
             {

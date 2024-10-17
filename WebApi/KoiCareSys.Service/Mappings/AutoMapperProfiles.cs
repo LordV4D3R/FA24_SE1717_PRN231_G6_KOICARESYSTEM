@@ -13,6 +13,9 @@ namespace KoiCareSys.Service.Mappings
             CreateMap<MeasurementDTO, Measurement>().ReverseMap();
             CreateMap<MeasureDataDTO, MeasureData>().ReverseMap();
             CreateMap<PondDTO, Pond>().ReverseMap();
+
+            // Koi
+            CreateMap<KoiDTO, Koi>().ReverseMap();
         }
     }
 }
