@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
 {
-    public class DevelopmentStageIndexModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly IApiService _apiService;
 
-        public DevelopmentStageIndexModel(IApiService apiService)
+        public IndexModel(IApiService apiService)
         {
             _apiService = apiService;
         }
