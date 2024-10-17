@@ -20,9 +20,9 @@ namespace KoiCareSys.Data
             _unitOfWorkContext = unitOfWorkContext;
         }
 
-        public UnitOfWork()
-        {
-        }
+        //public UnitOfWork()
+        //{
+        //}
 
         public UserRepository User
         {
@@ -32,7 +32,7 @@ namespace KoiCareSys.Data
 
         public KoiReposiory Koi
         {
-            get { return koiReposiory ??= new KoiReposiory(); }
+            get { return koiReposiory ??= new KoiReposiory(_unitOfWorkContext); }
 
         }
 

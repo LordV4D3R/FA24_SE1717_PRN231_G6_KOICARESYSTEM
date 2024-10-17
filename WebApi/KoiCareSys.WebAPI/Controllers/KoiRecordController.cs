@@ -11,9 +11,9 @@ namespace KoiCareSys.WebAPI.Controllers
     {
         private readonly IKoiRecordSvc _koiRecordSvc;
 
-        public KoiRecordController()
+        public KoiRecordController(IKoiRecordSvc koiRecordSvc)
         {
-            _koiRecordSvc = new KoiRecordSvc();
+            _koiRecordSvc = koiRecordSvc;
         }
 
         [HttpGet]

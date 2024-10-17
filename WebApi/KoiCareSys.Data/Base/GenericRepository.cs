@@ -94,8 +94,12 @@ namespace KoiCareSys.Data.Base
         //    tracker.State = EntityState.Modified;
         //    _context.SaveChanges();
         //}
+        public void CreateKoi(T entity)
+        {
+            _context.Add(entity);
+        }
 
-        public virtual void Update(T entityToUpdate)
+        public void Update(T entityToUpdate)
         {
             var trackedEntities = _context.ChangeTracker.Entries<T>().ToList();
             foreach (var trackedEntity in trackedEntities)

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KoiCareSys.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class completedb : Migration
+    public partial class updatedatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,6 +77,8 @@ namespace KoiCareSys.Data.Migrations
                     skimmer_count = table.Column<int>(type: "int", nullable: true),
                     pump_capacity = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     img_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     status = table.Column<int>(type: "int", nullable: false),
                     is_qualified = table.Column<bool>(type: "bit", nullable: true),
                     user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -155,6 +157,8 @@ namespace KoiCareSys.Data.Migrations
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     feed_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     food_amount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    food_type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     koi_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
