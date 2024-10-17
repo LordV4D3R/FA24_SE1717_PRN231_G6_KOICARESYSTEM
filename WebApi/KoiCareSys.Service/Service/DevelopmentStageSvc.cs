@@ -87,6 +87,23 @@ namespace KoiCareSys.Service.Service
             }
         }
 
+        public async Task<IBusinessResult> GetAllDevelopmenStageByKeyword(string keyword)
+        {
+            try
+            {
+                var result = await _unitOfWork.DevelopmentStage.GetAllDevelopmentStagesByKewordsAsync(keyword);
+
+                if (result == null) return new BusinessResult(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG);
+
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+
+            }
+            catch (Exception ex)
+            {
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
         public async Task<IBusinessResult> GetDevelopmenStageById(Guid id)
         {
             try

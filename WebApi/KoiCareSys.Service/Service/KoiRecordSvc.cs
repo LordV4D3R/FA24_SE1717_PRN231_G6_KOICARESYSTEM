@@ -71,6 +71,27 @@ namespace KoiCareSys.Service.Service
             }
         }
 
+        public async Task<IBusinessResult> GetAllKoiRecordsByKeywordAsync(string keyword)
+        {
+            try
+            {
+                var result = await _unitOfWork.KoiRecord.GetAllKoiRecordsByKeywordAsync(keyword);
+                if (result != null)
+                {
+                    return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+                }
+                else
+                {
+                    return new BusinessResult(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
         public async Task<IBusinessResult> GetKoiRecordByIdAsync(Guid id)
         {
             try

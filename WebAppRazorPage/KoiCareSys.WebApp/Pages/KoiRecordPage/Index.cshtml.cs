@@ -3,32 +3,32 @@ using KoiCareSys.WebApp.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
+namespace KoiCareSys.WebApp.Pages.KoiRecordPage
 {
-    public class IndexModel : PageModel
+    public class KoiRecordIndexModel : PageModel
     {
         private readonly IApiService _apiService;
 
-        public IndexModel(IApiService apiService)
+        public KoiRecordIndexModel(IApiService apiService)
         {
             _apiService = apiService;
-            DevelopmentStages = new List<DevelopmentStageDTO>(); // Initialize the list
-
+            KoiRecords = new List<KoiRecordDTO>();
         }
 
-        public List<DevelopmentStageDTO> DevelopmentStages { get; set; }
+        public List<KoiRecordDTO> KoiRecords { get; set; }
+
 
         public async Task OnGetAsync()
         {
             try
             {
-                var response = await _apiService.GetAsync<ApiResponse<List<DevelopmentStageDTO>>>("api/DevelopmentStage");
-                DevelopmentStages = response.Data; // Access the data property
+                var response = await _apiService.GetAsync<ApiResponse<List<KoiRecordDTO>>>("api/KoiRecord");
+                KoiRecords = response.Data; // Access the data property
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching development stages: {ex.Message}");
+                Console.WriteLine($"Error fetching koi record: {ex.Message}");
             }
         }
 
@@ -37,8 +37,8 @@ namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
             // call search api
             try
             {
-                var response = await _apiService.GetAsync<ApiResponse<List<DevelopmentStageDTO>>>("api/DevelopmentStage/search?keyword=" + keyword);
-                DevelopmentStages = response?.Data ?? new List<DevelopmentStageDTO>(); // Fallback to empty list if response is null
+                var response = await _apiService.GetAsync<ApiResponse<List<KoiRecordDTO>>>("api/KoiRecord/search?keyword=" + keyword);
+                KoiRecords = response?.Data ?? new List<KoiRecordDTO>(); // Fallback to empty list if response is null
                 if (response.Status == 1)
                 {
                     return Page();
@@ -52,7 +52,7 @@ namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching development stages: {ex.Message}");
+                Console.WriteLine($"Error fetching koi records: {ex.Message}");
                 return Page();
             }
         }

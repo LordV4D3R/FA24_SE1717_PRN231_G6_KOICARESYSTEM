@@ -3,7 +3,7 @@ using KoiCareSys.WebApp.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
+namespace KoiCareSys.WebApp.Pages.KoiRecordPage
 {
     public class UpdateModel : PageModel
     {
@@ -14,13 +14,13 @@ namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
         }
 
         [BindProperty]
-        public DevelopmentStageDTO Request { get; set; } = default!;
+        public KoiRecordDTO Request { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(string? id)
         {
             try
             {
-                var response = await _apiService.GetAsync<ApiResponse<DevelopmentStageDTO>>("api/DevelopmentStage/" + id);
+                var response = await _apiService.GetAsync<ApiResponse<KoiRecordDTO>>("api/KoiRecord/" + id);
                 if (response.Status == 1)
                 {
                     Request = response.Data;
@@ -36,7 +36,7 @@ namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching development stages: {ex.Message}");
+                Console.WriteLine($"Error fetching koi record: {ex.Message}");
                 return Page();
             }
         }
@@ -50,7 +50,7 @@ namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
                     return Page();
                 }
 
-                var response = await _apiService.PutAsync<ApiResponse<DevelopmentStageDTO>>("api/DevelopmentStage", Request);
+                var response = await _apiService.PutAsync<ApiResponse<KoiRecordUpdateDTO>>("api/KoiRecord", Request);
                 if (response.Status == 1)
                 {
                     return RedirectToPage("./Index");

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
 {
-    public class UpdateModel : PageModel
+    public class DeleteModel : PageModel
     {
         private readonly IApiService _apiService;
-        public UpdateModel(IApiService apiService)
+        public DeleteModel(IApiService apiService)
         {
             _apiService = apiService;
         }
@@ -41,16 +41,17 @@ namespace KoiCareSys.WebApp.Pages.DevelopmentStagePage
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string? id)
         {
             try
             {
-                if (!ModelState.IsValid)
+
+                if (id == null)
                 {
-                    return Page();
+                    return NotFound();
                 }
 
-                var response = await _apiService.PutAsync<ApiResponse<DevelopmentStageDTO>>("api/DevelopmentStage", Request);
+                var response = await _apiService.DeleteAsync<ApiResponse<DevelopmentStageDTO>>("api/DevelopmentStage/" + id);
                 if (response.Status == 1)
                 {
                     return RedirectToPage("./Index");

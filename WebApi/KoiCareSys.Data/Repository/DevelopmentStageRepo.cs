@@ -3,6 +3,8 @@ using KoiCareSys.Data.DAO;
 using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Data.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace KoiCareSys.Data.Repository
 {
@@ -34,6 +36,11 @@ namespace KoiCareSys.Data.Repository
             return await _dao.GetAllAsync();
         }
 
+        public async Task<IEnumerable<DevelopmentStage>> GetAllDevelopmentStagesByKewordsAsync(string keyword)
+        {
+            return await _dao.GetAllAsync(x => x.StageName.Contains(keyword));
+        }
+
         public async Task<DevelopmentStage> GetDevelopmentStageByIdAsync(Guid id)
         {
             return await _dao.GetByIdAsync(id);
@@ -53,13 +60,15 @@ namespace KoiCareSys.Data.Repository
 
         public async Task<bool> UpdateDevelopmentStageAsync(DevelopmentStageUpdateDTO developmentStage)
         {
-            DevelopmentStage found = _dao.GetById(developmentStage.Id);
 
-            if (found == null)
+            DevelopmentStage update = new DevelopmentStage()
             {
-                return false;
-            }
-            int result = await _dao.UpdateAsync(found);
+                Id = developmentStage.Id,
+                StageName = developmentStage.StageName,
+                RequiredFoodAmount = developmentStage.RequiredFoodAmount,
+            };
+
+            int result = await _dao.UpdateAsync(update);
             return result > 0;
         }
     }

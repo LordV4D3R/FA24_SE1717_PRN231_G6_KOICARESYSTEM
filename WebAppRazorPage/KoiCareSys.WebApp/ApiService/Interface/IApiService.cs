@@ -9,7 +9,6 @@ namespace KoiCareSys.WebApp.ApiService.Interface
         Task<T> DeleteAsync<T>(string endpoint);
         Task<T> PutAsync<T>(string endpoint, object data);
         // Thêm các phương thức khác nếu cần
-        Task<ApiResponse<T>> MyGetAsync<T>(string endpoint);
 
     }
 }

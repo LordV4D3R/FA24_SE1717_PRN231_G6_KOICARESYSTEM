@@ -19,7 +19,8 @@ namespace KoiCareSys.Data.Repository
         {
             KoiRecord create = new KoiRecord()
             {
-                KoiId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                KoiId = koiRecord.KoiId,
                 Length = koiRecord.Length,
                 Weight = koiRecord.Weight,
                 Physique = koiRecord.Physique,
@@ -33,6 +34,17 @@ namespace KoiCareSys.Data.Repository
         public async Task<IEnumerable<KoiRecord>> GetAllKoiRecordsAsync()
         {
             return await _dao.GetAllAsync();
+        }
+
+        public async Task<IEnumerable<KoiRecord>> GetAllKoiRecordsByKeywordAsync(string keyword)
+        {
+            return await _dao.GetAllAsync(
+                x => x.Physique.Contains(keyword)
+            || x.Length.ToString().Contains(keyword)
+            || x.Weight.ToString().Contains(keyword)
+            || x.RecordAt.ToString().Contains(keyword)
+            || x.DevelopmentStageId.ToString().Contains(keyword));
+
         }
 
         public async Task<KoiRecord> GetKoiRecordByIdAsync(Guid id)
@@ -53,7 +65,7 @@ namespace KoiCareSys.Data.Repository
 
         public async Task<bool> UpdateKoiRecordAsync(KoiRecordUpdateDTO koiRecord)
         {
-            KoiRecord create = new KoiRecord()
+            KoiRecord update = new KoiRecord()
             {
                 Id = koiRecord.Id,
                 KoiId = koiRecord.KoiId,
@@ -63,7 +75,7 @@ namespace KoiCareSys.Data.Repository
                 RecordAt = koiRecord.RecordAt,
                 DevelopmentStageId = koiRecord.DevelopmentStageId
             };
-            int result = await _dao.UpdateAsync(create);
+            int result = await _dao.UpdateAsync(update);
             return result > 0;
         }
     }

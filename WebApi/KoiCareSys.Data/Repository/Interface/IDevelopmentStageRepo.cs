@@ -5,6 +5,8 @@ namespace KoiCareSys.Data.Repository.Interface
 {
     public interface IDevelopmentStageRepo
     {
+        public Task<IEnumerable<DevelopmentStage>> GetAllDevelopmentStagesByKewordsAsync(string keyword);
+
         public Task<IEnumerable<DevelopmentStage>> GetAllDevelopmentStagesAsync();
 
         public Task<DevelopmentStage> GetDevelopmentStageByIdAsync(Guid id);

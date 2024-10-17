@@ -50,5 +50,12 @@ namespace KoiCareSys.WebAPI.Controllers
             var result = await _koiRecordSvc.RemoveKoiRecord(id);
             return Ok(result);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            var result = await _koiRecordSvc.GetAllKoiRecordsByKeywordAsync(keyword);
+            return Ok(result);
+        }
     }
 }

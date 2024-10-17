@@ -37,7 +37,7 @@ namespace KoiCareSys.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> Put([FromBody] DevelopmentStageUpdateDTO request)
         {
             var result = await _DevelopmentStageSvc.UpdateDevelopmenStage(request);
@@ -51,6 +51,12 @@ namespace KoiCareSys.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            var result = await _DevelopmentStageSvc.GetAllDevelopmenStageByKeyword(keyword);
+            return Ok(result);
+        }
 
     }
 }

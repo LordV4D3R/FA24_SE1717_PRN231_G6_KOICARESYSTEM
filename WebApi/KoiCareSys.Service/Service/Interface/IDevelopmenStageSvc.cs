@@ -5,6 +5,7 @@ namespace KoiCareSys.Service.Service.Interface
 {
     public interface IDevelopmenStageSvc
     {
+        public Task<IBusinessResult> GetAllDevelopmenStageByKeyword(string keyword);
         public Task<IBusinessResult> GetAllDevelopmenStage();
         public Task<IBusinessResult> GetDevelopmenStageById(Guid id);
         public Task<IBusinessResult> AddDevelopmenStage(DevelopmentStageDTO request);
