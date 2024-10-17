@@ -37,7 +37,7 @@ namespace KoiCareSys.WebApp.Pages.KoiPage
             try
             {
                 var result = await _apiService.PostAsync<BusinessResult>("api/kois", Koi);
-                if (result != null)
+                if (result != null && result.Status == 1)
                 {
                     return RedirectToPage("/KoiPage/KoiIndex");
                 }
