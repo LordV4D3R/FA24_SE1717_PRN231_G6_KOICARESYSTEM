@@ -51,53 +51,98 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        public async Task<IBusinessResult> Save(MeasurementDTO request)
+        public async Task<IBusinessResult> Create(MeasurementDTO request)
         {
-            Measurement measurement = _mapper.Map<Measurement>(request);
-
             try
             {
-                int result = -1;
+                Measurement measurement = _mapper.Map<Measurement>(request);
+                var result = await _unitOfWork.Measurement.CreateAsync(measurement);
 
-                var MeasurementTmp = _unitOfWork.Measurement.GetById(measurement.MeasurementId);
-                if (MeasurementTmp != null)
+                if (result > 0)
                 {
-                    #region Business rule
-                    #endregion Business rule
-                    result = await _unitOfWork.Measurement.UpdateAsync(measurement);
-                    if (result > 0)
-                    {
-                        return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
-                    }
-                    else
-                    {
-                        var measurementDTO = _mapper.Map<MeasurementDTO>(measurement);
-                        return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, measurementDTO);
-                    }
+                    return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
                 }
                 else
                 {
-                    #region Business rule
-                    #endregion Business rule
-
-                    result = await _unitOfWork.Measurement.CreateAsync(measurement);
-
-                    if (result > 0)
-                    {
-                        return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
-                    }
-                    else
-                    {
-                        return new BusinessResult(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
-                    }
+                    return new BusinessResult(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
                 }
-
             }
             catch (Exception ex)
             {
                 return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        public async Task<IBusinessResult> Update(MeasurementDTO request)
+        {
+            Measurement measurement = _mapper.Map<Measurement>(request);
+
+            try
+            {
+                var result = await _unitOfWork.Measurement.UpdateAsync(measurement);
+                if (result > 0)
+                {
+                    return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
+                }
+                else
+                {
+                    var measurementDTO = _mapper.Map<MeasurementDTO>(measurement);
+                    return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, measurementDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        //public async Task<IBusinessResult> Save(MeasurementDTO request)
+        //{
+        //    Measurement measurement = _mapper.Map<Measurement>(request);
+
+        //    try
+        //    {
+        //        int result = -1;
+
+        //        var MeasurementTmp = _unitOfWork.Measurement.GetById(measurement.MeasurementId);
+        //        if (MeasurementTmp != null)
+        //        {
+        //            #region Business rule
+        //            #endregion Business rule
+        //            result = await _unitOfWork.Measurement.UpdateAsync(measurement);
+        //            if (result > 0)
+        //            {
+        //                return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
+        //            }
+        //            else
+        //            {
+        //                var measurementDTO = _mapper.Map<MeasurementDTO>(measurement);
+        //                return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, measurementDTO);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            #region Business rule
+        //            #endregion Business rule
+
+        //            result = await _unitOfWork.Measurement.CreateAsync(measurement);
+
+        //            if (result > 0)
+        //            {
+        //                return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
+        //            }
+        //            else
+        //            {
+        //                return new BusinessResult(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
+        //            }
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+        //    }
+        //}
 
         public async Task<IBusinessResult> DeleteById(Guid measurementId)
         {

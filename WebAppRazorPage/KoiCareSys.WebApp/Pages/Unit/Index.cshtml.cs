@@ -1,9 +1,11 @@
 using KoiCareSys.WebApp.ApiService.Interface;
 using KoiCareSys.WebApp.Model;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KoiCareSys.WebApp.Pages.Unit
 {
+    [EnableCors("MyAllowPolicy")]
     public class IndexModel : PageModel
     {
         private readonly IApiService _apiService;
@@ -18,8 +20,9 @@ namespace KoiCareSys.WebApp.Pages.Unit
         {
             try
             {
-                var response = await _apiService.GetAsync<BusinessResult<List<UnitDto>>>("api/Unit");
-                Units = response.Data;
+                //var response = await _apiService.GetAsync<BusinessResult<List<UnitDto>>>("api/Unit");
+                //Units = response.Data;
+                Units = new List<UnitDto>();
             }
             catch (Exception ex)
             {

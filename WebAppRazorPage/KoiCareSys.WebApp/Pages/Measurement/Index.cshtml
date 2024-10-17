@@ -9,17 +9,21 @@
         border-radius: 15px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+
     .table thead th {
         background-color: #f8f9fa;
     }
+
     .btn-custom {
         border-radius: 50px;
         transition: background-color 0.3s ease;
     }
-    .btn-custom:hover {
-        background-color: #0056b3;
-        color: #fff;
-    }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
     .search-bar {
         max-width: 300px;
     }
@@ -32,13 +36,14 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h2 class="card-title mb-0">Measurements</h2>
                     <div class="search-bar input-group">
-                        <input type="text" class="form-control" placeholder="Search measurements" aria-label="Search measurements" />
-                        <button class="btn btn-primary" type="button">Search</button>
+                        <input type="text" class="form-control" id="searchMeasurements" placeholder="Search measurements" aria-label="Search measurements" />
+                        <button class="btn btn-primary" type="button" id="searchButton">Search</button>
                     </div>
+                     <a href="/Measurement/Create" class="btn btn-md btn-primary">Create</a>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-striped table-hover" id="measurementsTable">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -49,54 +54,8 @@
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach (var measurement in Model.Measurements)
-                                {
-                                    <tr>
-                                        <td>@(Model.Measurements.IndexOf(measurement) + 1)</td>
-                                        <td>@measurement.MeasurementId</td>
-                                        <td>@measurement.PondId</td>
-                                        <td>@measurement.DateRecord.ToString("yyyy-MM-dd")</td>
-                                        <td>@measurement.Note</td>
-                                        <td class="text-center">
-                                            <a href="#" class="btn btn-danger btn-sm btn-custom">
-                                                <i class="fas fa-trash-alt"></i> Delete
-                                            </a>
-                                            <a href="#" class="btn btn-warning btn-sm btn-custom">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                            <button class="btn btn-info btn-sm btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#measureData_@(measurement.MeasurementId)">
-                                                <i class="fas fa-info-circle"></i> Details
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr class="collapse" id="measureData_@(measurement.MeasurementId)">
-                                        <td colspan="6">
-                                            <div class="card card-body">
-                                                <h5>Measure Data</h5>
-                                                <table class="table table-sm table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>MeasureDataId</th>
-                                                            <th>Volume</th>
-                                                            <th>UnitId</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach (var measureData in measurement.MeasureData)
-                                                        {
-                                                            <tr>
-                                                                <td>@measureData.MeasureDataId</td>
-                                                                <td>@measureData.Volume</td>
-                                                                <td>@measureData.UnitId</td>
-                                                            </tr>
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
+                            <tbody id="measurementsTableBody">
+                                <!-- Data will be populated here by AJAX -->
                             </tbody>
                         </table>
                     </div>
@@ -105,3 +64,91 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function fetchMeasurements() {
+                $.ajax({
+                    url: 'https://localhost:7050/api/Measurement',
+                    type: 'GET',
+                    success: function (response) {
+                        var measurements = response.data;
+                        var tbody = $('#measurementsTableBody');
+                        tbody.empty(); // Clear existing data
+
+                        $.each(measurements, function (index, measurement) {
+                            var row = `<tr>
+                                                    <td>${index + 1}</td>
+                                                    <td>${measurement.measurementId}</td>
+                                                    <td>${measurement.pondId}</td>
+                                                    <td>${new Date(measurement.dateRecord).toLocaleDateString()}</td>
+                                                    <td>${measurement.note}</td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-danger btn-sm btn-custom delete-btn" data-id="${measurement.measurementId}">
+                                                            <i class="fas fa-trash-alt"></i> Delete
+                                                        </button>
+                                                        <button class="btn btn-info btn-sm btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#measureData_${measurement.measurementId}">
+                                                            <i class="fas fa-info-circle"></i> Details
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="collapse" id="measureData_${measurement.measurementId}">
+                                                    <td colspan="6">
+                                                        <div class="card card-body">
+                                                            <h5>Measure Data</h5>
+                                                            <table class="table table-sm table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>MeasureDataId</th>
+                                                                        <th>Volume</th>
+                                                                        <th>UnitId</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>`;
+                            $.each(measurement.measureData, function (i, measureData) {
+                                row += `<tr>
+                                                    <td>${measureData.measureDataId}</td>
+                                                    <td>${measureData.volume}</td>
+                                                    <td>${measureData.unitId}</td>
+                                                </tr>`;
+                            });
+                            row += `                    </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>`;
+                            tbody.append(row);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching measurements:', error);
+                    }
+                });
+            }
+
+            // Delete measurement function
+            $(document).on('click', '.delete-btn', function () {
+                const measurementId = $(this).data('id');
+
+                if (confirm('Are you sure you want to delete this measurement?')) {
+                    $.ajax({
+                        url: 'https://localhost:7050/api/Measurement/' + measurementId,
+                        type: 'DELETE',
+                        success: function (result) {
+                            alert('Measurement deleted successfully!');
+                            fetchMeasurements(); // Refresh the measurements table
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error deleting measurement: ' + error);
+                        }
+                    });
+                }
+            });
+
+            // Initial fetch
+            fetchMeasurements();
+        });
+    </script>
+}
