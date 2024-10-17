@@ -10,9 +10,9 @@ namespace KoiCareSys.Service.Service
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public KoiRecordSvc()
+        public KoiRecordSvc(UnitOfWork unitOfWork)
         {
-            _unitOfWork ??= new UnitOfWork();
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IBusinessResult> AddKoiRecordAsync(KoiRecordDTO request)

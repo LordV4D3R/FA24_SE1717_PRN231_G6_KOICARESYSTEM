@@ -10,9 +10,10 @@ namespace KoiCareSys.WebAPI.Controllers
     public class DevelopmentStageController : ControllerBase
     {
         private IDevelopmenStageSvc _DevelopmentStageSvc;
-        public DevelopmentStageController()
+
+        public DevelopmentStageController(IDevelopmenStageSvc developmentStageSvc)
         {
-            _DevelopmentStageSvc = new DevelopmentStageSvc();
+            _DevelopmentStageSvc = developmentStageSvc;
         }
 
         [HttpGet]

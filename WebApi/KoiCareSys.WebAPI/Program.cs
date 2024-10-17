@@ -30,6 +30,8 @@ builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 builder.Services.AddScoped<IFeedingScheduleService, FeedingScheduleService>();
 builder.Services.AddScoped<IPondService, PondService>();
+builder.Services.AddScoped<IKoiRecordSvc, KoiRecordSvc>();
+builder.Services.AddScoped<IDevelopmenStageSvc, DevelopmentStageSvc>();
 
 //builder.Services.ConfigAddDbContext();
 
