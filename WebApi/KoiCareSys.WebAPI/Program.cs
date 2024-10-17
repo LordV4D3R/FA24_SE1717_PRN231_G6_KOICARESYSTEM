@@ -4,6 +4,7 @@ using KoiCareSys.Data.Repository.Interface;
 using KoiCareSys.Service.Mappings;
 using KoiCareSys.Service.Service;
 using KoiCareSys.Service.Service.Interface;
+using KoiCareSys.Service.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("https://localhost:7250")
+                  .WithOrigins("https://localhost:7022")
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -50,6 +52,10 @@ builder.Services.AddCors(options =>
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+// Add SignalR
+builder.Services.AddSignalR();
+builder.Services.AddScoped<SignalRHub>();
 
 var app = builder.Build();
 
@@ -68,5 +74,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<SignalRHub>("/signalRHub");
 
 app.Run();

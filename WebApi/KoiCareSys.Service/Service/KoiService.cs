@@ -5,18 +5,22 @@ using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Serivice.Base;
 using KoiCareSys.Service.Service.Interface;
+using KoiCareSys.Service.SignalR;
 
 namespace KoiCareSys.Service.Service
 {
 
     public class KoiService : IKoiService
     {
-        private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public KoiService(UnitOfWork unitOfWork, IMapper mapper)
+        private readonly UnitOfWork _unitOfWork;
+        private readonly SignalRHub _hub;
+
+        public KoiService(UnitOfWork unitOfWork, IMapper mapper, SignalRHub hub)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hub = hub;
         }
 
         public async Task<IBusinessResult> GetAll()
@@ -77,6 +81,7 @@ namespace KoiCareSys.Service.Service
                     result = _unitOfWork.SaveChangesWithTransaction();
                     if (result > 0)
                     {
+                        await _hub.SendMessage($"Updated Koi with id: {koiTmp.Id}");
                         return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
                     }
                     else
@@ -92,6 +97,7 @@ namespace KoiCareSys.Service.Service
                     result = _unitOfWork.SaveChangesWithTransaction();
                     if (result > 0)
                     {
+                        await _hub.SendMessage($"Created new Koi with id: {koi.Id}");
                         return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
                     }
                     else
@@ -115,13 +121,14 @@ namespace KoiCareSys.Service.Service
                 var koi = await _unitOfWork.Koi.GetByIdAsync(koiId);
                 if (koi == null)
                 {
-                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, new List<Koi>());
+                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
                 }
                 else
                 {
                     var result = await _unitOfWork.Koi.RemoveAsync(koi);
                     if (result)
                     {
+                        await _hub.SendMessage($"Removed Koi with id: {koi.Id}");
                         return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
                     }
                     else
