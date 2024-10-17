@@ -12,6 +12,14 @@ namespace KoiCareSys.WebApp.ApiService
             _clientFactory = clientFactory;
         }
 
+        public async Task<T> DeleteAsync<T>(string endpoint)
+        {
+            var client = _clientFactory.CreateClient("MyAPI");
+            var response = await client.DeleteAsync(endpoint);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<T>();
+        }
+
         public async Task<T> GetAsync<T>(string endpoint)
         {
             var client = _clientFactory.CreateClient("MyAPI");
@@ -27,6 +35,7 @@ namespace KoiCareSys.WebApp.ApiService
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<T>();
         }
+
         public async Task<ApiResponse<T>> MyGetAsync<T>(string endpoint)
         {
             var client = _clientFactory.CreateClient("MyAPI");
@@ -37,5 +46,12 @@ namespace KoiCareSys.WebApp.ApiService
             return await response.Content.ReadFromJsonAsync<ApiResponse<T>>();
         }
 
+        public async Task<T> PutAsync<T>(string endpoint, object data)
+        {
+            var client = _clientFactory.CreateClient("MyAPI");
+            var response = await client.PutAsJsonAsync(endpoint, data);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<T>();
+        }
     }
 }

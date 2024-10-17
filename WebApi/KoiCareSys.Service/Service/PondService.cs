@@ -1,31 +1,29 @@
-﻿using KoiCareSys.Common;
+﻿using AutoMapper;
+using KoiCareSys.Common;
 using KoiCareSys.Data;
 using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Serivice.Base;
 using KoiCareSys.Service.Service.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoiCareSys.Service.Service
 {
     public class PondService : IPondService
     {
         private readonly UnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public PondService()
+        public PondService(UnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = new UnitOfWork();
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<IBusinessResult> GetAll(String? search)
         {
             try
             {
-                var ponds = _unitOfWork.Pond.GetAllPond(search ?? "");
+                var ponds = await _unitOfWork.Pond.GetAllPond(search ?? "");
                 if (ponds == null)
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, "Pond not found");
                 else
@@ -45,6 +43,21 @@ namespace KoiCareSys.Service.Service
                 {
                     return new BusinessResult(Const.ERROR_EXCEPTION, "request cannot be null.");
                 }
+
+                var tempUser = await _unitOfWork.User.GetFirstUser();
+
+                if (tempUser == null)
+                {
+                    return new BusinessResult(Const.FAIL_CREATE_CODE, "No users not found.");
+                }
+
+                var existingPond = await _unitOfWork.Pond.GetAllPond(dto.PondName);
+
+                if (existingPond.Any())
+                {
+                    return new BusinessResult(Const.FAIL_CREATE_CODE, "Pond Name is exist.");
+                }
+
                 Pond create = new Pond()
                 {
                     PondName = dto.PondName,
@@ -58,9 +71,10 @@ namespace KoiCareSys.Service.Service
                     Description = dto.Description,
                     Status = dto.Status,
                     IsQualified = dto.IsQualified,
-                    UserId = dto.UserId
-                    
+                    //UserId = dto.UserId != null ? dto.UserId : Guid.Empty
+                    UserId = tempUser.Id
                 };
+
                 if (await _unitOfWork.Pond.CreateAsync(create) > 0)
                     return new BusinessResult(Const.SUCCESS_CREATE_CODE, "Create pond success", create);
                 else
@@ -68,7 +82,7 @@ namespace KoiCareSys.Service.Service
             }
             catch (Exception ex)
             {
-                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.InnerException.Message);
             }
         }
 
@@ -84,6 +98,81 @@ namespace KoiCareSys.Service.Service
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, "Pond not found");
                 else
                     return new BusinessResult(Const.SUCCESS_READ_CODE, "Success", pond);
+            }
+            catch (Exception ex)
+            {
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<IBusinessResult> DeleteById(Guid pondId)
+        {
+            try
+            {
+                var pond = await _unitOfWork.Pond.GetByIdAsync(pondId);
+                if (pond == null)
+                {
+                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
+                }
+                else
+                {
+                    var result = await _unitOfWork.Pond.RemoveAsync(pond);
+                    if (result)
+                    {
+                        return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
+                    }
+                    else
+                    {
+                        return new BusinessResult(Const.FAIL_DELETE_CODE, Const.FAIL_DELETE_MSG);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<IBusinessResult> GetAll()
+        {
+            var ponds = await _unitOfWork.Pond.GetAllAsync();
+            if (ponds == null)
+            {
+                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
+            }
+            else
+            {
+                var pondDTOs = _mapper.Map<List<PondDTO>>(ponds);
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, pondDTOs);
+            }
+        }
+
+        public async Task<IBusinessResult> Update(PondDTO dto)
+        {
+            Pond pond = _mapper.Map<Pond>(dto);
+
+            try
+            {
+                int result = -1;
+
+                var existingPond = _unitOfWork.Pond.GetById(dto.Id);
+
+                if (existingPond != null)
+                {
+                    #region Business rule
+                    #endregion Business rule
+
+                    _mapper.Map(dto, existingPond);
+                    await _unitOfWork.Pond.UpdateAsync(existingPond);
+
+                    return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG, existingPond);
+
+                }
+                else
+                {
+                    return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, dto);
+                }
+
             }
             catch (Exception ex)
             {
