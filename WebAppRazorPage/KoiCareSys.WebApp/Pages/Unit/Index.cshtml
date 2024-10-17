@@ -1,0 +1,116 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.Unit.IndexModel
+@{
+    ViewData["Title"] = "Unit Page";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title">Units</h2>
+                    <div>
+                        <label for="searchUnits" class="sr-only">Search units</label>
+                        <input type="text" id="searchUnits" class="form-control form-control-sm d-inline-block w-auto" placeholder="Search units" />
+                    </div>
+                    <a href="/Unit/Create" class="btn btn-md btn-primary">Create</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Unit Id</th>
+                                    <th>Name</th>
+                                    <th>Unit Of Measure</th>
+                                    <th>Full Name</th>
+                                    <th>Information</th>
+                                    <th>Min Value</th>
+                                    <th>Max Value</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="unitsTableBody">
+                                <!-- Data will be populated here by AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function fetchUnits() {
+                $.ajax({
+                    url: 'https://localhost:7050/api/Unit',
+                    type: 'GET',
+                    success: function (response) {
+                        var units = response.data;
+                        var tbody = $('#unitsTableBody');
+                        tbody.empty(); // Clear existing data
+
+                        $.each(units, function (index, unit) {
+                            var row = `<tr class="unit-row">
+                                                        <td>${index + 1}</td>
+                                                        <td>${unit.unitId}</td>
+                                                        <td>${unit.name}</td>
+                                                        <td>${unit.unitOfMeasure}</td>
+                                                        <td>${unit.fullName}</td>
+                                                        <td>${unit.information}</td>
+                                                        <td>${unit.minValue}</td>
+                                                        <td>${unit.maxValue}</td>
+                                                        <td class="text-center">
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete-btn" data-id="${unit.unitId}">Delete</a>
+                                                            <a href="/Unit/Update/${unit.unitId}" class="btn btn-sm btn-warning">Edit</a>
+                                                        </td>
+                                                    </tr>`;
+                            tbody.append(row);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching units:', error);
+                    }
+                });
+            }
+
+            // Delete unit function
+            $(document).on('click', '.delete-btn', function () {
+                const unitId = $(this).data('id');
+
+                if (confirm('Are you sure you want to delete this unit?')) {
+                    $.ajax({
+                        url: 'https://localhost:7050/api/Unit/' + unitId,
+                        type: 'DELETE',
+                        success: function (result) {
+                            alert('Unit deleted successfully!');
+                            fetchUnits(); // Refresh the units table
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error deleting unit: ' + error);
+                        }
+                    });
+                }
+            });
+
+            // Search functionality
+            $('#searchUnits').on('input', function () {
+                var searchValue = $(this).val().toLowerCase();
+
+                // Filter rows based on the search input
+                $('#unitsTableBody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+                });
+            });
+
+            // Initial fetch
+            fetchUnits();
+        });
+    </script>
+}
