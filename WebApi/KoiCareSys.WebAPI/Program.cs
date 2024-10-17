@@ -1,13 +1,10 @@
-using Autofac.Core;
 using KoiCareSys.Data;
 using KoiCareSys.Data.Repository;
 using KoiCareSys.Data.Repository.Interface;
 using KoiCareSys.Service.Mappings;
 using KoiCareSys.Service.Service;
 using KoiCareSys.Service.Service.Interface;
-using KoiCareSys.WebAPI.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +13,7 @@ builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 builder.Services.AddScoped<IFeedingScheduleService, FeedingScheduleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPondService, PondService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -30,6 +28,7 @@ builder.Services.AddScoped<IFeedingScheduleRepository, FeedingScheduleRepository
 
 builder.Services.AddScoped<IMeasurementRepository, MeasurementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPondRepository, PondRepository>();
 
 
 //Add Configuration

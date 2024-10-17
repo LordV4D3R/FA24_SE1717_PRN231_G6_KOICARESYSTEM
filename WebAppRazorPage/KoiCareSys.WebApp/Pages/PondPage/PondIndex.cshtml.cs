@@ -2,28 +2,28 @@ using KoiCareSys.WebApp.ApiService.Interface;
 using KoiCareSys.WebApp.Model;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KoiCareSys.WebApp.Pages.UserPage
+namespace KoiCareSys.WebApp.Pages.PondPage
 {
-    public class UserIndexModel : PageModel
+    public class PondIndexModel : PageModel
     {
         private readonly IApiService _apiService;
 
-        public UserIndexModel(IApiService apiService)
+        public PondIndexModel(IApiService apiService)
         {
             _apiService = apiService;
         }
 
-        public List<UserDto> Users { get; set; }
+        public List<PondDto> Ponds { get; set; }
         public async Task OnGetAsync()
         {
             try
             {
-                Users = await _apiService.GetAsync<List<UserDto>>("api/users");
+                Ponds = await _apiService.GetAsync<List<PondDto>>("api/pond");
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching users: {ex.Message}");
+                Console.WriteLine($"Error fetching ponds: {ex.Message}");
             }
         }
     }

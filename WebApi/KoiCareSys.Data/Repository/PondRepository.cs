@@ -3,19 +3,14 @@ using KoiCareSys.Data.DAO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Data.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoiCareSys.Data.Repository
 {
-    public class PondRepository : GenericRepository<Pond> ,IPondRepository
+    public class PondRepository : GenericRepository<Pond>, IPondRepository
     {
         private readonly PondDAO _dao;
-        public PondRepository() 
+        public PondRepository()
         {
             _dao ??= new PondDAO();
         }
@@ -33,8 +28,17 @@ namespace KoiCareSys.Data.Repository
         public async Task<IEnumerable<Pond>> GetAllPond(string search)
         {
             Expression<Func<Pond, bool>> predicate = x => x.PondName.Contains(search) || x.Description.Contains(search);
+
+            bool hasResults = await _dbSet.AnyAsync(predicate);
+
+            if (!hasResults)
+            {
+                return Enumerable.Empty<Pond>();
+            }
+
             IQueryable<Pond> query = _dbSet.Where(predicate);
-            return query.AsNoTracking().AsEnumerable();
+            return await query.AsNoTracking().ToListAsync();
         }
+
     }
 }

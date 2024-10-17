@@ -1,10 +1,4 @@
-﻿using KoiCareSys.Data.Models;
-using KoiCareSys.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KoiCareSys.Data.Repository;
 
 namespace KoiCareSys.Data
 {
@@ -18,6 +12,8 @@ namespace KoiCareSys.Data
         private MeasurementRepository measurementRepository;
         private MeasureDataRepository measureDataRepository;
         private UnitRepository unitRepository;
+        private DevelopmentStageRepo developmentStageRepo;
+        private KoiRecordRepo koiRecordRepo;
 
         public UnitOfWork(ApplicationDbContext unitOfWorkContext)
         {
@@ -65,6 +61,16 @@ namespace KoiCareSys.Data
         public UnitRepository Unit
         {
             get { return unitRepository ??= new UnitRepository(); }
+        }
+
+        public DevelopmentStageRepo DevelopmentStage
+        {
+            get { return developmentStageRepo ??= new DevelopmentStageRepo(); }
+        }
+
+        public KoiRecordRepo KoiRecord
+        {
+            get { return koiRecordRepo ??= new KoiRecordRepo(); }
         }
 
         ////TO-DO CODE HERE/////////////////
@@ -129,6 +135,5 @@ namespace KoiCareSys.Data
             return result;
         }
         #endregion
-
     }
 }
