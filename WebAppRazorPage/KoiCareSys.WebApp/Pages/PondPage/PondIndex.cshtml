@@ -3,6 +3,62 @@
 @{
     ViewData["Title"] = "Pond Page";
 }
+<style>
+    .btn-custom {
+        border-radius: 25px;
+        padding: 5px 15px;
+        font-size: 14px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin: 0 5px; /* Spacing between the buttons */
+        text-decoration: none; /* Remove underline from anchor links */
+    }
+
+    .btn-custom-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-custom-delete:hover {
+            background-color: #c82333;
+            color: white;
+        }
+
+    .btn-custom-edit {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .btn-custom-edit:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+    .ico {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+
+    .btn-custom-create {
+        background-color: #28a745; /* Green color for create action */
+        color: white;
+        border-radius: 25px;
+        padding: 5px 15px;
+        font-size: 14px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        text-decoration: none; /* Remove underline */
+        margin-right: 5px; /* Optional spacing */
+    }
+
+        .btn-custom-create:hover {
+            background-color: #218838; /* Darker green on hover */
+            color: white;
+        }
+
+</style>
+
 
 <h1 style="color: black;">
     Pond Board
@@ -28,6 +84,13 @@
         </tr>
     </thead>
     <tbody>
+        @if (Model.Ponds.Count == 0)
+        {
+            <tr>
+                <td colspan="5">No records found.</td>
+            </tr>
+        }
+
         @foreach (var pond in Model.Ponds)
         {
             <tr class="@(Model.Ponds.IndexOf(pond) % 2 == 0 ? "odd" : "")">
@@ -46,9 +109,14 @@
                 <td>@pond.Note</td>
 
                 <td class="text-center">
-                    <a asp-page="./PondDelete" asp-route-id="@pond.Id" class="ico del">Delete</a><a asp-page="./PondEdit" asp-route-id="@pond.Id" class="ico edit">Edit</a>
-                </td>
+                    <a asp-page="./PondDelete" asp-route-id="@pond.Id" class="ico btn-custom btn-custom-delete">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
 
+                    <a asp-page="./PondEdit" asp-route-id="@pond.Id" class="ico btn-custom btn-custom-edit">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </td>
             </tr>
             }
     </tbody>
