@@ -39,7 +39,7 @@
                         <input type="text" class="form-control" id="searchMeasurements" placeholder="Search measurements" aria-label="Search measurements" />
                         <button class="btn btn-primary" type="button" id="searchButton">Search</button>
                     </div>
-                     <a href="/Measurement/Create" class="btn btn-md btn-primary">Create</a>
+                    <a href="/Measurement/Create" class="btn btn-md btn-primary">Create</a>
                 </div>
                 <div class="card-body p-4">
                     <div class="table-responsive">
@@ -48,7 +48,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>MeasurementId</th>
-                                    <th>PondId</th>
+                                    <th>Pond Name</th>
                                     <th>DateRecord</th>
                                     <th>Note</th>
                                     <th class="text-center">Actions</th>
@@ -69,6 +69,24 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            let ponds = [];
+
+            // Fetch Ponds
+            function fetchPonds(callback) {
+                $.ajax({
+                    url: 'https://localhost:7050/api/Pond',
+                    type: 'GET',
+                    success: function (response) {
+                        ponds = response;
+                        if (callback) callback();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching ponds:', error);
+                    }
+                });
+            }
+
+            // Fetch Measurements
             function fetchMeasurements() {
                 $.ajax({
                     url: 'https://localhost:7050/api/Measurement',
@@ -79,46 +97,47 @@
                         tbody.empty(); // Clear existing data
 
                         $.each(measurements, function (index, measurement) {
+                            var pondName = ponds.find(pond => pond.id === measurement.pondId)?.pondName || 'Unknown';
                             var row = `<tr>
-                                                    <td>${index + 1}</td>
-                                                    <td>${measurement.measurementId}</td>
-                                                    <td>${measurement.pondId}</td>
-                                                    <td>${new Date(measurement.dateRecord).toLocaleDateString()}</td>
-                                                    <td>${measurement.note}</td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-danger btn-sm btn-custom delete-btn" data-id="${measurement.measurementId}">
-                                                            <i class="fas fa-trash-alt"></i> Delete
-                                                        </button>
-                                                        <button class="btn btn-info btn-sm btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#measureData_${measurement.measurementId}">
-                                                            <i class="fas fa-info-circle"></i> Details
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr class="collapse" id="measureData_${measurement.measurementId}">
-                                                    <td colspan="6">
-                                                        <div class="card card-body">
-                                                            <h5>Measure Data</h5>
-                                                            <table class="table table-sm table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>MeasureDataId</th>
-                                                                        <th>Volume</th>
-                                                                        <th>UnitId</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>`;
+                                                            <td>${index + 1}</td>
+                                                            <td>${measurement.measurementId}</td>
+                                                            <td>${pondName}</td>
+                                                            <td>${new Date(measurement.dateRecord).toLocaleDateString()}</td>
+                                                            <td>${measurement.note}</td>
+                                                            <td class="text-center">
+                                                                <button class="btn btn-danger btn-sm btn-custom delete-btn" data-id="${measurement.measurementId}">
+                                                                    <i class="fas fa-trash-alt"></i> Delete
+                                                                </button>
+                                                                <button class="btn btn-info btn-sm btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#measureData_${measurement.measurementId}">
+                                                                    <i class="fas fa-info-circle"></i> Details
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="collapse" id="measureData_${measurement.measurementId}">
+                                                            <td colspan="6">
+                                                                <div class="card card-body">
+                                                                    <h5>Measure Data</h5>
+                                                                    <table class="table table-sm table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>MeasureDataId</th>
+                                                                                <th>Volume</th>
+                                                                                <th>UnitId</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>`;
                             $.each(measurement.measureData, function (i, measureData) {
                                 row += `<tr>
-                                                    <td>${measureData.measureDataId}</td>
-                                                    <td>${measureData.volume}</td>
-                                                    <td>${measureData.unitId}</td>
-                                                </tr>`;
+                                                            <td>${measureData.measureDataId}</td>
+                                                            <td>${measureData.volume}</td>
+                                                            <td>${measureData.unitId}</td>
+                                                        </tr>`;
                             });
                             row += `                    </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </td>
-                                                </tr>`;
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>`;
                             tbody.append(row);
                         });
                     },
@@ -148,7 +167,7 @@
             });
 
             // Initial fetch
-            fetchMeasurements();
+            fetchPonds(fetchMeasurements);
         });
     </script>
 }
