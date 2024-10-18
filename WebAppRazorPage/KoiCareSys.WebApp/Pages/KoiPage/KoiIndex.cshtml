@@ -100,7 +100,7 @@
 
         // SignalR connection
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7050/signalRHub") // Replace with your SignalR hub URL
+            .withUrl("https://localhost:7050/signalRHub", {withCredentials: true}) // Replace with your SignalR hub URL
             .build();
 
         // Start the connection
