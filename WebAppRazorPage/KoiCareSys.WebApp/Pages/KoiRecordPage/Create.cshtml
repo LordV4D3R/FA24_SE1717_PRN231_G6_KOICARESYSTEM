@@ -3,7 +3,7 @@
 @{
 }
 <!-- Container -->
-<div id="container">
+<div id="container" style="color: black;">
     <div class="shell">
         <!-- Main -->
         <div id="main">
@@ -19,7 +19,9 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group">
                                     <label asp-for="Request.KoiId" class="control-label"></label>
-                                    <input asp-for="Request.KoiId" class="form-control" />
+                                    <select asp-for="Request.KoiId" class="form-control" id="koiIdDropdown">
+                                        <option value="">Select Koi</option>
+                                    </select>
                                     <span asp-validation-for="Request.KoiId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -44,7 +46,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Request.DevelopmentStageId" class="control-label"></label>
-                                    <input asp-for="Request.DevelopmentStageId" class="form-control" />
+                                    <select asp-for="Request.DevelopmentStageId" class="form-control" id="developmentStageDropdown">
+                                        <option value="">Select Development Stage</option>
+                                    </select>
                                     <span asp-validation-for="Request.DevelopmentStageId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -63,3 +67,41 @@
     </div>
 </div>
 <!-- End Container -->
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Fetch Koi IDs
+            $.ajax({
+                url: 'https://localhost:7050/api/Kois', // Change to your actual API endpoint
+                type: 'GET',
+                success: function (data2) {
+                    const data = data2.data;
+                    var koiDropdown = $('#koiIdDropdown');
+                    $.each(data, function (index, item) {
+                        koiDropdown.append($('<option>', {
+                            value: item.id,
+                            text: item.name // Adjust based on your data structure
+                        }));
+                    });
+                }
+            });
+
+            // Fetch Development Stages
+            $.ajax({
+                url: 'https://localhost:7050/api/DevelopmentStage', // Change to your actual API endpoint
+                type: 'GET',
+                success: function (data2) {
+                    const data = data2.data;
+                    var stageDropdown = $('#developmentStageDropdown');
+                    $.each(data, function (index, item) {
+                        stageDropdown.append($('<option>', {
+                            value: item.id,
+                            text: item.stageName // Adjust based on your data structure
+                        }));
+                    });
+                }
+            });
+        });
+    </script>
+}
