@@ -28,7 +28,9 @@ namespace KoiCareSys.Data
         public DbSet<Measurement> Measurements { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<Product> Products { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Order> Orders{ get; set; }
 
         #endregion DbSet
 

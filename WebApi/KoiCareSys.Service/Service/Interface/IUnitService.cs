@@ -7,7 +7,8 @@ namespace KoiCareSys.Service.Service.Interface
     {
         Task<IBusinessResult> GetAll();
         Task<IBusinessResult> GetById(Guid code);
+        Task<IBusinessResult> Create(UnitDTO unitDTO);
+        Task<IBusinessResult> Update(UnitDTO unitDTO);
         Task<IBusinessResult> DeleteById(Guid id);
-        Task<IBusinessResult> Save(UnitDTO unitDTO);
     }
 }
