@@ -24,10 +24,13 @@
                 </div>
                 <div class="card-body">
                     <form id="createMeasurementForm">
-                        @* <div class="mb-3">
-                            <label for="pondId" class="form-label">Pond Id</label>
-                            <input type="text" class="form-control" id="pondId" name="pondId" required />
-                        </div> *@
+                        <div class="mb-3">
+                            <label for="pondId" class="form-label">Pond</label>
+                            <select class="form-control" id="pondId" name="pondId" required>
+                                <option value="">Select Pond</option>
+                                <!-- Options will be populated by AJAX -->
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label for="dateRecord" class="form-label">Date Record</label>
                             <input type="date" class="form-control" id="dateRecord" name="dateRecord" required />
@@ -61,6 +64,26 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Fetch ponds for dropdown
+            function fetchPonds() {
+                $.ajax({
+                    url: 'https://localhost:7050/api/Pond', // Adjust your API endpoint as necessary
+                    type: 'GET',
+                    success: function (response) {
+                        var ponds = response; // Adjust based on your API response structure
+                        var pondDropdown = $('#pondId');
+                        pondDropdown.empty(); // Clear existing options
+                        pondDropdown.append('<option value="">Select Pond</option>'); // Default option
+                        $.each(ponds, function (index, pond) {
+                            pondDropdown.append(`<option value="${pond.id}">${pond.pondName}</option>`);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching ponds:', error);
+                    }
+                });
+            }
+
             // Fetch units for dropdown
             function fetchUnits() {
                 $.ajax({
@@ -81,6 +104,7 @@
                 });
             }
 
+            fetchPonds(); // Initial fetch of ponds
             fetchUnits(); // Initial fetch of units
 
             // Update unit of measure next to volume input on change
@@ -91,13 +115,13 @@
 
             $('#addMeasureData').on('click', function () {
                 var measureDataHtml = `<div class="measure-data-input">
-                                                    <input type="number" class="form-control volume" placeholder="Volume" name="volume" required />
-                                                    <span class="unit-of-measure"></span>
-                                                    <select class="form-control unitId" name="unitId" required>
-                                                        <option value="">Select Unit</option>
-                                                        <!-- Options will be populated by AJAX -->
-                                                    </select>
-                                                </div>`;
+                            <input type="number" class="form-control volume" placeholder="Volume" name="volume" required />
+                            <span class="unit-of-measure"></span>
+                            <select class="form-control unitId" name="unitId" required>
+                                <option value="">Select Unit</option>
+                                <!-- Options will be populated by AJAX -->
+                            </select>
+                        </div>`;
                 $('#measureDataContainer').append(measureDataHtml);
                 // Re-fetch units to ensure the new dropdown has options
                 fetchUnits();
@@ -116,10 +140,9 @@
                 });
 
                 var formData = {
-                    // pondId: $('#pondId').val(),
+                    pondId: $('#pondId').val(),
                     dateRecord: $('#dateRecord').val(),
                     note: $('#note').val(),
-                    pondId: '93784181-5183-4b63-affd-7f21b9e82701', // TODO: Update later
                     measureData: measureDataList // Add the measure data list to the form data
                 };
 

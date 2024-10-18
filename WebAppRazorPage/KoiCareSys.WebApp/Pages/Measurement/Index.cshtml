@@ -138,15 +138,18 @@
                                                         <tr>
                                                             <th>MeasureDataId</th>
                                                             <th>Volume</th>
+                                                            <th>Data</th>
                                                             <th>Unit</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>`;
                             $.each(measurement.measureData, function (i, measureData) {
                                 var unitFullName = units.find(unit => unit.unitId === measureData.unitId)?.fullName || 'Unknown';
+                                var unitOfMeasure = units.find(unit => unit.unitId === measureData.unitId)?.unitOfMeasure || 'Unknown';
                                 row += `<tr>
                                             <td>${measureData.measureDataId}</td>
                                             <td>${measureData.volume}</td>
+                                            <td>${unitOfMeasure}</td>
                                             <td>${unitFullName}</td>
                                         </tr>`;
                             });
