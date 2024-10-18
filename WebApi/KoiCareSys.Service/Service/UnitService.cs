@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using KoiCareSys.Common;
 using KoiCareSys.Data;
 using KoiCareSys.Data.DTO;
@@ -50,54 +51,92 @@ namespace KoiCareSys.Service.Service
                 return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, unitDTO);
             }
         }
-        public async Task<IBusinessResult> Save(UnitDTO request)
+
+        public async Task<IBusinessResult> Create(UnitDTO request)
         {
             Unit unit = _mapper.Map<Unit>(request);
+            var result = await _unitOfWork.Unit.CreateAsync(unit);
+            if (result > 0)
+            {
+                return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
+            }
+            else
+            {
+                return new BusinessResult(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
+            }
+        }
 
+        public async Task<IBusinessResult> Update(UnitDTO request)
+        {
             try
             {
-                int result = -1;
-
-                var UnitTmp = await _unitOfWork.Unit.GetByIdAsync(unit.UnitId);
-                if (UnitTmp != null)
+                Unit unit = _mapper.Map<Unit>(request);
+                var result = await _unitOfWork.Unit.UpdateAsync(unit);
+                if (result > 0)
                 {
-                    #region Business rule
-                    #endregion Business rule
-                    UnitTmp = _mapper.Map<Unit>(unit);
-                    _unitOfWork.Unit.Update(UnitTmp);
-                    result = await _unitOfWork.SaveChangesWithTransactionAsync();
-                    if (result > 0)
-                    {
-                        return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
-                    }
-                    else
-                    {
-                        var unitDTO = _mapper.Map<UnitDTO>(unit);
-                        return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, unit);
-                    }
+                    return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
                 }
                 else
                 {
-                    #region Business rule
-                    #endregion Business rule
-
-                    result = await _unitOfWork.Unit.CreateAsync(unit);
-                    if (result > 0)
-                    {
-                        return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
-                    }
-                    else
-                    {
-                        return new BusinessResult(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
-                    }
+                    var unitDTO = _mapper.Map<UnitDTO>(request);
+                    return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, unitDTO);
                 }
-
             }
             catch (Exception ex)
             {
                 return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
             }
         }
+
+        //public async Task<IBusinessResult> Save(UnitDTO request)
+        //{
+        //    Unit unit = _mapper.Map<Unit>(request);
+
+        //    try
+        //    {
+        //        int result = -1;
+
+        //        var UnitTmp = await _unitOfWork.Unit.GetByIdAsync(unit.UnitId);
+        //        if (UnitTmp != null)
+        //        {
+        //            #region Business rule
+        //            #endregion Business rule
+        //            UnitTmp = _mapper.Map<Unit>(unit);
+        //            _unitOfWork.Unit.Update(UnitTmp);
+        //            result = await _unitOfWork.SaveChangesWithTransactionAsync();
+        //            if (result > 0)
+        //            {
+        //                return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
+        //            }
+        //            else
+        //            {
+        //                var unitDTO = _mapper.Map<UnitDTO>(unit);
+        //                return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, unit);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            #region Business rule
+        //            #endregion Business rule
+
+        //            result = await _unitOfWork.Unit.CreateAsync(unit);
+        //            if (result > 0)
+        //            {
+        //                return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
+        //            }
+        //            else
+        //            {
+        //                return new BusinessResult(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
+        //            }
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+        //    }
+        //}
+
         public async Task<IBusinessResult> DeleteById(Guid unitId)
         {
             #region Business rule

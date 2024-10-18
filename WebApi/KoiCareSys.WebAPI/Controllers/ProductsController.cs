@@ -10,6 +10,7 @@ using KoiCareSys.Data.Models;
 using KoiCareSys.Service.Service.Interface;
 using KoiCareSys.Serivice.Base;
 using KoiCareSys.Data.DTO;
+using KoiCareSys.Service.Service;
 
 namespace KoiCareSys.WebAPI.Controllers
 {
@@ -26,18 +27,39 @@ namespace KoiCareSys.WebAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<IBusinessResult> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await _productService.GetAll();
+
+            var result = await _productService.GetAll();
+            if (result != null && result.Status > 0 && result.Data != null)
+            {
+                return Ok(result.Data as IEnumerable<Product>);
+            }
+            else
+            {
+                return NotFound(result.Message ?? "No products found");
+            }
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<IBusinessResult> GetProduct(Guid id)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProduct(Guid id)
         {
-         return   await _productService.GetById(id);
+        
 
-           
+            try
+            {
+                var result = await _productService.GetById(id);
+                if (result.Status > 0)
+                {
+                    return  Ok(result.Data);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/Products/5
@@ -51,10 +73,22 @@ namespace KoiCareSys.WebAPI.Controllers
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IBusinessResult> PostProduct(ProductDTO product)
+        public async Task<ActionResult<IEnumerable<Product>>> PostProduct(ProductDTO product)
         {
 
-            return await _productService.Save(product);
+            try
+            {
+                var result = await _productService.Save(product);
+                if (result.Status > 0)
+                {
+                    return Ok(result.Data);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: api/Products/5

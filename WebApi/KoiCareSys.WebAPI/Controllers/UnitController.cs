@@ -33,14 +33,14 @@ namespace KoiCareSys.WebAPI.Controllers
         [HttpPut]
         public async Task<IBusinessResult> Update(UnitDTO request)
         {
-            return await _unitService.Save(request);
+            return await _unitService.Update(request);
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<IBusinessResult> Create([FromBody] UnitDTO request)
         {
-            return await _unitService.Save(request);
+            return await _unitService.Create(request);
         }
 
         [HttpDelete("{id}")]

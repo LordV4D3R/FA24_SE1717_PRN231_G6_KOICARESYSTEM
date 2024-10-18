@@ -16,10 +16,15 @@ namespace KoiCareSys.Service.Service
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public FeedingScheduleService()
+        public FeedingScheduleService(UnitOfWork unitOfWork)
         {
-            _unitOfWork = new UnitOfWork();
+            _unitOfWork = unitOfWork;
         }
+
+        //public FeedingScheduleService()
+        //{
+        //    _unitOfWork = new UnitOfWork();
+        //}
 
         public async Task<IBusinessResult> GetAll(String? search)
         {
@@ -41,7 +46,7 @@ namespace KoiCareSys.Service.Service
         {
             try
             {
-                if(request == null)
+                if (request == null)
                 {
                     return new BusinessResult(Const.ERROR_EXCEPTION, "request cannot be null.");
                 }

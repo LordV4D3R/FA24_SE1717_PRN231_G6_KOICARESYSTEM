@@ -1,4 +1,6 @@
-﻿namespace KoiCareSys.WebApp.ApiService.Interface
+﻿using KoiCareSys.WebApp.Model;
+
+namespace KoiCareSys.WebApp.ApiService.Interface
 {
     public interface IApiService
     {
@@ -7,5 +9,6 @@
         Task<T> DeleteAsync<T>(string endpoint);
         Task<T> PutAsync<T>(string endpoint, object data);
         // Thêm các phương thức khác nếu cần
+
     }
 }

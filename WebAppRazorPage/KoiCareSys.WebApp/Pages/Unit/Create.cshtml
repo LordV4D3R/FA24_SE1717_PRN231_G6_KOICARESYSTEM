@@ -1,0 +1,100 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.Unit.CreateModel
+@{
+    ViewData["Title"] = "Create Unit";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Create Unit</h2>
+                </div>
+                <div class="card-body">
+                    <form id="createUnitForm">
+                        <div class="form-group">
+                            <label for="Name" class="control-label">Name</label>
+                            <input type="text" id="Name" name="Name" class="form-control" required />
+                            <span class="text-danger" id="nameValidationError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="UnitOfMeasure" class="control-label">Unit of Measure</label>
+                            <input type="text" id="UnitOfMeasure" name="UnitOfMeasure" class="form-control" required />
+                            <span class="text-danger" id="unitOfMeasureValidationError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="FullName" class="control-label">Full Name</label>
+                            <input type="text" id="FullName" name="FullName" class="form-control" required />
+                            <span class="text-danger" id="fullNameValidationError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Information" class="control-label">Information</label>
+                            <textarea id="Information" name="Information" class="form-control" required></textarea>
+                            <span class="text-danger" id="informationValidationError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="MinValue" class="control-label">Min Value</label>
+                            <input type="number" id="MinValue" name="MinValue" class="form-control" required />
+                            <span class="text-danger" id="minValueValidationError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="MaxValue" class="control-label">Max Value</label>
+                            <input type="number" id="MaxValue" name="MaxValue" class="form-control" required />
+                            <span class="text-danger" id="maxValueValidationError"></span>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                    <div id="successMessage" class="alert alert-success d-none" role="alert">
+                        Unit created successfully!
+                    </div>
+                    <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+                        Error creating unit.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#createUnitForm').on('submit', function (e) {
+                e.preventDefault();
+
+                let unitData = {
+                    name: $('#Name').val(),
+                    unitOfMeasure: $('#UnitOfMeasure').val(),
+                    fullName: $('#FullName').val(),
+                    information: $('#Information').val(),
+                    minValue: parseFloat($('#MinValue').val()),
+                    maxValue: parseFloat($('#MaxValue').val())
+                };
+
+                $.ajax({
+                    url: 'https://localhost:7050/api/Unit',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(unitData),
+                    success: function (result) {
+                        setTimeout(() => {
+                            window.location.href = '/Unit';
+                        }, 300)
+                        $('#successMessage').removeClass('d-none');
+                        $('#errorMessage').addClass('d-none');
+                        $('#createUnitForm')[0].reset();
+                    },
+                    error: function (xhr, status, error) {
+                        $('#errorMessage').removeClass('d-none');
+                        $('#successMessage').addClass('d-none');
+                        console.error('Error creating unit:', error);
+                    }
+                });
+            });
+        });
+    </script>
+}

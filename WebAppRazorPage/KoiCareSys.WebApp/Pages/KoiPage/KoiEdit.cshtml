@@ -1,0 +1,94 @@
+﻿@page "{id:guid}"
+@model KoiCareSys.WebApp.Pages.KoiPage.KoiEditModel
+@{
+    ViewData["Title"] = "Edit Koi";
+}
+
+<h2>Edit Koi</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" asp-for="Koi.Name" class="form-control" />
+        <span asp-validation-for="Koi.Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Physique</label>
+        <input type="text" asp-for="Koi.Physique" class="form-control" />
+        <span asp-validation-for="Koi.Physique" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Age</label>
+        <input type="number" asp-for="Koi.Age" class="form-control" />
+        <span asp-validation-for="Koi.Age" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Length (cm)</label>
+        <input type="number" asp-for="Koi.Length" class="form-control" step="0.01" />
+        <span asp-validation-for="Koi.Length" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Sex</label>
+        <select asp-for="Koi.Sex" class="form-control">
+            <option value="0">Male</option>
+            <option value="1">Female</option>
+        </select>
+        <span asp-validation-for="Koi.Sex" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Category</label>
+        <input type="text" asp-for="Koi.Category" class="form-control" />
+        <span asp-validation-for="Koi.Category" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>In Pond Since</label>
+        <input type="date" asp-for="Koi.InPondSince" class="form-control" />
+        <span asp-validation-for="Koi.InPondSince" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Purchase Price</label>
+        <input type="number" asp-for="Koi.PurchasePrice" class="form-control" step="0.01" />
+        <span asp-validation-for="Koi.PurchasePrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Status</label>
+        <select asp-for="Koi.Status" class="form-control">
+            <option value="0">Active</option>
+            <option value="1">Inactive</option>
+            <option value="2">Suspended</option>
+            <option value="3">Deleted</option>
+        </select>
+        <span asp-validation-for="Koi.Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Image URL</label>
+        <input type="text" asp-for="Koi.ImgUrl" class="form-control" />
+        <span asp-validation-for="Koi.ImgUrl" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Origin</label>
+        <input type="text" asp-for="Koi.Origin" class="form-control" />
+        <span asp-validation-for="Koi.Origin" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Breed</label>
+        <input type="text" asp-for="Koi.Breed" class="form-control" />
+        <span asp-validation-for="Koi.Breed" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Koi.Id" />
+    <input type="hidden" asp-for="Koi.PondId" />
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-page="/KoiPage/KoiIndex" class="btn btn-secondary">Cancel</a>
+</form>

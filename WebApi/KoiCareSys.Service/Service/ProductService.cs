@@ -28,7 +28,7 @@ namespace KoiCareSys.Service.Service
             #region Business Rule
             #endregion
             var koi = await _unitOfWork.Product.GetAllAsync();
-            if (koi == null)
+            if (koi != null)
             {
                 return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, koi);
             }

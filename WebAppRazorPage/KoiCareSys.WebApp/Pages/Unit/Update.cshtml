@@ -1,0 +1,80 @@
+﻿@page "{id}"
+@model KoiCareSys.WebApp.Pages.Unit.UpdateModel
+@{
+    ViewData["Title"] = "Update Unit";
+}
+
+<div class="container mt-5">
+    <h2>Update Unit</h2>
+    <form id="updateForm">
+        <input type="hidden" asp-for="Unit.UnitId" />
+        <div class="form-group">
+            <label asp-for="Unit.Name"></label>
+            <input asp-for="Unit.Name" class="form-control" />
+            <span asp-validation-for="Unit.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.UnitOfMeasure"></label>
+            <input asp-for="Unit.UnitOfMeasure" class="form-control" />
+            <span asp-validation-for="Unit.UnitOfMeasure" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.FullName"></label>
+            <input asp-for="Unit.FullName" class="form-control" />
+            <span asp-validation-for="Unit.FullName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.Information"></label>
+            <textarea asp-for="Unit.Information" class="form-control"></textarea>
+            <span asp-validation-for="Unit.Information" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.MinValue"></label>
+            <input asp-for="Unit.MinValue" type="number" class="form-control" />
+            <span asp-validation-for="Unit.MinValue" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.MaxValue"></label>
+            <input asp-for="Unit.MaxValue" type="number" class="form-control" />
+            <span asp-validation-for="Unit.MaxValue" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Handle form submission
+            $('#updateForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                const unitId = $('input[name="Unit.UnitId"]').val();
+                const unitData = {
+                    unitId: unitId,
+                    name: $('input[name="Unit.Name"]').val(),
+                    unitOfMeasure: $('input[name="Unit.UnitOfMeasure"]').val(),
+                    fullName: $('input[name="Unit.FullName"]').val(),
+                    information: $('textarea[name="Unit.Information"]').val(),
+                    minValue: $('input[name="Unit.MinValue"]').val(),
+                    maxValue: $('input[name="Unit.MaxValue"]').val()
+                };
+
+                $.ajax({
+                    url: `https://localhost:7050/api/Unit`,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(unitData),
+                    success: function () {
+                        // Redirect to the unit page on success
+                        window.location.href = '/Unit';
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating unit:', error);
+                    }
+                });
+            });
+        });
+    </script>
+}

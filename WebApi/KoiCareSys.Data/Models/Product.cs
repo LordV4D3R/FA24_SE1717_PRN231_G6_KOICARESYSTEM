@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace KoiCareSys.Data.Models
@@ -44,7 +45,8 @@ namespace KoiCareSys.Data.Models
         [Required]
         public DateTime UpdateDate { get; set; }
 
-        [InverseProperty("Product")]
+        [JsonIgnore]
+        [InverseProperty("Product")]  
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

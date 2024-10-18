@@ -13,6 +13,8 @@ namespace KoiCareSys.Data
         private MeasureDataRepository measureDataRepository;
         private UnitRepository unitRepository;
         private ProductRepository productRepository;
+        private DevelopmentStageRepo developmentStageRepo;
+        private KoiRecordRepo koiRecordRepo;
 
         public UnitOfWork(ApplicationDbContext unitOfWorkContext)
         {
@@ -27,6 +29,9 @@ namespace KoiCareSys.Data
 
         get { return productRepository ??= new ProductRepository(); }
         }
+        //public UnitOfWork()
+        //{
+        //}
 
         public UserRepository User
         {
@@ -36,7 +41,7 @@ namespace KoiCareSys.Data
 
         public KoiReposiory Koi
         {
-            get { return koiReposiory ??= new KoiReposiory(); }
+            get { return koiReposiory ??= new KoiReposiory(_unitOfWorkContext); }
 
         }
 
@@ -65,6 +70,16 @@ namespace KoiCareSys.Data
         public UnitRepository Unit
         {
             get { return unitRepository ??= new UnitRepository(); }
+        }
+
+        public DevelopmentStageRepo DevelopmentStage
+        {
+            get { return developmentStageRepo ??= new DevelopmentStageRepo(); }
+        }
+
+        public KoiRecordRepo KoiRecord
+        {
+            get { return koiRecordRepo ??= new KoiRecordRepo(); }
         }
 
         ////TO-DO CODE HERE/////////////////
