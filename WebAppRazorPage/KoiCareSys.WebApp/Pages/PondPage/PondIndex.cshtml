@@ -57,6 +57,9 @@
             color: white;
         }
 
+    .search-bar {
+        max-width: 300px;
+    }
 </style>
 
 
@@ -66,6 +69,10 @@
 <a href="/PondPage/PondCreate" class="ico btn-custom btn-custom-create">
     <i class="fas fa-plus"></i> Create
 </a>
+<div class="search-bar input-group">
+    <input type="text" class="form-control" id="searchPonds" placeholder="Search ponds" aria-label="Search ponds" />
+    <button class="btn btn-primary" type="button" id="searchPondButton">Search</button>
+</div>
 
 
 <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -125,3 +132,15 @@
     </tbody>
 </table>
 
+<script>
+    document.getElementById("searchPondButton").addEventListener("click", function () {
+        let query = document.getElementById("searchPonds").value;
+
+        // Điều hướng lại trang với query như tham số
+        if (query) {
+            window.location.href = `/PondPage/PondIndex?SearchQuery=` + encodeURIComponent(query);
+        } else {
+            window.location.href = `/PondPage/PondIndex`;
+        }
+    });
+</script>
