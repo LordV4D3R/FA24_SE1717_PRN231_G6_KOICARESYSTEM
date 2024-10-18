@@ -70,6 +70,7 @@
     <script>
         $(document).ready(function () {
             let ponds = [];
+            let units = [];
 
             // Fetch Ponds
             function fetchPonds(callback) {
@@ -82,6 +83,21 @@
                     },
                     error: function (xhr, status, error) {
                         console.error('Error fetching ponds:', error);
+                    }
+                });
+            }
+
+            // Fetch Units
+            function fetchUnits(callback) {
+                $.ajax({
+                    url: 'https://localhost:7050/api/Unit',
+                    type: 'GET',
+                    success: function (response) {
+                        units = response.data;
+                        if (callback) callback();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching units:', error);
                     }
                 });
             }
@@ -99,45 +115,46 @@
                         $.each(measurements, function (index, measurement) {
                             var pondName = ponds.find(pond => pond.id === measurement.pondId)?.pondName || 'Unknown';
                             var row = `<tr>
-                                                            <td>${index + 1}</td>
-                                                            <td>${measurement.measurementId}</td>
-                                                            <td>${pondName}</td>
-                                                            <td>${new Date(measurement.dateRecord).toLocaleDateString()}</td>
-                                                            <td>${measurement.note}</td>
-                                                            <td class="text-center">
-                                                                <button class="btn btn-danger btn-sm btn-custom delete-btn" data-id="${measurement.measurementId}">
-                                                                    <i class="fas fa-trash-alt"></i> Delete
-                                                                </button>
-                                                                <button class="btn btn-info btn-sm btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#measureData_${measurement.measurementId}">
-                                                                    <i class="fas fa-info-circle"></i> Details
-                                                                </button>
-                                                            </td>
+                                        <td>${index + 1}</td>
+                                        <td>${measurement.measurementId}</td>
+                                        <td>${pondName}</td>
+                                        <td>${new Date(measurement.dateRecord).toLocaleDateString()}</td>
+                                        <td>${measurement.note}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-danger btn-sm btn-custom delete-btn" data-id="${measurement.measurementId}">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </button>
+                                            <button class="btn btn-info btn-sm btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#measureData_${measurement.measurementId}">
+                                                <i class="fas fa-info-circle"></i> Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="collapse" id="measureData_${measurement.measurementId}">
+                                        <td colspan="6">
+                                            <div class="card card-body">
+                                                <h5>Measure Data</h5>
+                                                <table class="table table-sm table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>MeasureDataId</th>
+                                                            <th>Volume</th>
+                                                            <th>Unit</th>
                                                         </tr>
-                                                        <tr class="collapse" id="measureData_${measurement.measurementId}">
-                                                            <td colspan="6">
-                                                                <div class="card card-body">
-                                                                    <h5>Measure Data</h5>
-                                                                    <table class="table table-sm table-bordered">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>MeasureDataId</th>
-                                                                                <th>Volume</th>
-                                                                                <th>UnitId</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>`;
+                                                    </thead>
+                                                    <tbody>`;
                             $.each(measurement.measureData, function (i, measureData) {
+                                var unitFullName = units.find(unit => unit.unitId === measureData.unitId)?.fullName || 'Unknown';
                                 row += `<tr>
-                                                            <td>${measureData.measureDataId}</td>
-                                                            <td>${measureData.volume}</td>
-                                                            <td>${measureData.unitId}</td>
-                                                        </tr>`;
+                                            <td>${measureData.measureDataId}</td>
+                                            <td>${measureData.volume}</td>
+                                            <td>${unitFullName}</td>
+                                        </tr>`;
                             });
-                            row += `                    </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </td>
-                                                        </tr>`;
+                            row += `</tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>`;
                             tbody.append(row);
                         });
                     },
@@ -167,7 +184,9 @@
             });
 
             // Initial fetch
-            fetchPonds(fetchMeasurements);
+            fetchPonds(function () {
+                fetchUnits(fetchMeasurements);
+            });
         });
     </script>
 }
