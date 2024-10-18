@@ -10,6 +10,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCareSys.Service", "KoiCareSys.Service\KoiCareSys.Service.csproj", "{9BA1A47A-6F95-4F98-8AF9-634636077EA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KoiCareSys.Common", "KoiCareSys.Common\KoiCareSys.Common.csproj", "{37D85721-2F23-4AC1-9F50-BD04806DD280}"
+<<<<<<< HEAD
+=======
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{7794881A-0735-4F52-8802-2693BC57CF32}"
+>>>>>>> f2d7ddddfb5631d5b5560585512b18120ed4c384
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +38,10 @@ Global
 		{37D85721-2F23-4AC1-9F50-BD04806DD280}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D85721-2F23-4AC1-9F50-BD04806DD280}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37D85721-2F23-4AC1-9F50-BD04806DD280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7794881A-0735-4F52-8802-2693BC57CF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7794881A-0735-4F52-8802-2693BC57CF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7794881A-0735-4F52-8802-2693BC57CF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7794881A-0735-4F52-8802-2693BC57CF32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
