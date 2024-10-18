@@ -8,7 +8,10 @@
     Koi Board
 </h1>
 <a href="/KoiPage/KoiCreate" class="ico edit">Create</a>
-
+<div style="margin-bottom: 20px;">
+    <input type="text" id="searchInput" placeholder="Search by Name, Category, or Origin..." style="width: 300px; padding: 5px;" />
+    <button onclick="loadKoiData()">Search</button>
+</div>
 <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
     <thead>
         <tr>
@@ -58,8 +61,10 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
     <script>
-        // Function to load Koi data from the Web API
+        // Function to load Koi data from the Web API with search functionality
         function loadKoiData() {
+            const searchQuery = $('#searchInput').val().toLowerCase();
+
             $.ajax({
                 url: "https://localhost:7050/api/kois", // Replace with your actual Web API endpoint
                 method: "GET",
@@ -67,29 +72,37 @@
                     // Clear the existing table body
                     $('#koiTableBody').empty();
 
-                    // Re-populate the table with new data
-                    data.data.forEach(function (koi, index) {
+                    // Re-populate the table with filtered data
+                    const filteredData = data.data.filter(function (koi) {
+                        return (
+                            koi.name.toLowerCase().includes(searchQuery) ||
+                            koi.category.toLowerCase().includes(searchQuery) ||
+                            koi.origin.toLowerCase().includes(searchQuery)
+                        );
+                    });
+
+                    filteredData.forEach(function (koi, index) {
                         $('#koiTableBody').append(`
-                                                           <tr class="${index % 2 === 0 ? 'odd' : ''}">
-                                                                <td>${index + 1}</td>
-                                                                <td>${koi.name}</td>
-                                                                <td>${koi.physique}</td>
-                                                                <td>${koi.age}</td>
-                                                                <td>${koi.length}</td>
-                                                                <td>${koi.sex}</td>
-                                                                <td>${koi.category}</td>
-                                                                <td>${new Date(koi.inPondSince).toISOString().split('T')[0]}</td>
-                                                                <td>${koi.purchasePrice}</td>
-                                                                <td>${koi.status}</td>
-                                                                <td><img src="${koi.imgUrl}" alt="${koi.name}" width="50" /></td>
-                                                                <td>${koi.origin}</td>
-                                                                <td>${koi.breed}</td>
-                                                                <td class="text-center">
-                                                                    <a href="/KoiPage/KoiDelete/${koi.id}" class="ico del">Delete</a>
-                                                                    <a href="/KoiPage/KoiEdit/${koi.id}" class="ico edit">Edit</a>
-                                                                </td>
-                                                            </tr>
-                                                        `);
+                                    <tr class="${index % 2 === 0 ? 'odd' : ''}">
+                                        <td>${index + 1}</td>
+                                        <td>${koi.name}</td>
+                                        <td>${koi.physique}</td>
+                                        <td>${koi.age}</td>
+                                        <td>${koi.length}</td>
+                                        <td>${koi.sex}</td>
+                                        <td>${koi.category}</td>
+                                        <td>${new Date(koi.inPondSince).toISOString().split('T')[0]}</td>
+                                        <td>${koi.purchasePrice}</td>
+                                        <td>${koi.status}</td>
+                                        <td><img src="${koi.imgUrl}" alt="${koi.name}" width="50" /></td>
+                                        <td>${koi.origin}</td>
+                                        <td>${koi.breed}</td>
+                                        <td class="text-center">
+                                            <a href="/KoiPage/KoiDelete/${koi.id}" class="ico del">Delete</a>
+                                            <a href="/KoiPage/KoiEdit/${koi.id}" class="ico edit">Edit</a>
+                                        </td>
+                                    </tr>
+                                `);
                     });
                 },
                 error: function (err) {
@@ -100,7 +113,7 @@
 
         // SignalR connection
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7050/signalRHub", {withCredentials: true}) // Replace with your SignalR hub URL
+            .withUrl("https://localhost:7050/signalRHub", { withCredentials: true })
             .build();
 
         // Start the connection
@@ -116,9 +129,9 @@
             loadKoiData(); // Call the function to refresh data
         });
 
-        // // Load data on initial page load
-        // $(document).ready(function () {
-        //     loadKoiData();
-        // });
+        // Load data on initial page load
+        $(document).ready(function () {
+            loadKoiData();
+        });
     </script>
 }
