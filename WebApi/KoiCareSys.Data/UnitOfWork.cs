@@ -12,6 +12,7 @@ namespace KoiCareSys.Data
         private MeasurementRepository measurementRepository;
         private MeasureDataRepository measureDataRepository;
         private UnitRepository unitRepository;
+        private ProductRepository productRepository;
         private DevelopmentStageRepo developmentStageRepo;
         private KoiRecordRepo koiRecordRepo;
 
@@ -20,6 +21,14 @@ namespace KoiCareSys.Data
             _unitOfWorkContext = unitOfWorkContext;
         }
 
+        public UnitOfWork()
+        {
+        }
+        public ProductRepository Product
+        {
+
+        get { return productRepository ??= new ProductRepository(); }
+        }
         //public UnitOfWork()
         //{
         //}
