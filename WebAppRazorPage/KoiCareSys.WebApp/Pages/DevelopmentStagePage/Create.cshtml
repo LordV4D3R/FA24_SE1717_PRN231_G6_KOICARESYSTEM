@@ -1,0 +1,45 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.DevelopmentStagePage.CreateModel
+@{
+}
+<!-- Container -->
+<div id="container">
+    <div class="shell">
+        <!-- Main -->
+        <div id="main">
+            <div class="cl">&nbsp;</div>
+            <!-- Content -->
+            <div id="content">
+                <!-- Box -->
+                <div class="box">
+                    <!-- End Box Head -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="Request.StageName" class="control-label"></label>
+                                    <input asp-for="Request.StageName" class="form-control" />
+                                    <span asp-validation-for="Request.StageName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Request.RequiredFoodAmount" class="control-label"></label>
+                                    <input asp-for="Request.RequiredFoodAmount" class="form-control" />
+                                    <span asp-validation-for="Request.RequiredFoodAmount" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Box -->
+            </div>
+            <!-- End Content -->
+            <div class="cl">&nbsp;</div>
+        </div>
+        <!-- Main -->
+    </div>
+</div>
+<!-- End Container -->

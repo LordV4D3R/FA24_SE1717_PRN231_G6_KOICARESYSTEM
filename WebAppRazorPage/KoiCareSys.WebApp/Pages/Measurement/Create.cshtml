@@ -1,0 +1,142 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.Measurement.CreateModel
+@{
+    ViewData["Title"] = "Create Measurement";
+}
+
+<style>
+    .form-custom {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .measure-data-input {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="card form-custom">
+                <div class="card-header">
+                    <h2 class="card-title mb-0">Create Measurement</h2>
+                </div>
+                <div class="card-body">
+                    <form id="createMeasurementForm">
+                        @* <div class="mb-3">
+                            <label for="pondId" class="form-label">Pond Id</label>
+                            <input type="text" class="form-control" id="pondId" name="pondId" required />
+                        </div> *@
+                        <div class="mb-3">
+                            <label for="dateRecord" class="form-label">Date Record</label>
+                            <input type="date" class="form-control" id="dateRecord" name="dateRecord" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="note" class="form-label">Note</label>
+                            <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+                        </div>
+                        <div id="measureDataContainer">
+                            <h5>Measure Data</h5>
+                            <div class="measure-data-input">
+                                <input type="number" class="form-control volume" placeholder="Volume" name="volume" required />
+                                <span class="unit-of-measure"></span>
+                                <select class="form-control unitId" name="unitId" required>
+                                    <option value="">Select Unit</option>
+                                    <!-- Options will be populated by AJAX -->
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary mb-3" id="addMeasureData">Add Measure Data</button>
+                        <button type="submit" class="btn btn-primary">Create Measurement</button>
+                        <a href="/Measurement/Index" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Fetch units for dropdown
+            function fetchUnits() {
+                $.ajax({
+                    url: 'https://localhost:7050/api/Unit', // Adjust your API endpoint as necessary
+                    type: 'GET',
+                    success: function (response) {
+                        var units = response.data; // Adjust based on your API response structure
+                        var unitDropdown = $('select.unitId');
+                        unitDropdown.empty(); // Clear existing options
+                        unitDropdown.append('<option value="">Select Unit</option>'); // Default option
+                        $.each(units, function (index, unit) {
+                            unitDropdown.append(`<option value="${unit.unitId}" data-unit="${unit.unitOfMeasure}">${unit.name}</option>`);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching units:', error);
+                    }
+                });
+            }
+
+            fetchUnits(); // Initial fetch of units
+
+            // Update unit of measure next to volume input on change
+            $(document).on('change', 'select.unitId', function () {
+                var selectedUnit = $(this).find(':selected').data('unit');
+                $(this).closest('.measure-data-input').find('.unit-of-measure').text(selectedUnit);
+            });
+
+            $('#addMeasureData').on('click', function () {
+                var measureDataHtml = `<div class="measure-data-input">
+                                                    <input type="number" class="form-control volume" placeholder="Volume" name="volume" required />
+                                                    <span class="unit-of-measure"></span>
+                                                    <select class="form-control unitId" name="unitId" required>
+                                                        <option value="">Select Unit</option>
+                                                        <!-- Options will be populated by AJAX -->
+                                                    </select>
+                                                </div>`;
+                $('#measureDataContainer').append(measureDataHtml);
+                // Re-fetch units to ensure the new dropdown has options
+                fetchUnits();
+            });
+
+            $('#createMeasurementForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                var measureDataList = [];
+                $('.measure-data-input').each(function () {
+                    var measureData = {
+                        volume: $(this).find('.volume').val(),
+                        unitId: $(this).find('.unitId').val()
+                    };
+                    measureDataList.push(measureData);
+                });
+
+                var formData = {
+                    // pondId: $('#pondId').val(),
+                    dateRecord: $('#dateRecord').val(),
+                    note: $('#note').val(),
+                    pondId: '93784181-5183-4b63-affd-7f21b9e82701', // TODO: Update later
+                    measureData: measureDataList // Add the measure data list to the form data
+                };
+
+                $.ajax({
+                    url: 'https://localhost:7050/api/Measurement',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        alert('Measurement created successfully!');
+                        window.location.href = '/Measurement/Index'; // Redirect to the index page
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error creating measurement: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+}

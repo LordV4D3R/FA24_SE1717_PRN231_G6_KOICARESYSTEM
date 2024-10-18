@@ -242,6 +242,74 @@ namespace KoiCareSys.Data.Migrations
                     b.ToTable("measurement", "koicare");
                 });
 
+            modelBuilder.Entity("KoiCareSys.Data.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("create_date");
+
+                    b.Property<DateTime?>("OrderDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("order_date");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Status");
+
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Total");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("order", "koicare");
+                });
+
+            modelBuilder.Entity("KoiCareSys.Data.Models.OrderDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("create_date");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("order_id");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("quantity");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("subtotal");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("order_detail", "koicare");
+                });
+
             modelBuilder.Entity("KoiCareSys.Data.Models.Pond", b =>
                 {
                     b.Property<Guid>("Id")
@@ -305,6 +373,47 @@ namespace KoiCareSys.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("pond", "koicare");
+                });
+
+            modelBuilder.Entity("KoiCareSys.Data.Models.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("create_date");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("ImgUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("img_url");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("price");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("update_date");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("product", "koicare");
                 });
 
             modelBuilder.Entity("KoiCareSys.Data.Models.Unit", b =>
@@ -455,6 +564,25 @@ namespace KoiCareSys.Data.Migrations
                     b.Navigation("Pond");
                 });
 
+            modelBuilder.Entity("KoiCareSys.Data.Models.OrderDetail", b =>
+                {
+                    b.HasOne("KoiCareSys.Data.Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KoiCareSys.Data.Models.Product", "Product")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("KoiCareSys.Data.Models.Pond", b =>
                 {
                     b.HasOne("KoiCareSys.Data.Models.User", "User")
@@ -483,11 +611,21 @@ namespace KoiCareSys.Data.Migrations
                     b.Navigation("MeasureData");
                 });
 
+            modelBuilder.Entity("KoiCareSys.Data.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
             modelBuilder.Entity("KoiCareSys.Data.Models.Pond", b =>
                 {
                     b.Navigation("Koi");
 
                     b.Navigation("Measurements");
+                });
+
+            modelBuilder.Entity("KoiCareSys.Data.Models.Product", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("KoiCareSys.Data.Models.Unit", b =>

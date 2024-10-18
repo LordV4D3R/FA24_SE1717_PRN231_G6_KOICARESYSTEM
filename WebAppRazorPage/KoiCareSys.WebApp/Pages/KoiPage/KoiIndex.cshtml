@@ -1,0 +1,124 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.KoiPage.KoiIndexModel
+@{
+    ViewData["Title"] = "Koi Page";
+}
+
+<h1 style="color: black;">
+    Koi Board
+</h1>
+<a href="/KoiPage/KoiCreate" class="ico edit">Create</a>
+
+<table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Physique</th>
+            <th>Age</th>
+            <th>Length (cm)</th>
+            <th>Sex</th>
+            <th>Category</th>
+            <th>In Pond Since</th>
+            <th>Purchase Price</th>
+            <th>Status</th>
+            <th>Img Url</th>
+            <th>Origin</th>
+            <th>Breed</th>
+            <th class="text-center" width="110">Content Control</th>
+        </tr>
+    </thead>
+    <tbody id="koiTableBody">
+        @foreach (var koi in Model.Kois)
+        {
+            <tr class="@(Model.Kois.IndexOf(koi) % 2 == 0 ? "odd" : "")">
+                <td>@(Model.Kois.IndexOf(koi) + 1)</td>
+                <td>@koi.Name</td>
+                <td>@koi.Physique</td>
+                <td>@koi.Age</td>
+                <td>@koi.Length</td>
+                <td>@koi.Sex</td>
+                <td>@koi.Category</td>
+                <td>@koi.InPondSince.ToString("yyyy-MM-dd")</td>
+                <td>@koi.PurchasePrice</td>
+                <td>@koi.Status</td>
+                <td><img src="@koi.ImgUrl" alt="@koi.Name" width="50" /></td>
+                <td>@koi.Origin</td>
+                <td>@koi.Breed</td>
+
+                <td class="text-center">
+                    <a asp-page="./KoiDelete" asp-route-id="@koi.Id" class="ico del">Delete</a>
+                    <a asp-page="./KoiEdit" asp-route-id="@koi.Id" class="ico edit">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.12/signalr.min.js"></script>
+    <script>
+        // Function to load Koi data from the Web API
+        function loadKoiData() {
+            $.ajax({
+                url: "https://localhost:7050/api/kois", // Replace with your actual Web API endpoint
+                method: "GET",
+                success: function (data) {
+                    // Clear the existing table body
+                    $('#koiTableBody').empty();
+
+                    // Re-populate the table with new data
+                    data.data.forEach(function (koi, index) {
+                        $('#koiTableBody').append(`
+                                                           <tr class="${index % 2 === 0 ? 'odd' : ''}">
+                                                                <td>${index + 1}</td>
+                                                                <td>${koi.name}</td>
+                                                                <td>${koi.physique}</td>
+                                                                <td>${koi.age}</td>
+                                                                <td>${koi.length}</td>
+                                                                <td>${koi.sex}</td>
+                                                                <td>${koi.category}</td>
+                                                                <td>${new Date(koi.inPondSince).toISOString().split('T')[0]}</td>
+                                                                <td>${koi.purchasePrice}</td>
+                                                                <td>${koi.status}</td>
+                                                                <td><img src="${koi.imgUrl}" alt="${koi.name}" width="50" /></td>
+                                                                <td>${koi.origin}</td>
+                                                                <td>${koi.breed}</td>
+                                                                <td class="text-center">
+                                                                    <a href="/KoiPage/KoiDelete/${koi.id}" class="ico del">Delete</a>
+                                                                    <a href="/KoiPage/KoiEdit/${koi.id}" class="ico edit">Edit</a>
+                                                                </td>
+                                                            </tr>
+                                                        `);
+                    });
+                },
+                error: function (err) {
+                    console.error("Failed to load Koi data:", err);
+                }
+            });
+        }
+
+        // SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7050/signalRHub", {withCredentials: true}) // Replace with your SignalR hub URL
+            .build();
+
+        // Start the connection
+        connection.start()
+            .then(() => {
+                console.log("Connected to SignalR hub.");
+            })
+            .catch(err => console.error("Failed to connect to SignalR hub:", err));
+
+        // Receive message from backend and refresh the Koi table
+        connection.on("ReceiveMessage", (message) => {
+            console.log(message);
+            loadKoiData(); // Call the function to refresh data
+        });
+
+        // // Load data on initial page load
+        // $(document).ready(function () {
+        //     loadKoiData();
+        // });
+    </script>
+}
