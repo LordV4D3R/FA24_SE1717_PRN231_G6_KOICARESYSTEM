@@ -50,9 +50,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
         builder => builder
-            .AllowAnyOrigin()
+            //.AllowAnyOrigin()
+            .WithOrigins("https://localhost:7022")
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 // AutoMapper
