@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KoiCareSys.WebApp.Pages.Unit
 {
-    [EnableCors("MyAllowPolicy")]
     public class IndexModel : PageModel
     {
         private readonly IApiService _apiService;
