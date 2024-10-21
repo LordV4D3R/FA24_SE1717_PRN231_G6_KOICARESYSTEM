@@ -50,7 +50,8 @@
                 <td>@koi.Breed</td>
 
                 <td class="text-center">
-                    <a asp-page="./KoiDelete" asp-route-id="@koi.Id" class="ico del">Delete</a>
+                    @* <a asp-page="./KoiDelete" asp-route-id="@koi.Id" class="ico del">Delete</a> *@
+                    <button class="btn btn-danger" onclick="deleteKoi('@koi.Id')">Delete</button>
                     <a asp-page="./KoiEdit" asp-route-id="@koi.Id" class="ico edit">Edit</a>
                 </td>
             </tr>
@@ -98,7 +99,7 @@
                                         <td>${koi.origin}</td>
                                         <td>${koi.breed}</td>
                                         <td class="text-center">
-                                            <a href="/KoiPage/KoiDelete/${koi.id}" class="ico del">Delete</a>
+                                            <button class="btn btn-danger" onclick="deleteKoi('${koi.id}')">Delete</button>
                                             <a href="/KoiPage/KoiEdit/${koi.id}" class="ico edit">Edit</a>
                                         </td>
                                     </tr>
@@ -109,6 +110,23 @@
                     console.error("Failed to load Koi data:", err);
                 }
             });
+        }
+
+        function deleteKoi(koiId) {
+            if (confirm("Are you sure you want to delete this Koi?")) {
+                $.ajax({
+                    url: `https://localhost:7050/api/kois/${koiId}`, // Replace with your actual Web API endpoint
+                    method: "DELETE",
+                    success: function () {
+                        alert("Koi deleted successfully.");
+                        loadKoiData(); // Refresh the table after deletion
+                    },
+                    error: function (err) {
+                        console.error("Failed to delete Koi:", err);
+                        alert("An error occurred while deleting the Koi.");
+                    }
+                });
+            }
         }
 
         // SignalR connection
