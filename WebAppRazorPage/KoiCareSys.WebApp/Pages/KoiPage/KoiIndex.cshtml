@@ -9,7 +9,9 @@
 </h1>
 <a href="/KoiPage/KoiCreate" class="ico edit">Create</a>
 <div style="margin-bottom: 20px;">
-    <input type="text" id="searchInput" placeholder="Search by Name, Category, or Origin..." style="width: 300px; padding: 5px;" />
+    <input type="text" id="searchNameInput" placeholder="Search by Name" style="width: 300px; padding: 5px;" />
+    <input type="text" id="searchCategoryInput" placeholder="Search by Category" style="width: 300px; padding: 5px;" />
+    <input type="text" id="searchOriginInput" placeholder="Search by Origin" style="width: 300px; padding: 5px;" />
     <button onclick="loadKoiData()">Search</button>
 </div>
 <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -53,6 +55,7 @@
                     @* <a asp-page="./KoiDelete" asp-route-id="@koi.Id" class="ico del">Delete</a> *@
                     <button class="btn btn-danger" onclick="deleteKoi('@koi.Id')">Delete</button>
                     <a asp-page="./KoiEdit" asp-route-id="@koi.Id" class="ico edit">Edit</a>
+                    <a asp-page="./KoiDetail" asp-route-id="@koi.Id" class="ico edit">Detail</a>
                 </td>
             </tr>
         }
@@ -64,7 +67,9 @@
     <script>
         // Function to load Koi data from the Web API with search functionality
         function loadKoiData() {
-            const searchQuery = $('#searchInput').val().toLowerCase();
+            const searchName = $('#searchNameInput').val().toLowerCase();
+            const searchCategory = $('#searchCategoryInput').val().toLowerCase();
+            const searchOrigin = $('#searchOriginInput').val().toLowerCase();
 
             $.ajax({
                 url: "https://localhost:7050/api/kois", // Replace with your actual Web API endpoint
@@ -76,34 +81,35 @@
                     // Re-populate the table with filtered data
                     const filteredData = data.data.filter(function (koi) {
                         return (
-                            koi.name.toLowerCase().includes(searchQuery) ||
-                            koi.category.toLowerCase().includes(searchQuery) ||
-                            koi.origin.toLowerCase().includes(searchQuery)
+                            koi.name.toLowerCase().includes(searchName) &&
+                            koi.category.toLowerCase().includes(searchCategory) &&
+                            koi.origin.toLowerCase().includes(searchOrigin)
                         );
                     });
 
                     filteredData.forEach(function (koi, index) {
                         $('#koiTableBody').append(`
-                                    <tr class="${index % 2 === 0 ? 'odd' : ''}">
-                                        <td>${index + 1}</td>
-                                        <td>${koi.name}</td>
-                                        <td>${koi.physique}</td>
-                                        <td>${koi.age}</td>
-                                        <td>${koi.length}</td>
-                                        <td>${koi.sex}</td>
-                                        <td>${koi.category}</td>
-                                        <td>${new Date(koi.inPondSince).toISOString().split('T')[0]}</td>
-                                        <td>${koi.purchasePrice}</td>
-                                        <td>${koi.status}</td>
-                                        <td><img src="${koi.imgUrl}" alt="${koi.name}" width="50" /></td>
-                                        <td>${koi.origin}</td>
-                                        <td>${koi.breed}</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-danger" onclick="deleteKoi('${koi.id}')">Delete</button>
-                                            <a href="/KoiPage/KoiEdit/${koi.id}" class="ico edit">Edit</a>
-                                        </td>
-                                    </tr>
-                                `);
+                                                                                            <tr class="${index % 2 === 0 ? 'odd' : ''}">
+                                                                                                <td>${index + 1}</td>
+                                                                                                <td>${koi.name}</td>
+                                                                                                <td>${koi.physique}</td>
+                                                                                                <td>${koi.age}</td>
+                                                                                                <td>${koi.length}</td>
+                                                                                                <td>${koi.sex}</td>
+                                                                                                <td>${koi.category}</td>
+                                                                                                <td>${new Date(koi.inPondSince).toISOString().split('T')[0]}</td>
+                                                                                                <td>${koi.purchasePrice}</td>
+                                                                                                <td>${koi.status}</td>
+                                                                                                <td><img src="${koi.imgUrl}" alt="${koi.name}" width="50" /></td>
+                                                                                                <td>${koi.origin}</td>
+                                                                                                <td>${koi.breed}</td>
+                                                                                                <td class="text-center">
+                                                                                                    <button class="btn btn-danger" onclick="deleteKoi('${koi.id}')">Delete</button>
+                                                                                                    <a href="/KoiPage/KoiEdit/${koi.id}" class="ico edit">Edit</a>
+                                                                                                    <a href="/KoiPage/KoiDetail/${koi.id}" class="ico edit">Detail</a>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        `);
                     });
                 },
                 error: function (err) {

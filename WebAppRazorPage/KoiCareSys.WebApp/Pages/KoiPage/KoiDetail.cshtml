@@ -1,0 +1,86 @@
+﻿@page "{id:guid}"
+@model KoiCareSys.WebApp.Pages.KoiPage.KoiDetailModel
+@{
+    ViewData["Title"] = "Koi Details";
+}
+
+<h1>Koi Details</h1>
+
+<div class="koi-details">
+    <div class="koi-image">
+        <img src="@Model.Koi.ImgUrl" alt="@Model.Koi.Name" width="300" />
+    </div>
+    <div class="koi-info">
+        <table class="table table-bordered">
+            <tr>
+                <th>Name:</th>
+                <td>@Model.Koi.Name</td>
+            </tr>
+            <tr>
+                <th>Physique:</th>
+                <td>@Model.Koi.Physique</td>
+            </tr>
+            <tr>
+                <th>Age:</th>
+                <td>@Model.Koi.Age</td>
+            </tr>
+            <tr>
+                <th>Length (cm):</th>
+                <td>@Model.Koi.Length</td>
+            </tr>
+            <tr>
+                <th>Sex:</th>
+                <td>@Model.Koi.Sex</td>
+            </tr>
+            <tr>
+                <th>Category:</th>
+                <td>@Model.Koi.Category</td>
+            </tr>
+            <tr>
+                <th>In Pond Since:</th>
+                <td>@Model.Koi.InPondSince.ToString("yyyy-MM-dd")</td>
+            </tr>
+            <tr>
+                <th>Purchase Price:</th>
+                <td>@Model.Koi.PurchasePrice</td>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td>@Model.Koi.Status</td>
+            </tr>
+            <tr>
+                <th>Origin:</th>
+                <td>@Model.Koi.Origin</td>
+            </tr>
+            <tr>
+                <th>Breed:</th>
+                <td>@Model.Koi.Breed</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<a href="/KoiPage/KoiIndex" class="btn btn-secondary">Back to List</a>
+<a asp-page="./KoiEdit" asp-route-id="@Model.Koi.Id" class="btn btn-primary">Edit</a>
+<button class="btn btn-danger" onclick="deleteKoi('@Model.Koi.Id')">Delete</button>
+
+@section Scripts {
+    <script>
+        function deleteKoi(koiId) {
+            if (confirm("Are you sure you want to delete this Koi?")) {
+                $.ajax({
+                    url: `https://localhost:7050/api/kois/${koiId}`, // Replace with your actual Web API endpoint
+                    method: "DELETE",
+                    success: function () {
+                        alert("Koi deleted successfully.");
+                        window.location.href = '/KoiPage/KoiIndex'; // Redirect back to index page
+                    },
+                    error: function (err) {
+                        console.error("Failed to delete Koi:", err);
+                        alert("An error occurred while deleting the Koi.");
+                    }
+                });
+            }
+        }
+    </script>
+}
