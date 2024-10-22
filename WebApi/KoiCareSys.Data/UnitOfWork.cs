@@ -27,7 +27,7 @@ namespace KoiCareSys.Data
         public ProductRepository Product
         {
 
-        get { return productRepository ??= new ProductRepository(); }
+            get { return productRepository ??= new ProductRepository(); }
         }
         //public UnitOfWork()
         //{
@@ -47,7 +47,7 @@ namespace KoiCareSys.Data
 
         public PondRepository Pond
         {
-            get { return pondRepository ??= new PondRepository(); }
+            get { return pondRepository ??= new PondRepository(_unitOfWorkContext); }
 
         }
 
@@ -69,7 +69,7 @@ namespace KoiCareSys.Data
 
         public UnitRepository Unit
         {
-            get { return unitRepository ??= new UnitRepository(); }
+            get { return unitRepository ??= new UnitRepository(_unitOfWorkContext); }
         }
 
         public DevelopmentStageRepo DevelopmentStage
