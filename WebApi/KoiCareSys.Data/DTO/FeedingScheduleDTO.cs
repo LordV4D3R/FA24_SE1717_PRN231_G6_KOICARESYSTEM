@@ -6,6 +6,6 @@
         public decimal? FoodAmount { get; set; }
         public string? FoodType { get; set; }
         public string? Note { get; set; }
-        public Guid KoiId { get; set; }
+        public Guid PondId { get; set; }
     }
 }

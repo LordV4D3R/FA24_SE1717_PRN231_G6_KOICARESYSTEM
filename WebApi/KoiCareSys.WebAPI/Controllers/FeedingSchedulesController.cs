@@ -1,5 +1,10 @@
-﻿using KoiCareSys.Data;
+﻿using Azure.Core;
+using KoiCareSys.Common;
+using KoiCareSys.Data;
+using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
+using KoiCareSys.Service.Service;
+using KoiCareSys.Service.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,95 +14,156 @@ namespace KoiCareSys.WebAPI.Controllers
     [ApiController]
     public class FeedingSchedulesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IFeedingScheduleService _feedingScheduleService;
 
-        public FeedingSchedulesController(ApplicationDbContext context)
+        public FeedingSchedulesController(IFeedingScheduleService feedingScheduleService)
         {
-            _context = context;
+            _feedingScheduleService = feedingScheduleService;
         }
 
         // GET: api/FeedingSchedules
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FeedingSchedule>>> GetFeedingSchedules()
+        public async Task<ActionResult<IEnumerable<FeedingSchedule>>> GetFeedingSchedules([FromQuery] string? search)
         {
-            return await _context.FeedingSchedules.ToListAsync();
+            try
+            {
+                var result = await _feedingScheduleService.GetAll(search);
+                if (result.Status > 0)
+                {
+                    return Ok(result.Data as IEnumerable<FeedingSchedule>);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // GET: api/FeedingSchedules/5
         [HttpGet("{id}")]
         public async Task<ActionResult<FeedingSchedule>> GetFeedingSchedule(Guid id)
         {
-            var feedingSchedule = await _context.FeedingSchedules.FindAsync(id);
-
-            if (feedingSchedule == null)
+            try
             {
-                return NotFound();
+                var result = await _feedingScheduleService.GetById(id);
+                if (result.Status > 0)
+                {
+                    return Ok(result.Data as FeedingSchedule);
+                }
+                else { return NotFound(result.Message); }
             }
-
-            return feedingSchedule;
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/FeedingSchedules/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFeedingSchedule(Guid id, FeedingSchedule feedingSchedule)
+        public async Task<IActionResult> PutFeedingSchedule(Guid id, FeedingScheduleDTO feedingSchedule)
         {
-            if (id != feedingSchedule.Id)
+            try
+            {
+                var result = await _feedingScheduleService.GetById(id);
+                if (result.Status < 0)
+                {
+                    return BadRequest();
+                }
+                var feedingScheduleUpdate = result.Data as FeedingSchedule;
+                var update = await _feedingScheduleService.Update(feedingScheduleUpdate, feedingSchedule);
+                if (update.Status > 0)
+                {
+                    return Ok(update.Data as FeedingSchedule);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
             {
                 return BadRequest();
             }
-
-            _context.Entry(feedingSchedule).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FeedingScheduleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/FeedingSchedules
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<FeedingSchedule>> PostFeedingSchedule(FeedingSchedule feedingSchedule)
+        public async Task<ActionResult<FeedingSchedule>> PostFeedingSchedule([FromBody] FeedingScheduleDTO feedingSchedule)
         {
-            _context.FeedingSchedules.Add(feedingSchedule);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var newSchedule = new FeedingScheduleDTO
+                {
+                    FeedAt = feedingSchedule.FeedAt,
+                    FoodAmount = feedingSchedule.FoodAmount,
+                    FoodType = feedingSchedule.FoodType,
+                    Note = feedingSchedule.Note,
+                    PondId = feedingSchedule.PondId
 
-            return CreatedAtAction("GetFeedingSchedule", new { id = feedingSchedule.Id }, feedingSchedule);
+                };
+                var result = await _feedingScheduleService.Create(newSchedule);
+                if (result.Status > 0)
+                {
+                    return Ok(result.Data as FeedingSchedule);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: api/FeedingSchedules/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFeedingSchedule(Guid id)
         {
-            var feedingSchedule = await _context.FeedingSchedules.FindAsync(id);
-            if (feedingSchedule == null)
+            try
             {
-                return NotFound();
+                var result = await _feedingScheduleService.GetById(id);
+                if (result.Status < 0)
+                {
+                    return BadRequest();
+                }
+                var delete = await _feedingScheduleService.Delete(id);
+                if (delete.Status > 0)
+                {
+                    return Ok();
+                }
+                else { return NotFound(result.Message); }
+
             }
-
-            _context.FeedingSchedules.Remove(feedingSchedule);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        private bool FeedingScheduleExists(Guid id)
+        [HttpPost("CalculateFoodAmount")]
+        public async Task<ActionResult<decimal>> CalculateFoodAmount([FromBody] Guid pondId)
         {
-            return _context.FeedingSchedules.Any(e => e.Id == id);
+            try
+            {
+                if (pondId == Guid.Empty)
+                {
+                    return BadRequest("Invalid pondId");
+                }
+
+                var result = await _feedingScheduleService.CaculateFoodAmountByKoi(pondId);
+
+                if (result.Status > 0)  // Status > 0 có nghĩa là thành công
+                {
+                    return Ok(result.Data);  // `result.Data` chứa tổng lượng thức ăn
+                }
+                else
+                {
+                    return NotFound(result.Message);
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

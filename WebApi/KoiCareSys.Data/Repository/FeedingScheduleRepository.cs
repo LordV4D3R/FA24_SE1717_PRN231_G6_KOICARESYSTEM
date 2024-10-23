@@ -25,7 +25,7 @@ namespace KoiCareSys.Data.Repository
             return await GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<FeedingSchedule>> GetAllFeedingSchedules()
+        public async Task<IEnumerable<FeedingSchedule>> GetFeedingSchedules()
         {
             return await GetAllAsync();
         }
@@ -43,7 +43,7 @@ namespace KoiCareSys.Data.Repository
             {
                 FeedAt = feedingSchedule.FeedAt,
                 FoodAmount = feedingSchedule.FoodAmount,
-                KoiId = feedingSchedule.KoiId
+                PondId = feedingSchedule.PondId,
 
             };
             _dao.Create(create);
