@@ -26,8 +26,8 @@ public partial class FeedingSchedule
     [Column("note")]
     public string? Note { get; set; }
 
-    [Column("koi_id")]
-    [ForeignKey("Koi")]
-    public Guid KoiId { get; set; }
-    public virtual Koi Koi { get; set; }
+    [Column("pond_id")]
+    [ForeignKey("Pond")]
+    public Guid PondId { get; set; }
+    public virtual Pond Pond { get; set; }
 }

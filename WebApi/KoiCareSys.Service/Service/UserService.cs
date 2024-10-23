@@ -6,6 +6,7 @@ using KoiCareSys.Serivice.Base;
 using KoiCareSys.Service.Service.Interface;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +21,6 @@ namespace KoiCareSys.Service.Service
         {
             _unitOfWork = unitOfWork;
         }
-
-        //public UserService()
-        //{
-        //    _unitOfWork = new UnitOfWork();
-        //}
 
         public async Task<IBusinessResult> GetAll(String? search)
         {
@@ -77,9 +73,9 @@ namespace KoiCareSys.Service.Service
                 var user = await _unitOfWork.User.GetByIdAsync(code);
 
                 if (user == null)
-                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, "No jobboard data by code");
+                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, "No useer data by code");
                 else
-                    return new BusinessResult(Const.SUCCESS_READ_CODE, "Get jobboard success", user);
+                    return new BusinessResult(Const.SUCCESS_READ_CODE, "Get user success", user);
             }
             catch (Exception ex)
             {
@@ -87,5 +83,57 @@ namespace KoiCareSys.Service.Service
             }
         }
 
+        public async Task<IBusinessResult> UpdateUser(User user, UpdateUserDTO updateUser)
+        {
+            try
+            {
+                if (user == null)
+                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, "No user data by code");
+                else
+                {
+                    user.Email = updateUser.Email;
+                    user.FullName = updateUser.FullName;
+                    user.PhoneNumber = updateUser.PhoneNumber;
+                    user.Password = updateUser.Password;
+                    if (await _unitOfWork.User.UpdateAsync(user) > 0)
+                        return new BusinessResult(Const.SUCCESS_UPDATE_CODE, "Update user success", user);
+                    else
+                        return new BusinessResult(Const.FAIL_UPDATE_CODE, "Update fail");
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            }
+        }
+
+        public async Task<IBusinessResult> DeleteUser(Guid code)
+        {
+            try
+            {
+                var user = await _unitOfWork.User.GetByIdAsync(code);
+                if (user == null)
+                {
+                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
+                }
+                else
+                {
+                    var result = await _unitOfWork.User.RemoveAsync(user);
+                    if (result)
+                    {
+                        return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
+                    }
+                    else
+                    {
+                        return new BusinessResult(Const.FAIL_DELETE_CODE, Const.FAIL_DELETE_MSG);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            }
+
+        }
     }
 }

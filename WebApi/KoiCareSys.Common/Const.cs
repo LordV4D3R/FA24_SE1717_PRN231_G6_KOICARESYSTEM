@@ -18,7 +18,8 @@
         public static string SUCCESS_UPDATE_MSG = "Update data success";
         public static int SUCCESS_DELETE_CODE = 1;
         public static string SUCCESS_DELETE_MSG = "Delete data success";
-
+        public static int SUCCESS_BUSSINESS_CODE = 1;
+        public static string SUCCESS_BUSSINESS_MSG = "Success";
 
         #endregion
 
