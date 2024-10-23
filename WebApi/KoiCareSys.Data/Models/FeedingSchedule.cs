@@ -14,11 +14,20 @@ public partial class FeedingSchedule
     [Column("id")]
     public Guid Id { get; set; } = Guid.NewGuid();
 
+    [Column("foodcaculate")]
+    public decimal? Foodcaculate { get; set; }
+
     [Column("feed_at")]
     public DateTime FeedAt { get; set; }
 
     [Column("food_amount")]
     public decimal? FoodAmount { get; set; }
+
+    [Column("feed_by")]
+    public string? FeedBy { get; set; }
+
+    [Column("temperature")]
+    public decimal? Temperature { get; set; }
 
     [Column("food_type")]
     public string? FoodType { get; set; }
