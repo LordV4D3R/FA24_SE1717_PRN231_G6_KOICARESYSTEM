@@ -1,0 +1,71 @@
+﻿@model List<KoiDto>
+
+@{
+    ViewData["Title"] = "Koi Page";
+}
+
+<h1 style="color: black;">
+    Koi Board
+</h1>
+
+<a href="@Url.Action("Create", "Koi")" class="ico edit">Create</a>
+
+<form method="get" action="@Url.Action("Search", "Koi")" style="margin-bottom: 20px;">
+    <input type="text" name="name" id="searchNameInput" placeholder="Search by Name"
+           value="@(string.IsNullOrEmpty(ViewContext.HttpContext.Request.Query["name"]) ? "" : ViewContext.HttpContext.Request.Query["name"])" style="width: 300px; padding: 5px;" />
+    <input type="text" name="category" id="searchCategoryInput" placeholder="Search by Category"
+           value="@(string.IsNullOrEmpty(ViewContext.HttpContext.Request.Query["category"]) ? "" : ViewContext.HttpContext.Request.Query["category"])" style="width: 300px; padding: 5px;" />
+    <input type="text" name="origin" id="searchOriginInput" placeholder="Search by Origin"
+           value="@(string.IsNullOrEmpty(ViewContext.HttpContext.Request.Query["origin"]) ? "" : ViewContext.HttpContext.Request.Query["origin"])" style="width: 300px; padding: 5px;" />
+    <button type="submit">Search</button>
+</form>
+
+<table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Physique</th>
+            <th>Age</th>
+            <th>Length (cm)</th>
+            <th>Sex</th>
+            <th>Category</th>
+            <th>In Pond Since</th>
+            <th>Purchase Price</th>
+            <th>Status</th>
+            <th>Img Url</th>
+            <th>Origin</th>
+            <th>Breed</th>
+            <th class="text-center" width="110">Content Control</th>
+        </tr>
+    </thead>
+    <tbody id="koiTableBody">
+        @foreach (var koi in Model)
+        {
+            <tr class="@(Model.IndexOf(koi) % 2 == 0 ? "odd" : "")">
+                <td>@(Model.IndexOf(koi) + 1)</td>
+                <td>@koi.Name</td>
+                <td>@koi.Physique</td>
+                <td>@koi.Age</td>
+                <td>@koi.Length</td>
+                <td>@koi.Sex</td>
+                <td>@koi.Category</td>
+                <td>@koi.InPondSince.ToString("yyyy-MM-dd")</td>
+                <td>@koi.PurchasePrice</td>
+                <td>@koi.Status</td>
+                <td><img src="@koi.ImgUrl" alt="@koi.Name" width="50" /></td>
+                <td>@koi.Origin</td>
+                <td>@koi.Breed</td>
+                <td class="text-center">
+                    <a href="@Url.Action("Edit", "Koi", new { id = koi.Id })" class="ico edit">Edit</a>
+                    <a href="@Url.Action("Delete", "Koi", new { id = koi.Id })" class="ico edit">Delete</a>
+                    <a href="@Url.Action("Detail", "Koi", new { id = koi.Id })" class="ico edit">Detail</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    
+}

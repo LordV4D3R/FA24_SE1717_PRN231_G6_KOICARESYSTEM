@@ -1,0 +1,98 @@
+﻿@model KoiDto
+@{
+    ViewData["Title"] = "Edit Koi";
+}
+
+<h2>Edit Koi</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Physique" class="control-label"></label>
+        <input asp-for="Physique" class="form-control" />
+        <span asp-validation-for="Physique" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Age" class="control-label"></label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Length" class="control-label"></label>
+        <input asp-for="Length" class="form-control" step="0.01" />
+        <span asp-validation-for="Length" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Sex" class="control-label"></label>
+        <select asp-for="Sex" class="form-control">
+            <option value="0">Male</option>
+            <option value="1">Female</option>
+        </select>
+        <span asp-validation-for="Sex" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Category" class="control-label"></label>
+        <input asp-for="Category" class="form-control" />
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="InPondSince" class="control-label"></label>
+        <input asp-for="InPondSince" class="form-control" type="date" />
+        <span asp-validation-for="InPondSince" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PurchasePrice" class="control-label"></label>
+        <input asp-for="PurchasePrice" class="form-control" step="0.01" />
+        <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <select asp-for="Status" class="form-control">
+            <option value="0">Active</option>
+            <option value="1">Inactive</option>
+            <option value="2">Suspended</option>
+            <option value="3">Deleted</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImgUrl" class="control-label"></label>
+        <input asp-for="ImgUrl" class="form-control" />
+        <span asp-validation-for="ImgUrl" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Origin" class="control-label"></label>
+        <input asp-for="Origin" class="form-control" />
+        <span asp-validation-for="Origin" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Breed" class="control-label"></label>
+        <input asp-for="Breed" class="form-control" />
+        <span asp-validation-for="Breed" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="PondId" />
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

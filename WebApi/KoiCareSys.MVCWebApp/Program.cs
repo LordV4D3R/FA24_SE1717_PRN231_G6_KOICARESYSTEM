@@ -1,7 +1,15 @@
+using KoiCareSys.MVCWebApp.ApiService.Interface;
+using KoiCareSys.MVCWebApp.ApiService;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<ApiService>("MyAPI", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7050");
+});
+builder.Services.AddScoped<IApiService, ApiService>();
 
 var app = builder.Build();
 
