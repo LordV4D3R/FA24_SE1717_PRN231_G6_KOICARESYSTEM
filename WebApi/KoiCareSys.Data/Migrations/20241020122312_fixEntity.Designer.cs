@@ -4,6 +4,7 @@ using KoiCareSys.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KoiCareSys.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241020122312_fixEntity")]
+    partial class fixEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,10 +57,6 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("feed_at");
 
-                    b.Property<string>("FeedBy")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("feed_by");
-
                     b.Property<decimal?>("FoodAmount")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("food_amount");
@@ -66,10 +65,6 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("food_type");
 
-                    b.Property<decimal?>("Foodcaculate")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("foodcaculate");
-
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("note");
@@ -77,10 +72,6 @@ namespace KoiCareSys.Data.Migrations
                     b.Property<Guid>("PondId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("pond_id");
-
-                    b.Property<decimal?>("Temperature")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("temperature");
 
                     b.HasKey("Id");
 
@@ -167,21 +158,9 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
-                    b.Property<string>("Color")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("color");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("description");
-
                     b.Property<Guid>("DevelopmentStageId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("development_stage_id");
-
-                    b.Property<string>("HealthIssue")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("health_issue");
 
                     b.Property<Guid>("KoiId")
                         .HasColumnType("uniqueidentifier")
@@ -195,17 +174,9 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("physique");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float")
-                        .HasColumnName("price");
-
                     b.Property<DateTime>("RecordAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("record_at");
-
-                    b.Property<string>("RecordName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("record_name");
 
                     b.Property<decimal?>("Weight")
                         .HasColumnType("decimal(18,2)")

@@ -42,42 +42,48 @@ namespace KoiCareSys.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
-            var result = await userService.GetById(id);
-            return Ok(result.Data);
+            try
+            {
+                var result = await userService.GetById(id);
+                if (result.Status > 0)
+                {
+                    return Ok(result.Data as User);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, User user)
+        public async Task<IActionResult> PutUser(Guid id, UpdateUserDTO user)
         {
-            if (id != user.Id)
+            try
+            {
+                var result = await userService.GetById(id);
+                if (result.Status < 0)
+                {
+                    return BadRequest();
+                }
+                var userUpdate = result.Data as User;
+                var update = await userService.UpdateUser(userUpdate, user);
+                if (update.Status > 0)
+                {
+                    return Ok(update.Data as User);
+                }
+                else { return NotFound(result.Message); }
+            }
+            catch
             {
                 return BadRequest();
             }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
-        */
+
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -106,31 +112,33 @@ namespace KoiCareSys.WebAPI.Controllers
                 return BadRequest();
             }
 
-
         }
 
-        /*
+
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var result = await userService.GetById(id);
+                if (result.Status < 0)
+                {
+                    return BadRequest();
+                }
+                var delete = await userService.DeleteUser(id);
+                if (delete.Status > 0)
+                {
+                    return Ok();
+                }
+                else { return NotFound(result.Message); }
+
             }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch
+            {
+                return BadRequest();
+            }
         }
-
-        private bool UserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
-        */
     }
 }
