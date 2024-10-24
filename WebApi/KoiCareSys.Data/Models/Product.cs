@@ -24,7 +24,9 @@ namespace KoiCareSys.Data.Models
         [Required]
         public decimal Price { get; set; }
 
-
+        [Column("sale_price")]
+        
+        public decimal SalePrice { get; set; }
         [Column("img_url")]
         [Url]
         public string? ImgUrl { get; set; }
