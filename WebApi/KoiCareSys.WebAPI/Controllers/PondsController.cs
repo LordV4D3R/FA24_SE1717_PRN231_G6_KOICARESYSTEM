@@ -8,11 +8,11 @@ namespace KoiCareSys.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PondController : ControllerBase
+    public class PondsController : ControllerBase
     {
         private readonly IPondService _pondService;
 
-        public PondController(IPondService pondService)
+        public PondsController(IPondService pondService)
         {
             _pondService = pondService;
         }
