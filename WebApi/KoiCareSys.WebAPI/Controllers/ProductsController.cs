@@ -67,7 +67,7 @@ namespace KoiCareSys.WebAPI.Controllers
         [HttpPut]
         public async Task<IBusinessResult> PutProduct([FromBody] ProductDTO request)
         {
-            return await _productService.Save(request);
+            return await _productService.Update(request);
         }
 
         // POST: api/Products
@@ -78,7 +78,7 @@ namespace KoiCareSys.WebAPI.Controllers
 
             try
             {
-                var result = await _productService.Save(product);
+                var result = await _productService.Create(product);
                 if (result.Status > 0)
                 {
                     return Ok(result.Data);
