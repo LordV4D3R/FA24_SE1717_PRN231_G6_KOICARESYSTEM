@@ -27,18 +27,12 @@ namespace KoiCareSys.WebAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<IBusinessResult> GetProducts()
         {
 
-            var result = await _productService.GetAll();
-            if (result != null && result.Status > 0 && result.Data != null)
-            {
-                return Ok(result.Data as IEnumerable<Product>);
-            }
-            else
-            {
-                return NotFound(result.Message ?? "No products found");
-            }
+            return await _productService.GetAll();
+            
+            
         }
 
         // GET: api/Products/5

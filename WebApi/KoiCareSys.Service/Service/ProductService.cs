@@ -56,6 +56,10 @@ namespace KoiCareSys.Service.Service
         public async Task<IBusinessResult> Create(ProductDTO request)
         {
             Product product = _mapper.Map<Product>(request);
+                    product.CreateDate = DateTime.Now;
+                    product.UpdateDate = DateTime.Now;
+                    product.isDeleted = false;
+                    product.TotalSold = 0;
             var result = await _unitOfWork.Product.CreateAsync(product);
             if (result > 0)
             {

@@ -25,8 +25,13 @@ namespace KoiCareSys.Data.Models
         public decimal Price { get; set; }
 
         [Column("sale_price")]
-        
-        public decimal SalePrice { get; set; }
+
+        public decimal? SalePrice { get; set; }
+
+        [Column("total_sold")]
+
+        public decimal? TotalSold { get; set; }
+
         [Column("img_url")]
         [Url]
         public string? ImgUrl { get; set; }
@@ -46,6 +51,9 @@ namespace KoiCareSys.Data.Models
         [Column("update_date")]
         [Required]
         public DateTime UpdateDate { get; set; }
+        [Column("isDeleted")]
+        [Required]
+        public bool isDeleted { get; set; }
 
         [JsonIgnore]
         [InverseProperty("Product")]  
