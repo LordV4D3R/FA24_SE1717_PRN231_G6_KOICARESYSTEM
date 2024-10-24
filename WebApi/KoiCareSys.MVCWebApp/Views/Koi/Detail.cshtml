@@ -1,0 +1,68 @@
+﻿@model KoiDto
+
+@{
+    ViewData["Title"] = "Koi Details";
+}
+
+<h1>Koi Details</h1>
+
+<div class="koi-details">
+    <div class="koi-image">
+        <img src="@Model.ImgUrl" alt="@Model.Name" width="300" />
+    </div>
+    <div class="koi-info">
+        <table class="table table-bordered">
+            <tr>
+                <th>Name:</th>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <th>Physique:</th>
+                <td>@Model.Physique</td>
+            </tr>
+            <tr>
+                <th>Age:</th>
+                <td>@Model.Age</td>
+            </tr>
+            <tr>
+                <th>Length (cm):</th>
+                <td>@Model.Length</td>
+            </tr>
+            <tr>
+                <th>Sex:</th>
+                <td>@(Model.Sex == 0 ? "Male" : "Female")</td>
+            </tr>
+            <tr>
+                <th>Category:</th>
+                <td>@Model.Category</td>
+            </tr>
+            <tr>
+                <th>In Pond Since:</th>
+                <td>@Model.InPondSince.ToString("yyyy-MM-dd")</td>
+            </tr>
+            <tr>
+                <th>Purchase Price:</th>
+                <td>@Model.PurchasePrice</td>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td>@Model.Status</td>
+            </tr>
+            <tr>
+                <th>Origin:</th>
+                <td>@Model.Origin</td>
+            </tr>
+            <tr>
+                <th>Breed:</th>
+                <td>@Model.Breed</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<a href="/Koi/Index" class="btn btn-secondary">Back to List</a>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline">
+    <input type="hidden" name="__RequestVerificationToken" value="@Html.AntiForgeryToken()" />
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this Koi?');">Delete</button>
+</form>
