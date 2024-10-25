@@ -62,6 +62,28 @@ namespace KoiCareSys.MVCWebApp.Controllers
             return View(ponds);
         }
 
+        [HttpGet("PondAjax")]
+        public async Task<IActionResult> PondAjax()
+        {
+            var ponds = new List<PondDto>();
+            try
+            {
+                var result = await _apiService.GetAsync<List<PondDto>>("api/ponds");
+                if (result != null && result.Any())
+                {
+                    ponds = result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching ponds: {ex.Message}");
+            }
+
+            // Return the view with the list of ponds
+            return View(ponds);
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
