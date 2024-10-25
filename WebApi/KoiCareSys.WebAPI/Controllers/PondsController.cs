@@ -66,7 +66,7 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IBusinessResult> Update([FromBody] PondDTO request)
         {
             return await _pondService.Update(request);

@@ -1,13 +1,13 @@
-﻿@model KoiDto
+﻿@model PondDto
 
 @{
-    ViewData["Title"] = "Delete Koi";
+    ViewData["Title"] = "Delete Pond";
 }
 
-<h2>Delete Koi</h2>
+<h2>Delete Pond</h2>
 
 <div class="alert alert-danger">
-    Are you sure you want to delete this Koi (@Model.Name)?
+    Are you sure you want to delete this Pond (@Model.PondName)?
 </div>
 
 <form asp-action="DeleteConfirmed" method="post">
