@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\PondAjax\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\KoiCareSys.Data\KoiCareSys.Data.csproj" />
     <ProjectReference Include="..\KoiCareSys.WebAPI\KoiCareSys.WebAPI.csproj" />
   </ItemGroup>
