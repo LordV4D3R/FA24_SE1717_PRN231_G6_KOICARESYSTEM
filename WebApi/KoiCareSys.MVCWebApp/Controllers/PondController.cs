@@ -9,10 +9,12 @@ namespace KoiCareSys.MVCWebApp.Controllers
     public class PondController : Controller
     {
         private IApiService _apiService;
+        private readonly IConfiguration _configuration;
 
-        public PondController(IApiService apiService)
+        public PondController(IApiService apiService, IConfiguration configuration)
         {
             _apiService = apiService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -83,6 +85,12 @@ namespace KoiCareSys.MVCWebApp.Controllers
             return View(ponds);
         }
 
+        public async Task<IActionResult> Map()
+        {
+            var ponds = await _apiService.GetAsync<List<PondDto>>("api/ponds");
+            ViewBag.GoogleMapsApiKey = _configuration["GoogleMaps:ApiKey"];
+            return View(ponds);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Create()
