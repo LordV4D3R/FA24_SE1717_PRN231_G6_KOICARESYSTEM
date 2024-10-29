@@ -8,11 +8,11 @@ namespace KoiCareSys.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PondController : ControllerBase
+    public class PondsController : ControllerBase
     {
         private readonly IPondService _pondService;
 
-        public PondController(IPondService pondService)
+        public PondsController(IPondService pondService)
         {
             _pondService = pondService;
         }
@@ -66,7 +66,7 @@ namespace KoiCareSys.WebAPI.Controllers
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IBusinessResult> Update([FromBody] PondDTO request)
         {
             return await _pondService.Update(request);

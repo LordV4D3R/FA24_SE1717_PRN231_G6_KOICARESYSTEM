@@ -1,4 +1,5 @@
 ﻿using KoiCareSys.Data.DTO;
+using KoiCareSys.Data.Models;
 using KoiCareSys.Serivice.Base;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace KoiCareSys.Service.Service.Interface
         Task<IBusinessResult> GetAll(String? search);
         Task<IBusinessResult> Create(FeedingScheduleDTO request);
         Task<IBusinessResult> GetById(Guid code);
-
+        Task<IBusinessResult> CaculateFoodAmountByKoi(Guid pondId);
+        Task<IBusinessResult> Update(FeedingSchedule feedingSchedule, FeedingScheduleDTO updateFeedingSchedule);
+        Task<IBusinessResult> Delete(Guid code);
     }
 }

@@ -1,0 +1,107 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.PondPage.PondDetailsModel
+@{
+    <div id="container">
+        <div class="shell">
+            <!-- Main -->
+            <div id="main">
+                <div class="cl">&nbsp;</div>
+                <!-- Content -->
+                <div id="content">
+                    <!-- Box -->
+                    <div class="box">
+                        <!-- End Box Head -->
+                        <div class="row">
+                            <div class="">
+                                <div>
+                                    <hr />
+                                    <dl class="row">
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.Id)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.Id)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.PondName)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.PondName)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.Volume)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.Volume)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.Depth)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.Depth)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.DrainCount)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.DrainCount)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.SkimmerCount)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.SkimmerCount)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.PumpCapacity)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.PumpCapacity)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.ImgUrl)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.ImgUrl)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.Note)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.Note)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.Description)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.Description)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.Status)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.Status)
+                                        </dd>
+                                        <dt class="col-sm-4">
+                                            @Html.DisplayNameFor(model => model.Request.IsQualified)
+                                        </dt>
+                                        <dd class="col-sm-8">
+                                            @Html.DisplayFor(model => model.Request.IsQualified)
+                                        </dd>
+                                    </dl>
+                                    <div>
+                                        <a asp-page="./PondIndex">Back to List</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Box -->
+                </div>
+                <!-- End Content -->
+                <div class="cl">&nbsp;</div>
+            </div>
+            <!-- Main -->
+        </div>
+    </div>
+}
