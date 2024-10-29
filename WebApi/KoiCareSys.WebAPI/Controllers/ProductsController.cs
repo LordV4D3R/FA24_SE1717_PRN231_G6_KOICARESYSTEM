@@ -27,18 +27,12 @@ namespace KoiCareSys.WebAPI.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<IBusinessResult> GetProducts()
         {
 
-            var result = await _productService.GetAll();
-            if (result != null && result.Status > 0 && result.Data != null)
-            {
-                return Ok(result.Data as IEnumerable<Product>);
-            }
-            else
-            {
-                return NotFound(result.Message ?? "No products found");
-            }
+            return await _productService.GetAll();
+            
+            
         }
 
         // GET: api/Products/5
@@ -64,10 +58,10 @@ namespace KoiCareSys.WebAPI.Controllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
-        public async Task<IBusinessResult> PutProduct([FromBody] ProductDTO request)
+        [HttpPut("{id}")]
+        public async Task<IBusinessResult> PutProduct([FromBody] ProductDTO request,Guid id)
         {
-            return await _productService.Save(request);
+            return await _productService.Update(request);
         }
 
         // POST: api/Products
@@ -78,7 +72,7 @@ namespace KoiCareSys.WebAPI.Controllers
 
             try
             {
-                var result = await _productService.Save(product);
+                var result = await _productService.Create(product);
                 if (result.Status > 0)
                 {
                     return Ok(result.Data);

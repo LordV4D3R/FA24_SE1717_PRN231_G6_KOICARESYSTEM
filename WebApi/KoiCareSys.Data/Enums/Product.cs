@@ -11,7 +11,6 @@ namespace KoiCareSys.Data.Enums
         {
             Active,
             Inactive,
-            Suspended,
             Deleted
         }
     
