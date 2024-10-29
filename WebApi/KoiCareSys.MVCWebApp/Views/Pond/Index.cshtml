@@ -1,0 +1,74 @@
+﻿@model List<PondDto>
+
+
+@{
+    ViewData["Title"] = "Pond Page";
+}
+
+
+<h1 style="color: black;">
+    Pond Board
+</h1>
+<a href="@Url.Action("Create", "Pond")" class="ico edit">Create</a>
+
+<form method="get" action="@Url.Action("Search", "Pond")" style="margin-bottom: 20px;">
+    <input type="text" name="name" placeholder="Search by Pond Name" value="@(ViewContext.HttpContext.Request.Query["name"].FirstOrDefault())" />
+    <input type="text" name="note" placeholder="Search by Note" value="@(ViewContext.HttpContext.Request.Query["note"].FirstOrDefault())" />
+    <input type="text" name="description" placeholder="Search by Description" value="@(ViewContext.HttpContext.Request.Query["description"].FirstOrDefault())" />
+    <button type="submit">Search</button>
+</form>
+
+<table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Pond Name</th>
+            <th>Volume</th>
+            <th>Depth</th>
+            <th>Drain Count</th>
+            <th>Skimmer Count</th>
+            <th>Pump Capacity</th>
+            <th>Note</th>
+            <th>Status</th>
+            <th>Img Url</th>
+            <th>Description</th>
+            <th class="text-center" width="110">Content Control</th>
+        </tr>
+    </thead>
+    <tbody id="pondTableBody">
+        @if (Model == null || !Model.Any())
+        {
+            <tr>
+                <td colspan="12" class="text-center">No ponds available</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var pond in Model)
+            {
+                <tr class="@(Model.IndexOf(pond) % 2 == 0 ? "odd" : "")">
+                    <td>@(Model.IndexOf(pond) + 1)</td>
+                    <td>@pond.PondName</td>
+                    <td>@pond.Volume</td>
+                    <td>@pond.Depth</td>
+                    <td>@pond.DrainCount</td>
+                    <td>@pond.SkimmerCount</td>
+                    <td>@pond.PumpCapacity</td>
+                    <td>@pond.Note</td>
+                    <td>@pond.Status</td>
+                    <td><img src="@pond.ImgUrl" alt="@pond.PondName" width="50" /></td>
+                    <td>@pond.Description</td>
+                    <td class="text-center">
+                        <a href="@Url.Action("Edit", "Pond", new { id = pond.Id })" class="ico edit">Edit</a>
+                        <a href="@Url.Action("Delete", "Pond", new { id = pond.Id })" class="ico edit">Delete</a>
+                        <a href="@Url.Action("Details", "Pond", new { id = pond.Id })" class="ico edit">Details</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+
+}

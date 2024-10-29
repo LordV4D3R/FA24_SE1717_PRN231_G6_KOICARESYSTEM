@@ -1,322 +1,102 @@
 ﻿@page
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koi Management</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+<h1>Koi Board</h1>
+<button onclick="openKoiForm()" class="ico edit">Create</button>
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
+<div style="margin-bottom: 20px;">
+    <input type="text" id="searchNameInput" placeholder="Search by Name" style="width: 300px; padding: 5px;" />
+    <input type="text" id="searchCategoryInput" placeholder="Search by Category" style="width: 300px; padding: 5px;" />
+    <input type="text" id="searchOriginInput" placeholder="Search by Origin" style="width: 300px; padding: 5px;" />
+    <button onclick="loadKoiData()">Search</button>
+</div>
 
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+<table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Physique</th>
+            <th>Age</th>
+            <th>Length (cm)</th>
+            <th>Sex</th>
+            <th>Category</th>
+            <th>In Pond Since</th>
+            <th>Purchase Price</th>
+            <th>Status</th>
+            <th>Img Url</th>
+            <th>Origin</th>
+            <th>Breed</th>
+            <th class="text-center" width="110">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="koiTableBody">
+        <!-- Koi data will be dynamically rendered here -->
+    </tbody>
+</table>
 
-            .table th, .table td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadKoiData();
+        });
 
-            .table th {
-                background-color: #f2f2f2;
-            }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
-        }
-
-        .modal-content {
-            background-color: white; /* Modal content */
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888; /* Border */
-            border-radius: 10px; /* Rounded corners */
-            width: 80%; /* Could be more or less, depending on screen size */
-        }
-    </style>
-</head>
-<body>
-    <h1>Koi Board</h1>
-    <button onclick="openKoiForm()" class="ico edit">Create</button>
-
-    <div style="margin-bottom: 20px;">
-        <input type="text" id="searchNameInput" placeholder="Search by Name" style="width: 300px; padding: 5px;" />
-        <input type="text" id="searchCategoryInput" placeholder="Search by Category" style="width: 300px; padding: 5px;" />
-        <input type="text" id="searchOriginInput" placeholder="Search by Origin" style="width: 300px; padding: 5px;" />
-        <button onclick="loadKoiData()">Search</button>
-    </div>
-
-    <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Name</th>
-                <th>Physique</th>
-                <th>Age</th>
-                <th>Length (cm)</th>
-                <th>Sex</th>
-                <th>Category</th>
-                <th>In Pond Since</th>
-                <th>Purchase Price</th>
-                <th>Status</th>
-                <th>Img Url</th>
-                <th>Origin</th>
-                <th>Breed</th>
-                <th class="text-center" width="110">Content Control</th>
-            </tr>
-        </thead>
-        <tbody id="koiTableBody">
-            <!-- Koi data will be dynamically rendered here -->
-        </tbody>
-    </table>
-
-    <!-- Modal for Create/Update Koi -->
-    <div id="koiModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modalTitle">Create Koi</h2>
-            <form id="koiForm">
-                <input type="hidden" id="koiId" />
-                <label>Name:</label><br />
-                <input type="text" id="koiName" required /><br /><br />
-                <label>Physique:</label><br />
-                <input type="text" id="koiPhysique" required /><br /><br />
-                <label>Age:</label><br />
-                <input type="number" id="koiAge" required /><br /><br />
-                <label>Length (cm):</label><br />
-                <input type="number" id="koiLength" required /><br /><br />
-                <label>Sex:</label><br />
-                <input type="text" id="koiSex" required /><br /><br />
-                <label>Category:</label><br />
-                <input type="text" id="koiCategory" required /><br /><br />
-                <label>Origin:</label><br />
-                <input type="text" id="koiOrigin" required /><br /><br />
-                <label>Breed:</label><br />
-                <input type="text" id="koiBreed" required /><br /><br />
-                <button type="submit">Save</button>
-                <button type="button" onclick="closeKoiForm()">Cancel</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal for Koi Details -->
-    <div id="koiDetailModal" class="modal">
-        <div class="modal-content">
-            <h2 id="detailModalTitle">Koi Details</h2>
-            <p><strong>Name:</strong> <span id="detailKoiName"></span></p>
-            <p><strong>Physique:</strong> <span id="detailKoiPhysique"></span></p>
-            <p><strong>Age:</strong> <span id="detailKoiAge"></span></p>
-            <p><strong>Length (cm):</strong> <span id="detailKoiLength"></span></p>
-            <p><strong>Sex:</strong> <span id="detailKoiSex"></span></p>
-            <p><strong>Category:</strong> <span id="detailKoiCategory"></span></p>
-            <p><strong>In Pond Since:</strong> <span id="detailKoiInPondSince"></span></p>
-            <p><strong>Purchase Price:</strong> <span id="detailKoiPurchasePrice"></span></p>
-            <p><strong>Status:</strong> <span id="detailKoiStatus"></span></p>
-            <p><strong>Image:</strong> <img id="detailKoiImg" alt="Koi Image" width="100" /></p>
-            <p><strong>Origin:</strong> <span id="detailKoiOrigin"></span></p>
-            <p><strong>Breed:</strong> <span id="detailKoiBreed"></span></p>
-            <button type="button" onclick="closeKoiDetailForm()">Close</button>
-        </div>
-    </div>
-    @section scripts {
-        <script>
-            // Function to load Koi data
-            function loadKoiData() {
-                const searchName = $('#searchNameInput').val().toLowerCase();
-                const searchCategory = $('#searchCategoryInput').val().toLowerCase();
-                const searchOrigin = $('#searchOriginInput').val().toLowerCase();
-
-                $.ajax({
-                    url: "https://localhost:7050/api/kois", // Replace with your actual Web API endpoint
-                    method: "GET",
-                    success: function (data) {
-                        $('#koiTableBody').empty();
-
-                        const filteredData = data.data.filter(function (koi) {
-                            return (
-                                koi.name.toLowerCase().includes(searchName) &&
-                                koi.category.toLowerCase().includes(searchCategory) &&
-                                koi.origin.toLowerCase().includes(searchOrigin)
-                            );
-                        });
-
-                        filteredData.forEach(function (koi, index) {
-                            $('#koiTableBody').append(`
-                                                        <tr class="${index % 2 === 0 ? 'odd' : ''}">
-                                                            <td>${index + 1}</td>
-                                                            <td>${koi.name}</td>
-                                                            <td>${koi.physique}</td>
-                                                            <td>${koi.age}</td>
-                                                            <td>${koi.length}</td>
-                                                            <td>${koi.sex}</td>
-                                                            <td>${koi.category}</td>
-                                                            <td>${new Date(koi.inPondSince).toISOString().split('T')[0]}</td>
-                                                            <td>${koi.purchasePrice}</td>
-                                                            <td>${koi.status}</td>
-                                                            <td><img src="${koi.imgUrl}" alt="${koi.name}" width="50" /></td>
-                                                            <td>${koi.origin}</td>
-                                                            <td>${koi.breed}</td>
-                                                            <td class="text-center">
-                                                                <button class="btn btn-danger" onclick="deleteKoi('${koi.id}')">Delete</button>
-                                                                <button class="btn btn-primary" onclick="openKoiForm('${koi.id}')">Edit</button>
-                                                                <button class="ico edit" onclick="showKoiDetails('${koi.id}')">Detail</button>
-                                                            </td>
-                                                        </tr>
-                                                    `);
-                        });
-                    },
-                    error: function (err) {
-                        console.error("Failed to fetch Koi data:", err);
-                    }
-                });
-            }
-
-            // Function to show Koi details
-            function showKoiDetails(koiId) {
-                $.ajax({
-                    url: `https://localhost:7050/api/kois/${koiId}`, // Replace with your actual Web API endpoint
-                    method: "GET",
-                    success: function (koi) {
-                        $('#detailKoiName').text(koi.name);
-                        $('#detailKoiPhysique').text(koi.physique);
-                        $('#detailKoiAge').text(koi.age);
-                        $('#detailKoiLength').text(koi.length);
-                        $('#detailKoiSex').text(koi.sex);
-                        $('#detailKoiCategory').text(koi.category);
-                        $('#detailKoiInPondSince').text(new Date(koi.inPondSince).toISOString().split('T')[0]);
-                        $('#detailKoiPurchasePrice').text(koi.purchasePrice);
-                        $('#detailKoiStatus').text(koi.status);
-                        $('#detailKoiImg').attr('src', koi.imgUrl);
-                        $('#detailKoiOrigin').text(koi.origin);
-                        $('#detailKoiBreed').text(koi.breed);
-                        $('#koiDetailModal').show();
-                    },
-                    error: function (err) {
-                        console.error("Failed to fetch Koi data for detail view:", err);
-                    }
-                });
-            }
-
-            // Function to open Create/Update Koi modal
-            function openKoiForm(koiId = null) {
-                $('#koiId').val(koiId);
-                if (koiId) {
-                    $.ajax({
-                        url: `https://localhost:7050/api/kois/${koiId}`, // Replace with your actual Web API endpoint
-                        method: "GET",
-                        success: function (koi) {
-                            $('#modalTitle').text("Update Koi");
-                            $('#koiName').val(koi.name);
-                            $('#koiPhysique').val(koi.physique);
-                            $('#koiAge').val(koi.age);
-                            $('#koiLength').val(koi.length);
-                            $('#koiSex').val(koi.sex);
-                            $('#koiCategory').val(koi.category);
-                            $('#koiOrigin').val(koi.origin);
-                            $('#koiBreed').val(koi.breed);
-                            $('#koiModal').show();
-                        },
-                        error: function (err) {
-                            console.error("Failed to fetch Koi data for update:", err);
-                        }
-                    });
-                } else {
-                    $('#modalTitle').text("Create Koi");
-                    $('#koiForm')[0].reset();
-                    $('#koiModal').show();
+        function loadKoiData() {
+            $.ajax({
+                url: 'https://localhost:7050/api/Kois',
+                type: "GET",
+                contentType: "application/json",
+                dataType: "json",
+                success: function (result) {
+                    renderKoiTable(result.data);
+                },
+                error: function (xhr) {
+                    console.error(xhr);
+                    alert('Error loading Koi data: ' + xhr.statusText);
                 }
-            }
+            });
+        }
 
-            // Function to close Koi modal
-            function closeKoiForm() {
-                $('#koiModal').hide();
-            }
+        function renderKoiTable(koiList) {
+            let html = '';
+            $.each(koiList, function (index, koi) {
+                html += `<tr>
+                                            <td>${index + 1}</td>
+                                            <td>${koi.name}</td>
+                                            <td>${koi.physique}</td>
+                                            <td>${koi.age}</td>
+                                            <td>${koi.length}</td>
+                                            <td>${koi.sex}</td>
+                                            <td>${koi.category}</td>
+                                            <td>${koi.inPondSince}</td>
+                                            <td>${koi.purchasePrice}</td>
+                                            <td>${koi.status}</td>
+                                            <td><img src="${koi.imgUrl}" alt="Koi Image" width="50"></td>
+                                            <td>${koi.origin}</td>
+                                            <td>${koi.breed}</td>
+                                            <td class="text-center">
+                                                <a href="@Url.Action("Edit", "Koi")/${koi.id}" class="ico edit">Edit</a>
+                                                <a href="@Url.Action("Detail", "Koi")/${koi.id}" class="ico edit">Detail</a>
+                                                <button class="btn btn-danger btn-sm" onclick="deleteKoi(${koi.id})">Delete</button>
+                                            </td>
+                                        </tr>`;
+            });
+            $('#koiTableBody').html(html);
+        }
 
-            // Function to close Koi Detail modal
-            function closeKoiDetailForm() {
-                $('#koiDetailModal').hide();
-            }
-
-            // Function to handle form submission for Create/Update
-            $('#koiForm').on('submit', function (event) {
-                event.preventDefault(); // Prevent default form submission
-                const koiData = {
-                    id: $('#koiId').val(),
-                    name: $('#koiName').val(),
-                    physique: $('#koiPhysique').val(),
-                    age: $('#koiAge').val(),
-                    length: $('#koiLength').val(),
-                    sex: $('#koiSex').val(),
-                    category: $('#koiCategory').val(),
-                    origin: $('#koiOrigin').val(),
-                    breed: $('#koiBreed').val(),
-                    inPondSince: new Date().toISOString(), // Assume current date for simplicity
-                    purchasePrice: 0, // Adjust as necessary
-                    status: 'Available', // Default status
-                    imgUrl: '', // Add image URL if needed
-                };
-
-                const method = koiData.id ? "PUT" : "POST";
-                const url = koiData.id ? `https://localhost:7050/api/kois/${koiData.id}` : "https://localhost:7050/api/kois"; // Replace with your actual Web API endpoint
-
+        function deleteKoi(koiId) {
+            if (confirm("Are you sure you want to delete this Koi?")) {
                 $.ajax({
-                    url: url,
-                    method: method,
-                    contentType: "application/json",
-                    data: JSON.stringify(koiData),
+                    url: `https://localhost:7050/api/kois/${koiId}`,
+                    method: "DELETE",
                     success: function () {
-                        closeKoiForm();
-                        loadKoiData(); // Reload data after submit
+                        alert("Koi deleted successfully.");
+                        loadKoiData();
                     },
                     error: function (err) {
-                        console.error("Failed to save Koi data:", err);
+                        console.error("Failed to delete Koi:", err);
+                        alert("An error occurred while deleting the Koi.");
                     }
                 });
-            });
-
-            // Function to delete a Koi
-            function deleteKoi(koiId) {
-                if (confirm("Are you sure you want to delete this Koi?")) {
-                    $.ajax({
-                        url: `https://localhost:7050/api/kois/${koiId}`, // Replace with your actual Web API endpoint
-                        method: "DELETE",
-                        success: function () {
-                            loadKoiData(); // Reload data after delete
-                        },
-                        error: function (err) {
-                            console.error("Failed to delete Koi:", err);
-                        }
-                    });
-                }
             }
-
-            // Load Koi data on page load
-            $(document).ready(function () {
-                loadKoiData();
-            });
-        </script>
-    }
-</body>
-</html>
+        }
+    </script>
+}

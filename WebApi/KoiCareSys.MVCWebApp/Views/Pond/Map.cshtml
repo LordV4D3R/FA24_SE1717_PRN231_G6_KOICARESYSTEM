@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Pond Map";
+}
+
+<h1>Pond Locations on Map</h1>
+
+<div id="map" style="height: 500px; width: 100%;"></div>
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&callback=initMap" async defer></script>
+    <script>
+        const apiKey = '@ViewBag.GoogleMapsApiKey';
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+        // script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+        let map;
+        const ponds = @Html.Raw(Json.Serialize(Model));
+
+        function initMap() {
+            const center = { lat: 14.0583, lng: 108.2772 }; 
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 6,
+                center: center,
+            });
+
+            ponds.forEach(pond => {
+                const marker = new google.maps.Marker({
+                    position: { lat: pond.Latitude, lng: pond.Longitude }, 
+                    map: map,
+                    title: pond.PondName,
+                });
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `<h3>${pond.PondName}</h3><p>${pond.Description}</p>`,
+                });
+
+                marker.addListener("click", () => {
+                    infoWindow.open(map, marker);
+                });
+            });
+        }
+    </script>
+}

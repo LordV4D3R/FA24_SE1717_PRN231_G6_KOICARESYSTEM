@@ -60,9 +60,10 @@ namespace KoiCareSys.MVCWebApp.Controllers
             return View(kois);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var ponds = await _apiService.GetAsync<List<PondDto>>("api/pond");
+            var ponds = await _apiService.GetAsync<List<PondDto>>("api/ponds");
             ViewBag.PondId = new SelectList(ponds, "Id", "PondName");
             return View();
         }

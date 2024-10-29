@@ -1,16 +1,29 @@
-using KoiCareSys.MVCWebApp.ApiService.Interface;
+using KoiCareSys.Data;
 using KoiCareSys.MVCWebApp.ApiService;
+using KoiCareSys.MVCWebApp.ApiService.Interface;
+using KoiCareSys.Service.Mappings;
+using KoiCareSys.Service.Service;
+using KoiCareSys.Service.Service.Interface;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Register your DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 builder.Services.AddHttpClient<ApiService>("MyAPI", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7050");
 });
 builder.Services.AddScoped<IApiService, ApiService>();
-
+builder.Services.AddScoped<IPondService, PondService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<UnitOfWork>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

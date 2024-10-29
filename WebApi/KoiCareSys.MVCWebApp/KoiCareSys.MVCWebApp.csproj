@@ -12,11 +12,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\KoiCareSys.WebAPI\KoiCareSys.WebAPI.csproj" />
+
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KoiCareSys.Data\KoiCareSys.Data.csproj" />
+    <ProjectReference Include="..\KoiCareSys.WebAPI\KoiCareSys.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>
