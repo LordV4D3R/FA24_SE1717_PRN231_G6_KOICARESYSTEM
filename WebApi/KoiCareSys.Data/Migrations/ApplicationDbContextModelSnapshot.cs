@@ -435,13 +435,25 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("price");
 
+                    b.Property<decimal?>("SalePrice")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("sale_price");
+
                     b.Property<int>("Status")
                         .HasColumnType("int")
                         .HasColumnName("status");
 
+                    b.Property<decimal?>("TotalSold")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("total_sold");
+
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("update_date");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit")
+                        .HasColumnName("isDeleted");
 
                     b.HasKey("Id");
 

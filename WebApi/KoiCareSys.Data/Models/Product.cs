@@ -24,9 +24,16 @@ namespace KoiCareSys.Data.Models
         [Required]
         public decimal Price { get; set; }
 
+        [Column("sale_price")]
+
+        public decimal? SalePrice { get; set; }
+
+        [Column("total_sold")]
+
+        public decimal? TotalSold { get; set; }
 
         [Column("img_url")]
-        [Url]
+        
         public string? ImgUrl { get; set; }
 
 
@@ -34,7 +41,7 @@ namespace KoiCareSys.Data.Models
         public string? Description { get; set; }
 
         [Column("status")]
-        [EnumDataType(typeof(Enums.PondStatus))]
+        [EnumDataType(typeof(Enums.ProductStatus))]
         public Enums.ProductStatus Status { get; set; }
 
         [Column("create_date")]
@@ -44,6 +51,9 @@ namespace KoiCareSys.Data.Models
         [Column("update_date")]
         [Required]
         public DateTime UpdateDate { get; set; }
+        [Column("isDeleted")]
+        [Required]
+        public bool isDeleted { get; set; }
 
         [JsonIgnore]
         [InverseProperty("Product")]  

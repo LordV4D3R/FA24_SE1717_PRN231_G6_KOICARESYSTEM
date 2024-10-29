@@ -14,13 +14,13 @@ namespace KoiCareSys.Service.Service
     {
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;
-        private readonly SignalRHub _hub;
+        //private readonly SignalRHub _hub;
 
-        public KoiService(UnitOfWork unitOfWork, IMapper mapper, SignalRHub hub)
+        public KoiService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _hub = hub;
+            //_hub = hub;
         }
 
         public async Task<IBusinessResult> GetAll()
@@ -81,7 +81,7 @@ namespace KoiCareSys.Service.Service
                     result = _unitOfWork.SaveChangesWithTransaction();
                     if (result > 0)
                     {
-                        await _hub.SendMessage($"Updated Koi with id: {koiTmp.Id}");
+                        //await _hub.SendMessage($"Updated Koi with id: {koiTmp.Id}");
                         return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
                     }
                     else
@@ -97,7 +97,7 @@ namespace KoiCareSys.Service.Service
                     result = _unitOfWork.SaveChangesWithTransaction();
                     if (result > 0)
                     {
-                        await _hub.SendMessage($"Created new Koi with id: {koi.Id}");
+                        //await _hub.SendMessage($"Created new Koi with id: {koi.Id}");
                         return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
                     }
                     else
@@ -128,7 +128,7 @@ namespace KoiCareSys.Service.Service
                     var result = await _unitOfWork.Koi.RemoveAsync(koi);
                     if (result)
                     {
-                        await _hub.SendMessage($"Removed Koi with id: {koi.Id}");
+                        //await _hub.SendMessage($"Removed Koi with id: {koi.Id}");
                         return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
                     }
                     else
