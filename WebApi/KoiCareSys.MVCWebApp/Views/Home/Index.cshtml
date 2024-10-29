@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -8,4 +8,7 @@
     <a href="/Koi" class="btn btn-primary">Koi</a>
     @* <a href="/KoiAjax" class="btn btn-primary">Koi With Ajax</a> *@
     <a href="/Pond" class="btn btn-primary">Pond</a>
+    <a href="@Url.Action("PondAjax", "Pond")" class="btn btn-primary">PondAjax</a>
+    <a href="@Url.Action("Map", "Pond")" class="btn btn-primary">View Pond Map</a>
+
 </div>

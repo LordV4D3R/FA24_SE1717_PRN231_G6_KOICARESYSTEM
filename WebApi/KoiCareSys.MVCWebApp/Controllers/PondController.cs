@@ -3,17 +3,18 @@ using KoiCareSys.MVCWebApp.Base;
 using KoiCareSys.MVCWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 
 namespace KoiCareSys.MVCWebApp.Controllers
 {
     public class PondController : Controller
     {
         private IApiService _apiService;
+        private readonly IConfiguration _configuration;
 
-        public PondController(IApiService apiService)
+        public PondController(IApiService apiService, IConfiguration configuration)
         {
             _apiService = apiService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -22,10 +23,10 @@ namespace KoiCareSys.MVCWebApp.Controllers
             var ponds = new List<PondDto>();
             try
             {
-                var result = await _apiService.GetAsync<BusinessResult>("api/ponds");
-                if (result != null && result.Status == 1)
+                var result = await _apiService.GetAsync<List<PondDto>>("api/ponds");
+                if (result != null)
                 {
-                    ponds = JsonConvert.DeserializeObject<List<PondDto>>(result.Data.ToString());
+                    ponds = result;
                 }
             }
             catch (Exception ex)
@@ -38,8 +39,11 @@ namespace KoiCareSys.MVCWebApp.Controllers
                             (string.IsNullOrEmpty(note) || p.Note.ToLower().Contains(note.ToLower())) &&
                             (string.IsNullOrEmpty(description) || p.Description.ToLower().Contains(description.ToLower())))
                 .ToList();
+
             return View("Index", filteredPonds);
         }
+
+
 
         public async Task<IActionResult> Index()
         {
@@ -57,6 +61,34 @@ namespace KoiCareSys.MVCWebApp.Controllers
                 Console.WriteLine($"Error fetching ponds: {ex.Message}");
             }
 
+            return View(ponds);
+        }
+
+        [HttpGet("PondAjax")]
+        public async Task<IActionResult> PondAjax()
+        {
+            var ponds = new List<PondDto>();
+            try
+            {
+                var result = await _apiService.GetAsync<List<PondDto>>("api/ponds");
+                if (result != null && result.Any())
+                {
+                    ponds = result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching ponds: {ex.Message}");
+            }
+
+            // Return the view with the list of ponds
+            return View(ponds);
+        }
+
+        public async Task<IActionResult> Map()
+        {
+            var ponds = await _apiService.GetAsync<List<PondDto>>("api/ponds");
+            ViewBag.GoogleMapsApiKey = _configuration["GoogleMaps:ApiKey"];
             return View(ponds);
         }
 

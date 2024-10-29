@@ -42,30 +42,30 @@
     <tbody id="koiTableBody">
         @foreach (var koi in Model)
         {
-            <tr class="@(Model.IndexOf(koi) % 2 == 0 ? "odd" : "")">
-                <td>@(Model.IndexOf(koi) + 1)</td>
-                <td>@koi.Name</td>
-                <td>@koi.Physique</td>
-                <td>@koi.Age</td>
-                <td>@koi.Length</td>
-                <td>@koi.Sex</td>
-                <td>@koi.Category</td>
-                <td>@koi.InPondSince.ToString("yyyy-MM-dd")</td>
-                <td>@koi.PurchasePrice</td>
-                <td>@koi.Status</td>
-                <td><img src="@koi.ImgUrl" alt="@koi.Name" width="50" /></td>
-                <td>@koi.Origin</td>
-                <td>@koi.Breed</td>
-                <td class="text-center">
-                    <a href="@Url.Action("Edit", "Koi", new { id = koi.Id })" class="ico edit">Edit</a>
-                    <a href="@Url.Action("Delete", "Koi", new { id = koi.Id })" class="ico edit">Delete</a>
-                    <a href="@Url.Action("Detail", "Koi", new { id = koi.Id })" class="ico edit">Detail</a>
-                </td>
-            </tr>
+                <tr class="@(Model.IndexOf(koi) % 2 == 0 ? "odd" : "")">
+                    <td>@(Model.IndexOf(koi) + 1)</td>
+                    <td>@koi.Name</td>
+                    <td>@koi.Physique</td>
+                    <td>@koi.Age</td>
+                    <td>@koi.Length</td>
+                    <td>@koi.Sex</td>
+                    <td>@koi.Category</td>
+                    <td>@koi.InPondSince.ToString("yyyy-MM-dd")</td>
+                    <td>@koi.PurchasePrice</td>
+                    <td>@koi.Status</td>
+                    <td><img src="@koi.ImgUrl" alt="@koi.Name" width="50" /></td>
+                    <td>@koi.Origin</td>
+                    <td>@koi.Breed</td>
+                    <td class="text-center">
+                        <a href="@Url.Action("Edit", "Koi", new { id = koi.Id })" class="ico edit">Edit</a>
+                        <a href="@Url.Action("Delete", "Koi", new { id = koi.Id })" class="ico edit">Delete</a>
+                        <a href="@Url.Action("Detail", "Koi", new { id = koi.Id })" class="ico edit">Detail</a>
+                    </td>
+                </tr>
         }
     </tbody>
 </table>
 
 @section Scripts {
-    
+
 }

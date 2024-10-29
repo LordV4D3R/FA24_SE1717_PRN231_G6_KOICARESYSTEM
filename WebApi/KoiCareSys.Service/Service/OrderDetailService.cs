@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using KoiCareSys.Common;
-using KoiCareSys.Data;
 using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
+using KoiCareSys.Data;
 using KoiCareSys.Serivice.Base;
-using KoiCareSys.Service.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,53 +12,53 @@ using System.Threading.Tasks;
 
 namespace KoiCareSys.Service.Service
 {
-    public class ProductService :IProductService
+    public class OrderDetailService
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(UnitOfWork unitOfWork,IMapper mapper)
+
+        public OrderDetailService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         public async Task<IBusinessResult> GetAll()
         {
             #region Business Rule
             #endregion
-            var koi = await _unitOfWork.Product.GetAllAsync();
-            if (koi != null)
+            var units = await _unitOfWork.Unit.GetAllAsync();
+            if (units == null)
             {
-                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, koi);
+                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
             }
             else
             {
-                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, koi);
+                var unitDTOs = _mapper.Map<List<UnitDTO>>(units);
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, unitDTOs);
             }
         }
 
-        public async Task<IBusinessResult> GetById(Guid KoiNo)
+        public async Task<IBusinessResult> GetById(Guid unitId)
         {
             #region Business ruke
             #endregion
-            var koi = await _unitOfWork.Product.GetByIdAsync(KoiNo);
-            if (koi == null)
+            var unit = await _unitOfWork.Unit.GetByIdAsync(unitId);
+            if (unit == null)
             {
-                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, new Product());
+                return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
             }
             else
             {
-                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, koi);
+                var unitDTO = _mapper.Map<UnitDTO>(unit);
+                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, unitDTO);
             }
         }
 
-        public async Task<IBusinessResult> Create(ProductDTO request)
+        public async Task<IBusinessResult> Create(UnitDTO request)
         {
-            Product product = _mapper.Map<Product>(request);
-                    product.CreateDate = DateTime.Now;
-                    product.UpdateDate = DateTime.Now;
-                    product.isDeleted = false;
-                    product.TotalSold = 0;
-            var result = await _unitOfWork.Product.CreateAsync(product);
+            Unit unit = _mapper.Map<Unit>(request);
+            var result = await _unitOfWork.Unit.CreateAsync(unit);
             if (result > 0)
             {
                 return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
@@ -71,20 +69,20 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        public async Task<IBusinessResult> Update(ProductDTO request)
+        public async Task<IBusinessResult> Update(UnitDTO request)
         {
             try
             {
-                Product product = _mapper.Map<Product>(request);
-                product.UpdateDate = DateTime.Now;
-                var result = await _unitOfWork.Product.UpdateAsync(product);
+                Unit unit = _mapper.Map<Unit>(request);
+                var result = await _unitOfWork.Unit.UpdateAsync(unit);
                 if (result > 0)
                 {
                     return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
                 }
                 else
                 {
-                    return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, product);
+                    var unitDTO = _mapper.Map<UnitDTO>(request);
+                    return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, unitDTO);
                 }
             }
             catch (Exception ex)
@@ -93,43 +91,41 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        //public async Task<IBusinessResult> Save(ProductDTO request)
+        //public async Task<IBusinessResult> Save(UnitDTO request)
         //{
-        //    Product product = _mapper.Map<Product>(request);
+        //    Unit unit = _mapper.Map<Unit>(request);
 
         //    try
         //    {
-
         //        int result = -1;
 
-        //        var KoiTmp = _unitOfWork.Product.GetById(product.Id);
-        //        if (KoiTmp != null)
+        //        var UnitTmp = await _unitOfWork.Unit.GetByIdAsync(unit.UnitId);
+        //        if (UnitTmp != null)
         //        {
         //            #region Business rule
-        //            product.UpdateDate = DateTime.Now;
         //            #endregion Business rule
-        //            result = await _unitOfWork.Product.UpdateAsync(product);
+        //            UnitTmp = _mapper.Map<Unit>(unit);
+        //            _unitOfWork.Unit.Update(UnitTmp);
+        //            result = await _unitOfWork.SaveChangesWithTransactionAsync();
         //            if (result > 0)
         //            {
-        //                return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG, new Product());
+        //                return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
         //            }
         //            else
         //            {
-        //                return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, product);
+        //                var unitDTO = _mapper.Map<UnitDTO>(unit);
+        //                return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, unit);
         //            }
         //        }
         //        else
         //        {
         //            #region Business rule
-        //            product.CreateDate = DateTime.Now;
-        //            product.UpdateDate = DateTime.Now;  
-
         //            #endregion Business rule
 
-        //            result = await _unitOfWork.Product.CreateAsync(product);
+        //            result = await _unitOfWork.Unit.CreateAsync(unit);
         //            if (result > 0)
         //            {
-        //                return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG,product);
+        //                return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
         //            }
         //            else
         //            {
@@ -143,21 +139,22 @@ namespace KoiCareSys.Service.Service
         //        return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
         //    }
         //}
-        public async Task<IBusinessResult> DeleteById(Guid productid)
+
+        public async Task<IBusinessResult> DeleteById(Guid unitId)
         {
             #region Business rule
 
             #endregion Business rule
             try
             {
-                var koi = await _unitOfWork.Product.GetByIdAsync(productid);
-                if (koi == null)
+                var unit = await _unitOfWork.Unit.GetByIdAsync(unitId);
+                if (unit == null)
                 {
-                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG, new List<Product>());
+                    return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA_MSG);
                 }
                 else
                 {
-                    var result = await _unitOfWork.Product.RemoveAsync(koi);
+                    var result = await _unitOfWork.Unit.RemoveAsync(unit);
                     if (result)
                     {
                         return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
