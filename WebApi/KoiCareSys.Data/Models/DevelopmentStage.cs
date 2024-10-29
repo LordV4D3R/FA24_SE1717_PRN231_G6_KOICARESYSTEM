@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KoiCareSys.Data.Models;
 
@@ -21,6 +22,7 @@ public partial class DevelopmentStage
     public decimal? RequiredFoodAmount { get; set; }
 
     [InverseProperty("DevelopmentStage")]
+    [JsonIgnore]
     public virtual ICollection<KoiRecord> KoiRecords { get; set; } = new List<KoiRecord>();
 
 }

@@ -152,12 +152,12 @@ namespace KoiCareSys.MVCWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, PondDto pond)
         {
-            if (!ModelState.IsValid)
-            {
-                var users = await _apiService.GetAsync<List<UserDto>>("api/users");
-                ViewBag.UserId = new SelectList(users, "Id", "Email");
-                return View("Edit", pond);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    var users = await _apiService.GetAsync<List<UserDto>>("api/users");
+            //    ViewBag.UserId = new SelectList(users, "Id", "Email");
+            //    return View("Edit", pond);
+            //}
 
             try
             {
@@ -176,8 +176,8 @@ namespace KoiCareSys.MVCWebApp.Controllers
                 ModelState.AddModelError("", "An error occurred: " + ex.Message);
             }
 
-            var usersOnError = await _apiService.GetAsync<List<UserDto>>("api/users");
-            ViewBag.UserId = new SelectList(usersOnError, "Id", "Email");
+            var users = await _apiService.GetAsync<List<UserDto>>("api/users");
+            ViewBag.UserId = new SelectList(users, "Id", "Email");
             return View("Edit", pond);
         }
 
@@ -185,6 +185,7 @@ namespace KoiCareSys.MVCWebApp.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             PondDto pond = null;
+
             try
             {
                 pond = await _apiService.GetAsync<PondDto>($"api/ponds/{id}");
@@ -200,7 +201,11 @@ namespace KoiCareSys.MVCWebApp.Controllers
                 return BadRequest();
             }
 
-            return View(pond);
+            var users = await _apiService.GetAsync<List<UserDto>>("api/users");
+            var selectedUser = users.FirstOrDefault(u => u.Id == pond.UserId);
+            ViewBag.SelectedEmail = selectedUser != null ? selectedUser.Email : "";
+
+            return View("Details", pond);
         }
 
         [HttpGet]
