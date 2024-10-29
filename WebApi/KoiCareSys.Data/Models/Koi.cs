@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KoiCareSys.Data.Models;
 
@@ -63,6 +64,7 @@ public partial class Koi
     public virtual Pond Pond { get; set; } = null;
 
     [InverseProperty("Koi")]
+    [JsonIgnore]
     public ICollection<KoiRecord> KoiRecords { get; set; } = new List<KoiRecord>();
 
 

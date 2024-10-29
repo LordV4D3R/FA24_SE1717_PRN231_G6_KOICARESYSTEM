@@ -25,13 +25,14 @@ namespace KoiCareSys.Service.Service
                     return new BusinessResult(Const.FAIL_CREATE_CODE, message: Const.FAIL_CREATE_MSG);
                 }
 
-                DevelopmentStageDTO create = new DevelopmentStageDTO()
+                DevelopmentStage create = new DevelopmentStage()
                 {
+                    Id = Guid.NewGuid(),
                     StageName = developmenStage.StageName,
                     RequiredFoodAmount = developmenStage.RequiredFoodAmount
                 };
 
-                if (await _unitOfWork.DevelopmentStage.AddDevelopmentStageAsync(create))
+                if (await _unitOfWork.DevelopmentStage.CreateAsync(create) > 0)
                 {
                     return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
                 }
@@ -56,9 +57,9 @@ namespace KoiCareSys.Service.Service
                 {
                     return new BusinessResult(Const.FAIL_DELETE_CODE, Const.FAIL_DELETE_MSG);
                 }
-                DevelopmentStage found = await _unitOfWork.DevelopmentStage.GetDevelopmentStageByIdAsync(id);
+                var found = await _unitOfWork.DevelopmentStage.GetByIdAsync(id);
                 if (found == null) return new BusinessResult(Const.FAIL_DELETE_CODE, Const.FAIL_DELETE_MSG);
-                await _unitOfWork.DevelopmentStage.RemoveDevelopmentStage(id);
+                await _unitOfWork.DevelopmentStage.RemoveAsync(found);
                 return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
 
 
@@ -73,7 +74,7 @@ namespace KoiCareSys.Service.Service
         {
             try
             {
-                var result = await _unitOfWork.DevelopmentStage.GetAllDevelopmentStagesAsync();
+                var result = await _unitOfWork.DevelopmentStage.GetAllAsync();
 
                 if (result == null) return new BusinessResult(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG);
 
@@ -89,19 +90,20 @@ namespace KoiCareSys.Service.Service
 
         public async Task<IBusinessResult> GetAllDevelopmenStageByKeyword(string keyword)
         {
-            try
-            {
-                var result = await _unitOfWork.DevelopmentStage.GetAllDevelopmentStagesByKewordsAsync(keyword);
+            //try
+            //{
+            //    var result = await _unitOfWork.DevelopmentStage.GetAllDevelopmentStagesByKewordsAsync(keyword);
 
-                if (result == null) return new BusinessResult(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG);
+            //    if (result == null) return new BusinessResult(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG);
 
-                return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
+            //    return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, result);
 
-            }
-            catch (Exception ex)
-            {
-                return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
+            //}
+            throw new NotImplementedException();
         }
 
         public async Task<IBusinessResult> GetDevelopmenStageById(Guid id)
@@ -110,7 +112,7 @@ namespace KoiCareSys.Service.Service
             {
 
                 if (id == null) return new BusinessResult(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG);
-                var result = await _unitOfWork.DevelopmentStage.GetDevelopmentStageByIdAsync(id);
+                var result = await _unitOfWork.DevelopmentStage.GetByIdAsync(id);
 
                 if (result == null) return new BusinessResult(Const.FAIL_READ_CODE, Const.FAIL_READ_MSG);
 
@@ -129,7 +131,7 @@ namespace KoiCareSys.Service.Service
             {
                 if (developmenStage == null) return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG);
 
-                DevelopmentStageUpdateDTO update = new DevelopmentStageUpdateDTO()
+                DevelopmentStage update = new DevelopmentStage()
                 {
                     Id = developmenStage.Id,
                     StageName = developmenStage.StageName,
@@ -137,7 +139,7 @@ namespace KoiCareSys.Service.Service
                 };
 
 
-                if (await _unitOfWork.DevelopmentStage.UpdateDevelopmentStageAsync(update))
+                if (await _unitOfWork.DevelopmentStage.UpdateAsync(update) > 0)
                 {
                     return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
 

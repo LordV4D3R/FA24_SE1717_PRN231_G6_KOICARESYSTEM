@@ -74,12 +74,12 @@ namespace KoiCareSys.Data
 
         public DevelopmentStageRepo DevelopmentStage
         {
-            get { return developmentStageRepo ??= new DevelopmentStageRepo(); }
+            get { return developmentStageRepo ??= new DevelopmentStageRepo(_unitOfWorkContext); }
         }
 
         public KoiRecordRepo KoiRecord
         {
-            get { return koiRecordRepo ??= new KoiRecordRepo(); }
+            get { return koiRecordRepo ??= new KoiRecordRepo(_unitOfWorkContext); }
         }
 
         ////TO-DO CODE HERE/////////////////
