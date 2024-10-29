@@ -76,6 +76,7 @@ namespace KoiCareSys.Service.Service
             try
             {
                 Product product = _mapper.Map<Product>(request);
+                product.UpdateDate = DateTime.Now;
                 var result = await _unitOfWork.Product.UpdateAsync(product);
                 if (result > 0)
                 {

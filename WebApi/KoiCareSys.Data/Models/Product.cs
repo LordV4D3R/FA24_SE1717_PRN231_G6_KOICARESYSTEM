@@ -33,7 +33,7 @@ namespace KoiCareSys.Data.Models
         public decimal? TotalSold { get; set; }
 
         [Column("img_url")]
-        [Url]
+        
         public string? ImgUrl { get; set; }
 
 
@@ -41,7 +41,7 @@ namespace KoiCareSys.Data.Models
         public string? Description { get; set; }
 
         [Column("status")]
-        [EnumDataType(typeof(Enums.PondStatus))]
+        [EnumDataType(typeof(Enums.ProductStatus))]
         public Enums.ProductStatus Status { get; set; }
 
         [Column("create_date")]

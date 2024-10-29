@@ -14,10 +14,10 @@ namespace KoiCareSys.Data.DTO
         public string Name { get; set; }
 
         public decimal Price { get; set; }
-        public decimal SalePrice { get; set; }
+        public decimal? SalePrice { get; set; }
         public string? ImgUrl { get; set; }
         public bool isDeleted { get; set; }
-
+        public decimal? TotalSold { get; set; }
         public string? Description { get; set; }
 
        

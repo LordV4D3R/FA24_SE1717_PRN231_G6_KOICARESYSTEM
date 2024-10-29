@@ -58,8 +58,8 @@ namespace KoiCareSys.WebAPI.Controllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
-        public async Task<IBusinessResult> PutProduct([FromBody] ProductDTO request)
+        [HttpPut("{id}")]
+        public async Task<IBusinessResult> PutProduct([FromBody] ProductDTO request,Guid id)
         {
             return await _productService.Update(request);
         }

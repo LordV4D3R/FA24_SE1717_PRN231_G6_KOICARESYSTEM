@@ -11,17 +11,48 @@ using KoiCareSys.Common;
 using KoiCareSys.Serivice.Base;
 using Newtonsoft.Json;
 using KoiCareSys.Data.DTO;
+using KoiCareSys.MVCWebApp.ApiService.Interface;
+using Azure;
+using KoiCareSys.MVCWebApp.Models;
 
 namespace KoiCareSys.MVCWebApp.Controllers
 {
     public class ProductsController : Controller
     {
-        //private readonly ApplicationDbContext _context;
+        private IApiService _apiService;
+       
 
-        //public ProductsController(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
+        public ProductsController(IApiService apiService)
+        {
+            _apiService = apiService;
+        }
+        [HttpGet]
+        public async Task<IActionResult> Search(string? name, string? description, int? minValue, int? maxValue)
+        {
+
+            var kois = new List<Product>();
+            try
+            {
+                var result = await _apiService.GetAsync<BusinessResult>("api/products");
+                if (result != null && result.Status == 1)
+                {
+                    kois = JsonConvert.DeserializeObject<List<Product>>(result.Data.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching ponds: {ex.Message}");
+            }
+
+            var filteredKois = kois
+       .Where(k =>
+           (string.IsNullOrEmpty(name) || k.Name.ToLower().Contains(name.ToLower())) &&
+           (string.IsNullOrEmpty(description) || k.Description.ToLower().Contains(description.ToLower())) &&
+           (!minValue.HasValue || k.Price >= minValue) &&
+           (!maxValue.HasValue || k.Price <= maxValue)
+       );
+            return View("Index", filteredKois);
+        }
 
         // GET: Products
         public async Task<IActionResult> Index()
@@ -52,23 +83,23 @@ namespace KoiCareSys.MVCWebApp.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync(Const.APIEndPoint + "Products"))
+                using (var response = await httpClient.GetAsync(Const.APIEndPoint + $"Products/{id}"))
                 {
                     Console.WriteLine(Const.APIEndPoint + "Products");
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<BusinessResult>(content);
+                        var result = JsonConvert.DeserializeObject<Product>(content);
 
-                        if (result != null && result.Data != null)
+                        if (result != null )
                         {
-                            var data = JsonConvert.DeserializeObject<List<Product>>(result.Data.ToString());
-                            return View(data);
+                            //var data = JsonConvert.DeserializeObject<Product>(result);
+                            return View(result);
                         }
                     }
                 }
             }
-            return View(new List<Product>());
+            return View(new Product());
         }
 
         //// GET: Products/Create
@@ -116,27 +147,23 @@ namespace KoiCareSys.MVCWebApp.Controllers
 
 
         //// GET: Products/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync(Const.APIEndPoint + $"Products/{id}"))
                 {
-                    Console.WriteLine(Const.APIEndPoint + $"Products/{id}");
+                    Console.WriteLine(Const.APIEndPoint + "Products");
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<BusinessResult>(content);
+                        var result = JsonConvert.DeserializeObject<Product>(content);
 
-                        if (result != null && result.Data != null)
+                        if (result != null)
                         {
-                            var data = JsonConvert.DeserializeObject<Product>(result.Data.ToString());
-                            return View(data);
+                            //var data = JsonConvert.DeserializeObject<Product>(result);
+                            return View(result);
                         }
                     }
                 }
@@ -149,72 +176,109 @@ namespace KoiCareSys.MVCWebApp.Controllers
         //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Price,SalePrice,TotalSold,ImgUrl,Description,Status,isDeleted")] ProductDTO product)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Price,SalePrice,TotalSold,ImgUrl,Description,Status,isDeleted")] Product product)
         {
             if (id != product.Id)
             {
                 return NotFound();
             }
+            var productDTO = new ProductDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                SalePrice = product.SalePrice,
+                TotalSold = product.TotalSold,
+                ImgUrl = product.ImgUrl,
+                Description = product.Description,
+                Status = product.Status,
+                isDeleted = product.isDeleted
+            };
+
+
 
             using (var httpClient = new HttpClient())
             {
                 // Serialize the product to JSON
-                var json = JsonConvert.SerializeObject(product);
+                var json = JsonConvert.SerializeObject(productDTO);
                 var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
                 // Send the POST request
-                using (var response = await httpClient.PutAsync(Const.APIEndPoint + "Products", content))
+                using (var response = await httpClient.PutAsync(Const.APIEndPoint + $"Products/{id}", content))
                 {
-                    Console.WriteLine(Const.APIEndPoint + "Products");
+                    // Log URL để kiểm tra
+                    Console.WriteLine(Const.APIEndPoint + $"Products/{id}");
 
                     if (response.IsSuccessStatusCode)
                     {
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var result = JsonConvert.DeserializeObject<BusinessResult>(responseContent);
 
-                        if (result != null && result.Data != null)
+                        if (result != null )
                         {
-                            var data = JsonConvert.DeserializeObject<List<Product>>(result.Data.ToString());
-                            return View(data);
+                            return RedirectToAction(nameof(Index));
                         }
+                    }
+                    else
+                    {
+                        // Log lỗi nếu không thành công
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Error: " + errorContent);
                     }
                 }
             }
             return View(product);
+            
+        
+
         }
 
         //// GET: Products/Delete/5
-        //public async Task<IActionResult> Delete(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var product = await _context.Products
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(Const.APIEndPoint + $"Products/{id}"))
+                {
+                    Console.WriteLine(Const.APIEndPoint + "Products");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<Product>(content);
 
-        //    return View(product);
-        //}
+                        if (result != null)
+                        {
+                            //var data = JsonConvert.DeserializeObject<Product>(result);
+                            return View(result);
+                        }
+                    }
+                }
+            }
+            return View(new Product());
+
+
+           
+        }
 
         //// POST: Products/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(Guid id)
-        //{
-        //    var product = await _context.Products.FindAsync(id);
-        //    if (product != null)
-        //    {
-        //        _context.Products.Remove(product);
-        //    }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var result = await _apiService.DeleteAsync<BusinessResult>($"api/Products/{id}");
+            if (result != null && result.Status == 1)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+            ModelState.AddModelError("", "Error deleting Koi.");
+            return View();
+        }
 
         //private bool ProductExists(Guid id)
         //{
