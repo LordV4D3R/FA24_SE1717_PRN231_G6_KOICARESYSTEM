@@ -4,11 +4,6 @@ using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Serivice.Base;
 using KoiCareSys.Service.Service.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KoiCareSys.Service.Service
 {

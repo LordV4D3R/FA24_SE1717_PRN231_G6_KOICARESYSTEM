@@ -1,5 +1,4 @@
-﻿
-namespace KoiCareSys.Data.DTO
+﻿namespace KoiCareSys.Data.DTO
 {
     public class UnitDTO
     {
