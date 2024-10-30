@@ -11,6 +11,7 @@ using KoiCareSys.MVCWebApp.ApiService.Interface;
 using KoiCareSys.MVCWebApp.ApiService;
 using KoiCareSys.MVCWebApp.Base;
 using Newtonsoft.Json;
+using KoiCareSys.Data.DTO;
 
 namespace KoiCareSys.MVCWebApp.Controllers
 {
@@ -54,8 +55,6 @@ namespace KoiCareSys.MVCWebApp.Controllers
             }
 
             KoiRecord koiRecord;
-            //DevelopmentStage developmentStage;
-            //Koi koi;
             try
             {
                 var resultKoiRecord = await _apiService.GetAsync<BusinessResult>($"api/KoiRecord/{id}");
@@ -85,12 +84,6 @@ namespace KoiCareSys.MVCWebApp.Controllers
                 {
                     return NotFound();
                 }
-
-                //developmentStage = await _apiService.GetAsync<DevelopmentStage>($"api/DevelopmentStages/{koiRecord.DevelopmentStageId}");
-                //koi = await _apiService.GetAsync<Koi>($"api/Kois/{koiRecord.KoiId}");
-
-                //koiRecord.DevelopmentStage = developmentStage;
-                //koiRecord.Koi = koi;
             }
             catch (Exception ex)
             {
@@ -107,16 +100,18 @@ namespace KoiCareSys.MVCWebApp.Controllers
         public async Task<IActionResult> Create()
         {
 
-            var developmentStage = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage");
-            var koi = await _apiService.GetAsync<BusinessResult>($"api/Kois");
-            if (developmentStage == null || koi == null)
+            var developmentStageResult = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage");
+            var koiResult = await _apiService.GetAsync<BusinessResult>($"api/Kois");
+            if (developmentStageResult.Status == 1 && koiResult.Status == 1)
             {
-                return NotFound();
+                List<DevelopmentStage> developmentStages = JsonConvert.DeserializeObject<List<DevelopmentStage>>(developmentStageResult.Data.ToString());
+                List<Koi> kois = JsonConvert.DeserializeObject<List<Koi>>(koiResult.Data.ToString());
+                ViewBag.DevelopmentStageId = new SelectList(developmentStages, "Id", "StageName");
+                ViewBag.KoiId = new SelectList(kois, "Id", "Name");
             }
             else
             {
-                ViewBag.DevelopmentStageId = new SelectList((System.Collections.IEnumerable)developmentStage.Data, "Id", "StageName");
-                ViewBag.KoiId = new SelectList((System.Collections.IEnumerable)koi.Data, "Id", "Name");
+                return NotFound();
             }
 
             return View();
@@ -129,21 +124,26 @@ namespace KoiCareSys.MVCWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,RecordName,Color,Price,Description,HealthIssue,Weight,RecordAt,Length,Physique,KoiId,DevelopmentStageId")] KoiRecord koiRecord)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    koiRecord.Id = Guid.NewGuid();
-            //    _context.Add(koiRecord);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["DevelopmentStageId"] = new SelectList(_context.DevelopmentStages, "Id", "StageName", koiRecord.DevelopmentStageId);
-            //ViewData["KoiId"] = new SelectList(_context.Kois, "Id", "Name", koiRecord.KoiId);
-            //return View(koiRecord);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _apiService.PostAsync<BusinessResult>("api/KoiRecord", koiRecord);
+                    KoiRecordDTO koiRecordData = new KoiRecordDTO()
+                    {
+                        KoiId = koiRecord.KoiId,
+                        Physique = koiRecord.Physique,
+                        Length = (decimal)koiRecord.Length,
+                        Weight = (decimal)koiRecord.Weight,
+                        Color = koiRecord.Color,
+                        Description = koiRecord.Description,
+                        HealthIssue = koiRecord.HealthIssue,
+                        Price = koiRecord.Price,
+                        RecordName = koiRecord.RecordName,
+                        RecordAt = koiRecord.RecordAt,
+                        DevelopmentStageId = koiRecord.DevelopmentStageId
+                    };
+
+                    await _apiService.PostAsync<BusinessResult>("api/KoiRecord", koiRecordData);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -154,16 +154,18 @@ namespace KoiCareSys.MVCWebApp.Controllers
             }
 
 
-            var developmentStage = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage");
-            var koi = await _apiService.GetAsync<BusinessResult>($"api/Kois");
-            if (developmentStage == null || koi == null)
+            var developmentStageResult = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage");
+            var koiResult = await _apiService.GetAsync<BusinessResult>($"api/Kois");
+            if (developmentStageResult.Status == 1 && koiResult.Status == 1)
             {
-                return NotFound();
+                List<DevelopmentStage> developmentStages = JsonConvert.DeserializeObject<List<DevelopmentStage>>(developmentStageResult.Data.ToString());
+                List<Koi> kois = JsonConvert.DeserializeObject<List<Koi>>(koiResult.Data.ToString());
+                ViewBag.DevelopmentStageId = new SelectList(developmentStages, "Id", "StageName");
+                ViewBag.KoiId = new SelectList(kois, "Id", "Name");
             }
             else
             {
-                ViewBag.DevelopmentStageId = new SelectList((System.Collections.IEnumerable)developmentStage.Data, "Id", "StageName");
-                ViewBag.KoiId = new SelectList((System.Collections.IEnumerable)koi, "Id", "Name");
+                return NotFound();
             }
             return View(koiRecord);
         }
@@ -171,19 +173,6 @@ namespace KoiCareSys.MVCWebApp.Controllers
         // GET: KoiRecords/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var koiRecord = await _context.KoiRecords.FindAsync(id);
-            //if (koiRecord == null)
-            //{
-            //    return NotFound();
-            //}
-            //ViewData["DevelopmentStageId"] = new SelectList(_context.DevelopmentStages, "Id", "StageName", koiRecord.DevelopmentStageId);
-            //ViewData["KoiId"] = new SelectList(_context.Kois, "Id", "Name", koiRecord.KoiId);
-            //return View(koiRecord);
             if (id == null)
             {
                 return NotFound();
@@ -192,12 +181,14 @@ namespace KoiCareSys.MVCWebApp.Controllers
             KoiRecord koiRecord;
             try
             {
-                var response = await _apiService.GetAsync<BusinessResult>($"api/KoiRecord/{id}");
-                koiRecord = (KoiRecord)response.Data;
-                if (koiRecord == null)
-                {
-                    return NotFound();
-                }
+                var resultKoiRecord = await _apiService.GetAsync<BusinessResult>($"api/KoiRecord/{id}");
+                koiRecord = JsonConvert.DeserializeObject<KoiRecord>(resultKoiRecord.Data.ToString());
+
+                var resultDevelopmentStage = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage/{koiRecord.DevelopmentStageId}");
+                koiRecord.DevelopmentStage = JsonConvert.DeserializeObject<DevelopmentStage>(resultDevelopmentStage.Data.ToString());
+
+                var resultKoi = await _apiService.GetAsync<BusinessResult>($"api/Kois/{koiRecord.KoiId}");
+                koiRecord.Koi = JsonConvert.DeserializeObject<Koi>(resultKoi.Data.ToString());
             }
             catch (Exception ex)
             {
@@ -205,6 +196,19 @@ namespace KoiCareSys.MVCWebApp.Controllers
                 return StatusCode(500);
             }
 
+            var developmentStageResult = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage");
+            var koiResult = await _apiService.GetAsync<BusinessResult>($"api/Kois");
+            if (developmentStageResult.Status == 1 && koiResult.Status == 1)
+            {
+                List<DevelopmentStage> developmentStages = JsonConvert.DeserializeObject<List<DevelopmentStage>>(developmentStageResult.Data.ToString());
+                List<Koi> kois = JsonConvert.DeserializeObject<List<Koi>>(koiResult.Data.ToString());
+                ViewBag.DevelopmentStageId = new SelectList(developmentStages, "Id", "StageName");
+                ViewBag.KoiId = new SelectList(kois, "Id", "Name");
+            }
+            else
+            {
+                return NotFound();
+            }
             return View(koiRecord);
         }
 
@@ -215,82 +219,93 @@ namespace KoiCareSys.MVCWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,RecordName,Color,Price,Description,HealthIssue,Weight,RecordAt,Length,Physique,KoiId,DevelopmentStageId")] KoiRecord koiRecord)
         {
-            //if (id != koiRecord.Id)
-            //{
-            //    return NotFound();
-            //}
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        _context.Update(koiRecord);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!KoiRecordExists(koiRecord.Id))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["DevelopmentStageId"] = new SelectList(_context.DevelopmentStages, "Id", "StageName", koiRecord.DevelopmentStageId);
-            //ViewData["KoiId"] = new SelectList(_context.Kois, "Id", "Name", koiRecord.KoiId);
-            //return View(koiRecord);
-            if (id != koiRecord.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _apiService.PutAsync<BusinessResult>("api/KoiRecord", koiRecord);
+                    KoiRecordUpdateDTO koiRecordData = new KoiRecordUpdateDTO()
+                    {
+                        Id = koiRecord.Id,
+                        KoiId = koiRecord.KoiId,
+                        Physique = koiRecord.Physique,
+                        Length = (decimal)koiRecord.Length,
+                        Weight = (decimal)koiRecord.Weight,
+                        Color = koiRecord.Color,
+                        Description = koiRecord.Description,
+                        HealthIssue = koiRecord.HealthIssue,
+                        Price = koiRecord.Price,
+                        RecordName = koiRecord.RecordName,
+                        RecordAt = koiRecord.RecordAt,
+                        DevelopmentStageId = koiRecord.DevelopmentStageId
+                    };
+
+                    await _apiService.PutAsync<BusinessResult>("api/KoiRecord", koiRecordData);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error updating record: {ex.Message}");
+                    Console.WriteLine($"Error creating record: {ex.Message}");
                     return StatusCode(500);
                 }
             }
 
+
+            var developmentStageResult = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage");
+            var koiResult = await _apiService.GetAsync<BusinessResult>($"api/Kois");
+            if (developmentStageResult.Status == 1 && koiResult.Status == 1)
+            {
+                List<DevelopmentStage> developmentStages = JsonConvert.DeserializeObject<List<DevelopmentStage>>(developmentStageResult.Data.ToString());
+                List<Koi> kois = JsonConvert.DeserializeObject<List<Koi>>(koiResult.Data.ToString());
+                ViewBag.DevelopmentStageId = new SelectList(developmentStages, "Id", "StageName");
+                ViewBag.KoiId = new SelectList(kois, "Id", "Name");
+            }
+            else
+            {
+                return NotFound();
+            }
             return View(koiRecord);
         }
 
         // GET: KoiRecords/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            //KoiRecord koiRecord;
-            //try
-            //{
-            //    var response = await _apiService.GetAsync<BusinessResult>($"api/KoiRecords/{id}");
-            //    koiRecord = (KoiRecord)response.Data;
-            //    if (koiRecord == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine($"Error fetching delete data: {ex.Message}");
-            //    return StatusCode(500);
-            //}
+            KoiRecord koiRecord;
+            try
+            {
+                var resultKoiRecord = await _apiService.GetAsync<BusinessResult>($"api/KoiRecord/{id}");
+                koiRecord = JsonConvert.DeserializeObject<KoiRecord>(resultKoiRecord.Data.ToString());
 
-            //return View(koiRecords);
-            throw new NotImplementedException();
+                var resultDevelopmentStage = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage/{koiRecord.DevelopmentStageId}");
+                koiRecord.DevelopmentStage = JsonConvert.DeserializeObject<DevelopmentStage>(resultDevelopmentStage.Data.ToString());
+
+                var resultKoi = await _apiService.GetAsync<BusinessResult>($"api/Kois/{koiRecord.KoiId}");
+                koiRecord.Koi = JsonConvert.DeserializeObject<Koi>(resultKoi.Data.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching edit data: {ex.Message}");
+                return StatusCode(500);
+            }
+
+            var developmentStageResult = await _apiService.GetAsync<BusinessResult>($"api/DevelopmentStage");
+            var koiResult = await _apiService.GetAsync<BusinessResult>($"api/Kois");
+            if (developmentStageResult.Status == 1 && koiResult.Status == 1)
+            {
+                List<DevelopmentStage> developmentStages = JsonConvert.DeserializeObject<List<DevelopmentStage>>(developmentStageResult.Data.ToString());
+                List<Koi> kois = JsonConvert.DeserializeObject<List<Koi>>(koiResult.Data.ToString());
+                ViewBag.DevelopmentStageId = new SelectList(developmentStages, "Id", "StageName");
+                ViewBag.KoiId = new SelectList(kois, "Id", "Name");
+            }
+            else
+            {
+                return NotFound();
+            }
+            return View(koiRecord);
         }
 
         // POST: KoiRecords/Delete/5
@@ -298,21 +313,22 @@ namespace KoiCareSys.MVCWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            //var koiRecord = await _context.KoiRecords.FindAsync(id);
-            //if (koiRecord != null)
-            //{
-            //    _context.KoiRecords.Remove(koiRecord);
-            //}
+            if (id == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _apiService.DeleteAsync<BusinessResult>($"api/KoiRecord/{id}");
 
-            //await _context.SaveChangesAsync();
-            //return RedirectToAction(nameof(Index));
-            throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting record: {ex.Message}");
+                return StatusCode(500);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
-        private bool KoiRecordExists(Guid id)
-        {
-            //return _context.KoiRecords.Any(e => e.Id == id);
-            throw new NotImplementedException();
-        }
     }
 }
