@@ -313,9 +313,22 @@ namespace KoiCareSys.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("create_date");
 
+                    b.Property<string>("ImgUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("img_url");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("order_id");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("price");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier")

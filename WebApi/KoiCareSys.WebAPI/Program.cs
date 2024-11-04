@@ -33,6 +33,7 @@ builder.Services.AddScoped<IPondRepository, PondRepository>();
 
 // Add Service
 builder.Services.AddScoped<IKoiService, KoiService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 builder.Services.AddScoped<IFeedingScheduleService, FeedingScheduleService>();

@@ -3,6 +3,7 @@ using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
 
 
+
 namespace KoiCareSys.Service.Mappings
 {
     public class AutoMapperProfiles : Profile
@@ -14,7 +15,7 @@ namespace KoiCareSys.Service.Mappings
             CreateMap<MeasureDataDTO, MeasureData>().ReverseMap();
             CreateMap<PondDTO, Pond>().ReverseMap();
             CreateMap<ProductDTO, Product>().ReverseMap();
-
+            CreateMap<OrderDTO,Order>().ReverseMap();
             // Koi
             CreateMap<KoiDTO, Koi>().ReverseMap();
         }
