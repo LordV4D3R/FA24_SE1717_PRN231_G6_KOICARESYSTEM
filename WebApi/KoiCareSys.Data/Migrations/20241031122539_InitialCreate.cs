@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KoiCareSys.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class updatedatabase : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +26,44 @@ namespace KoiCareSys.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_development_stage", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "order",
+                schema: "koicare",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    create_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    order_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_order", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "product",
+                schema: "koicare",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    sale_price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    total_sold = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    img_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    status = table.Column<int>(type: "int", nullable: false),
+                    create_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    update_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_product", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,6 +103,41 @@ namespace KoiCareSys.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "order_detail",
+                schema: "koicare",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    order_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    img_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    quantity = table.Column<int>(type: "int", nullable: false),
+                    subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    create_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    update_date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_order_detail", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_order_detail_order_order_id",
+                        column: x => x.order_id,
+                        principalSchema: "koicare",
+                        principalTable: "order",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_order_detail_product_product_id",
+                        column: x => x.product_id,
+                        principalSchema: "koicare",
+                        principalTable: "product",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "pond",
                 schema: "koicare",
                 columns: table => new
@@ -91,6 +164,33 @@ namespace KoiCareSys.Data.Migrations
                         column: x => x.user_id,
                         principalSchema: "koicare",
                         principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "feeding_schedule",
+                schema: "koicare",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    foodcaculate = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    feed_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    food_amount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    feed_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    temperature = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    food_type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    pond_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_feeding_schedule", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_feeding_schedule_pond_pond_id",
+                        column: x => x.pond_id,
+                        principalSchema: "koicare",
+                        principalTable: "pond",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -150,35 +250,16 @@ namespace KoiCareSys.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "feeding_schedule",
-                schema: "koicare",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    feed_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    food_amount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    food_type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    koi_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_feeding_schedule", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_feeding_schedule_koi_koi_id",
-                        column: x => x.koi_id,
-                        principalSchema: "koicare",
-                        principalTable: "koi",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "koi_record",
                 schema: "koicare",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    record_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    color = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    price = table.Column<double>(type: "float", nullable: false),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    health_issue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     weight = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     record_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     length = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -235,10 +316,10 @@ namespace KoiCareSys.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_feeding_schedule_koi_id",
+                name: "IX_feeding_schedule_pond_id",
                 schema: "koicare",
                 table: "feeding_schedule",
-                column: "koi_id");
+                column: "pond_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_koi_pond_id",
@@ -277,6 +358,18 @@ namespace KoiCareSys.Data.Migrations
                 column: "pond_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_order_detail_order_id",
+                schema: "koicare",
+                table: "order_detail",
+                column: "order_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_order_detail_product_id",
+                schema: "koicare",
+                table: "order_detail",
+                column: "product_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_pond_user_id",
                 schema: "koicare",
                 table: "pond",
@@ -299,6 +392,10 @@ namespace KoiCareSys.Data.Migrations
                 schema: "koicare");
 
             migrationBuilder.DropTable(
+                name: "order_detail",
+                schema: "koicare");
+
+            migrationBuilder.DropTable(
                 name: "development_stage",
                 schema: "koicare");
 
@@ -312,6 +409,14 @@ namespace KoiCareSys.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "unit",
+                schema: "koicare");
+
+            migrationBuilder.DropTable(
+                name: "order",
+                schema: "koicare");
+
+            migrationBuilder.DropTable(
+                name: "product",
                 schema: "koicare");
 
             migrationBuilder.DropTable(

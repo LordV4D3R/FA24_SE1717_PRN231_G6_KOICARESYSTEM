@@ -20,10 +20,24 @@ builder.Services.AddHttpClient<ApiService>("MyAPI", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7050");
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder
+     
+            .WithOrigins("https://localhost:7022")
+            .WithOrigins("https://localhost:7050")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+});
+
 builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddScoped<IPondService, PondService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IKoiRecordSvc, KoiRecordSvc>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IDevelopmenStageSvc, DevelopmentStageSvc>();
 builder.Services.AddScoped<IKoiService, KoiService>();
 builder.Services.AddScoped<UnitOfWork>();
@@ -41,7 +55,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 app.MapControllerRoute(

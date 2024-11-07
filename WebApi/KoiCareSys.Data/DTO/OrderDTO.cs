@@ -14,6 +14,6 @@ namespace KoiCareSys.Data.DTO
         public DateTime? OrderDate { get; set; }
         public string? Status { get; set; }
         public decimal? Total { get; set; } = 0;
-        public List<OrderDetail> Items { get; set;} 
+        public List<OrderDetailDTO> OrderDetails { get; set; } = new List<OrderDetailDTO>();
     }
 }

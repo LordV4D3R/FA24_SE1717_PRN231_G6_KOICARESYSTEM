@@ -1,0 +1,143 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+}
+<table class="table" id="itemsTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Sale Price</th>
+            <th>Total Sold</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Create Date</th>
+            <th>Update Date</th>
+            <th>Is Deleted</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be dynamically inserted here -->
+    </tbody>
+</table>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Item Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detailsContent">
+                <!-- Details content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadItems();
+    });
+
+    function loadItems() {
+        $.ajax({
+            url: 'https://localhost:7050/api/products',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 1) { // Check if the API returned success
+                    var items = response.data; // Get the actual list of items
+                    var rows = '';
+                    $.each(items, function (index, item) {
+                        rows += '<tr>'
+                            + '<td>' + item.name + '</td>'
+                            + '<td>' + item.price + '</td>'
+                            + '<td>' + item.salePrice + '</td>'
+                            + '<td>' + item.totalSold + '</td>'
+                            + '<td><img src="' + item.imgUrl + '" alt="' + item.name + '" width="100" height="100" /></td>'
+                            + '<td>' + item.description + '</td>'
+                            + '<td>' + (item.status === 1 ? 'Active' : 'Inactive') + '</td>'
+                            + '<td>' + formatDate(item.createDate) + '</td>'
+                            + '<td>' + formatDate(item.updateDate) + '</td>'
+                            + '<td>' + (item.isDeleted ? 'Yes' : 'No') + '</td>'
+                            + '<td>'
+                            + '<button class="btn btn-info btn-sm" onclick="showDetails(\'' + item.id + '\')">Details</button> '
+                            + '<button class="btn btn-danger btn-sm" onclick="confirmDelete(\'' + item.id + '\')">Delete</button>'
+                            + '</td>'
+                            + '</tr>';
+                    });
+                    $('#itemsTable tbody').html(rows);
+                } else {
+                    console.error("Failed to retrieve items:", response.message);
+                    alert('Failed cc retrieve items: ' + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Status:", status);
+                console.error("Error:", error);
+                console.error("Response Text:", xhr.responseText);
+                alert('Failed to retrieve items.');
+            }
+        });
+    }
+
+    function showDetails(itemId) {
+        $.ajax({
+            url: 'https://localhost:7051/api/products/' + itemId,
+            type: 'GET',
+            success: function (response) {
+                console.log(response); // Log the entire response for debugging
+
+                // Check if the response is valid
+                if (response && response.status === 1) {
+                    // Directly access the properties from the response
+                    var item = response; // Since item properties are directly on the response
+
+                    var detailsHtml = '<p><strong>ID:</strong> ' + item.id + '</p>'  
+                        + '<p><strong>Name:</strong> ' + item.name + '</p>'
+                        + '<p><strong>Price:</strong> ' + item.price + '</p>'
+                        + '<p><strong>Sale Price:</strong> ' + item.salePrice + '</p>'
+                        + '<p><strong>Description:</strong> ' + item.description + '</p>'
+                        + '<img src="' + item.imgUrl + '" alt="' + item.name + '" width="200" />'; var detailsHtml = '<p><strong>ID:</strong> ' + item.id + '</p>'
+                            + '<p><strong>Name:</strong> ' + item.name + '</p>'
+                            + '<p><strong>Price:</strong> ' + item.price + '</p>'
+                            + '<p><strong>Sale Price:</strong> ' + item.salePrice + '</p>'
+                            + '<p><strong>Description:</strong> ' + item.description + '</p>'
+                            + '<p><strong>Status:</strong> ' + item.status + '</p>'  // Add Status
+                            + '<p><strong>Create Date:</strong> ' + new Date(item.createDate).toLocaleString() + '</p>'  // Format Create Date
+                            + '<p><strong>Update Date:</strong> ' + new Date(item.updateDate).toLocaleString() + '</p>'  // Format Update Date
+                            + '<p><strong>Is Deleted:</strong> ' + (item.isDeleted ? 'Yes' : 'No') + '</p>'  // Show Is Deleted
+                            + '<img src="' + item.imgUrl + '" alt="' + item.name + '" width="200" />';
+
+
+                    $('#detailsContent').html(detailsHtml);
+                    $('#detailsModal').modal('show');
+                } else {
+                    alert('Failed to load item details. Response status was not successful.');
+                    console.error('Invalid response:', response);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Failed to retrieve item details: ' + textStatus);
+                console.error('AJAX error:', textStatus, errorThrown);
+                console.error('Response:', jqXHR.responseText); // Log the response text
+            }
+        });
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString();
+    }
+</script>

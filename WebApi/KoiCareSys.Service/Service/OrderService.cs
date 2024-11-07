@@ -9,10 +9,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KoiCareSys.Service.Service.Interface;
+
 
 namespace KoiCareSys.Service.Service
 {
-    public class OrderService
+    public class OrderService :IOrderService
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -49,15 +51,43 @@ namespace KoiCareSys.Service.Service
             }
             else
             {
-                var unitDTO = _mapper.Map<UnitDTO>(unit);
+                var unitDTO = _mapper.Map<Order>(unit);
                 return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, unitDTO);
             }
         }
 
-        public async Task<IBusinessResult> Create(UnitDTO request)
+        public async Task<IBusinessResult> Create(OrderDTO request)
         {
-            Unit unit = _mapper.Map<Unit>(request);
-            var result = await _unitOfWork.Unit.CreateAsync(unit);
+            Order unit = new Order
+            {
+                OrderDate = DateTime.Now,
+                CreateDate = DateTime.Now,
+                Status = "Chờ xác nhận",
+                Total = 0
+
+            };
+            foreach (var od in request.OrderDetails)
+            {
+                var product = await _unitOfWork.Product.GetByIdAsync(od.ProductId);
+                if (product == null)    
+                    { continue; }
+
+                unit.OrderDetails.Add(new OrderDetail
+                {
+                    ProductId = od.ProductId,
+                    Quantity = od.Quantity,
+                    Name= product.Name,
+                    Price = product.Price,
+                    CreateDate= DateTime.Now,   
+                    Subtotal = od.Quantity*product.Price,
+                    UpdateDate= DateTime.Now,
+                   
+                });
+               
+            }
+
+            unit.Total = unit.OrderDetails.Sum(od => od.Subtotal);
+            var result = await _unitOfWork.Order.CreateAsync(unit);
             if (result > 0)
             {
                 return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
@@ -68,12 +98,12 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        public async Task<IBusinessResult> Update(UnitDTO request)
+        public async Task<IBusinessResult> Update(OrderDTO request)
         {
             try
             {
-                Unit unit = _mapper.Map<Unit>(request);
-                var result = await _unitOfWork.Unit.UpdateAsync(unit);
+                var unit = _mapper.Map<Order>(request);
+                var result = await _unitOfWork.Order.UpdateAsync(unit);
                 if (result > 0)
                 {
                     return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);

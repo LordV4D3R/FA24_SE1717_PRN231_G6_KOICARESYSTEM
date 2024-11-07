@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace KoiCareSys.Data.Models
 {
@@ -16,18 +17,32 @@ namespace KoiCareSys.Data.Models
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Column("product_id")]
-        [ForeignKey("product")]
+        [ForeignKey("Product")]
         public Guid ProductId { get; set; }
+
+        [JsonIgnore]
         public virtual Product Product { get; set; } = null;
+
         [Column("order_id")]
-        [ForeignKey("order")]
+        [ForeignKey("Order")]
         public Guid OrderId { get; set; }
-        public virtual Order Order { get; set; } = null; 
-       
+
+        [JsonIgnore]
+        public virtual Order Order { get; set; } = null;
+        [Column("name")]
+        [Required]
+        public string Name { get; set; }
+
+        [Column("img_url")]
+        public string? ImgUrl { get; set; }
+
         [Column("quantity")]
         public int Quantity { get; set; }
         [Column("subtotal")]
         public decimal Subtotal { get; set; }
+
+        [Column("price")]
+        public decimal Price { get; set; }
 
         [Column("create_date")]
         [Required]

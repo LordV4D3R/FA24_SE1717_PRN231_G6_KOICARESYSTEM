@@ -33,6 +33,7 @@ builder.Services.AddScoped<IPondRepository, PondRepository>();
 
 // Add Service
 builder.Services.AddScoped<IKoiService, KoiService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 builder.Services.AddScoped<IFeedingScheduleService, FeedingScheduleService>();
@@ -50,9 +51,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
         builder => builder
-            //.AllowAnyOrigin()
+           // .AllowAnyOrigin()
             .WithOrigins("https://localhost:7022")
             .WithOrigins("https://localhost:7249")
+                .WithOrigins("https://localhost:7050")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());
