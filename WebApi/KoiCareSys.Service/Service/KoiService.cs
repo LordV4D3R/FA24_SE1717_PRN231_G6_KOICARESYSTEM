@@ -67,12 +67,12 @@ namespace KoiCareSys.Service.Service
                     koiTmp.Name = dto.Name;
                     koiTmp.PurchasePrice = dto.PurchasePrice;
                     koiTmp.InPondSince = dto.InPondSince;
-                    koiTmp.Status = dto.Status;
+                    koiTmp.Status = (int)dto.Status;
                     koiTmp.Age = dto.Age;
                     koiTmp.Breed = dto.Breed;
                     koiTmp.Category = dto.Category;
                     koiTmp.Physique = dto.Physique;
-                    koiTmp.Sex = dto.Sex;
+                    koiTmp.Sex = (int)dto.Sex;
                     koiTmp.Length = dto.Length;
                     koiTmp.ImgUrl = dto.ImgUrl;
                     koiTmp.Origin = dto.Origin;

@@ -191,8 +191,8 @@ namespace KoiCareSys.MVCWebApp.Controllers
                 TotalSold = product.TotalSold,
                 ImgUrl = product.ImgUrl,
                 Description = product.Description,
-                Status = product.Status,
-                isDeleted = product.isDeleted
+                Status = (Data.Enums.ProductStatus)product.Status,
+                isDeleted = product.IsDeleted
             };
 
 

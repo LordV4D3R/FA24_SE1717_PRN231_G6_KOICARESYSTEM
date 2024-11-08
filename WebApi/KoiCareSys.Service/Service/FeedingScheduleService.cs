@@ -96,7 +96,7 @@ namespace KoiCareSys.Service.Service
                 if (pond == null)
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, "Pond not found");
 
-                var koiFishList = pond.Koi; // Giả định danh sách cá Koi có trong hồ
+                var koiFishList = pond.Kois; // Giả định danh sách cá Koi có trong hồ
 
                 decimal totalFoodAmount = 0;
 

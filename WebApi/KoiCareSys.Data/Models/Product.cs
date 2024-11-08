@@ -1,62 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace KoiCareSys.Data.Models
+namespace KoiCareSys.Data.Models;
+
+public partial class Product
 {
-    [Table("product")]
-    public class Product
-    {
-        [Key]
-        [Column("id")]
-        public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
-        [Column("name")]
-        [Required]
-        public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
-        [Column("price")]
-        [Required]
-        public decimal Price { get; set; }
+    public decimal Price { get; set; }
 
-        [Column("sale_price")]
+    public decimal? SalePrice { get; set; }
 
-        public decimal? SalePrice { get; set; }
+    public decimal? TotalSold { get; set; }
 
-        [Column("total_sold")]
+    public string? ImgUrl { get; set; }
 
-        public decimal? TotalSold { get; set; }
+    public string? Description { get; set; }
 
-        [Column("img_url")]
-        
-        public string? ImgUrl { get; set; }
+    public int Status { get; set; }
 
+    public DateTime CreateDate { get; set; }
 
-        [Column("description")]
-        public string? Description { get; set; }
+    public DateTime UpdateDate { get; set; }
 
-        [Column("status")]
-        [EnumDataType(typeof(Enums.ProductStatus))]
-        public Enums.ProductStatus Status { get; set; }
+    public bool IsDeleted { get; set; }
 
-        [Column("create_date")]
-        [Required]
-        public DateTime CreateDate { get; set; }
-
-        [Column("update_date")]
-        [Required]
-        public DateTime UpdateDate { get; set; }
-        [Column("isDeleted")]
-        [Required]
-        public bool isDeleted { get; set; }
-
-        [JsonIgnore]
-        [InverseProperty("Product")]  
-        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-    }
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

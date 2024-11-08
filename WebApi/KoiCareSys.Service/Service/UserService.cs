@@ -52,8 +52,8 @@ namespace KoiCareSys.Service.Service
                     Password = request.Password,
                     FullName = request.FullName,
                     PhoneNumber = request.PhoneNumber,
-                    Role = request.Role,
-                    Status = request.Status,
+                    Role = (int)request.Role,
+                    Status = (int)request.Status,
 
                 };
                 if (await _unitOfWork.User.CreateAsync(create) > 0)

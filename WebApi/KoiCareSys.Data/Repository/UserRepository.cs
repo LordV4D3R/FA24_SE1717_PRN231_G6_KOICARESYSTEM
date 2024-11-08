@@ -40,8 +40,8 @@ namespace KoiCareSys.Data.Repository
                 Password = user.Password,
                 FullName = user.FullName,
                 PhoneNumber = user.PhoneNumber,
-                Role = user.Role,
-                Status = user.Status,
+                Role = (int)user.Role,
+                Status = (int)user.Status,
             }; ;
             _dao.Create(create);
             return true;
