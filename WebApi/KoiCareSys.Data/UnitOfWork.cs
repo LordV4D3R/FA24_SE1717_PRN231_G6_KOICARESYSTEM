@@ -28,7 +28,7 @@ namespace KoiCareSys.Data
         public ProductRepository Product
         {
 
-            get { return productRepository ??= new ProductRepository(); }
+            get { return productRepository ??= new ProductRepository(_unitOfWorkContext); }
         }
         //public UnitOfWork()
         //{

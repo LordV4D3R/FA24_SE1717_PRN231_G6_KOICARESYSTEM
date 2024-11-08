@@ -27,7 +27,7 @@ namespace KoiCareSys.Service.Service
         {
             #region Business Rule
             #endregion
-            var koi = await _unitOfWork.Product.GetAllAsync();
+            var koi = await _unitOfWork.Product.GetProductList();
             if (koi != null)
             {
                 return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, koi);
@@ -157,8 +157,11 @@ namespace KoiCareSys.Service.Service
                 }
                 else
                 {
-                    var result = await _unitOfWork.Product.RemoveAsync(koi);
-                    if (result)
+                    koi.isDeleted= true;
+                    koi.Status = Data.Enums.ProductStatus.Deleted;
+                    koi.UpdateDate = DateTime.Now;
+                    var result = await _unitOfWork.Product.UpdateAsync(koi);
+                    if (result>0)
                     {
                         return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
                     }
