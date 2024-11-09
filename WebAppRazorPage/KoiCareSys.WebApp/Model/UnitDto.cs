@@ -15,5 +15,17 @@
         public decimal? MinValue { get; set; }
 
         public decimal? MaxValue { get; set; }
+
+        public decimal? IdealValue { get; set; }
+
+        public decimal? WarningThreshold { get; set; }
+
+        public decimal? CriticalThreshold { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public string Description { get; set; }
+
+        public string AlertMessage { get; set; }
     }
 }

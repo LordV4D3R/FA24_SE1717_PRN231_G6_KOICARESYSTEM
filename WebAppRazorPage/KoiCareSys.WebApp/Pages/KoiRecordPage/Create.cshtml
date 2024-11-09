@@ -73,7 +73,7 @@
         $(document).ready(function () {
             // Fetch Koi IDs
             $.ajax({
-                url: 'https://localhost:7050/api/Kois', // Change to your actual API endpoint
+                url: 'https://localhost:7050/api/Kois', 
                 type: 'GET',
                 success: function (data2) {
                     const data = data2.data;
@@ -81,7 +81,7 @@
                     $.each(data, function (index, item) {
                         koiDropdown.append($('<option>', {
                             value: item.id,
-                            text: item.name // Adjust based on your data structure
+                            text: item.name
                         }));
                     });
                 }
@@ -89,7 +89,7 @@
 
             // Fetch Development Stages
             $.ajax({
-                url: 'https://localhost:7050/api/DevelopmentStage', // Change to your actual API endpoint
+                url: 'https://localhost:7050/api/DevelopmentStage',
                 type: 'GET',
                 success: function (data2) {
                     const data = data2.data;
@@ -97,7 +97,7 @@
                     $.each(data, function (index, item) {
                         stageDropdown.append($('<option>', {
                             value: item.id,
-                            text: item.stageName // Adjust based on your data structure
+                            text: item.stageName
                         }));
                     });
                 }

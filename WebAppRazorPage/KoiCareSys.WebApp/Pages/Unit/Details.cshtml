@@ -1,0 +1,93 @@
+﻿@page
+@model KoiCareSys.WebApp.Pages.Unit.DetailsModel
+@{
+}
+
+<div class="container mt-5">
+    <h2>Unit Details</h2>
+    <div class="card">
+        <div class="card-header">
+            <h3 id="unitName"></h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Unit Id</dt>
+                <dd class="col-sm-9" id="unitId"></dd>
+
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9" id="name"></dd>
+
+                <dt class="col-sm-3">Unit of Measure</dt>
+                <dd class="col-sm-9" id="unitOfMeasure"></dd>
+
+                <dt class="col-sm-3">Full Name</dt>
+                <dd class="col-sm-9" id="fullName"></dd>
+
+                <dt class="col-sm-3">Information</dt>
+                <dd class="col-sm-9" id="information"></dd>
+
+                <dt class="col-sm-3">Min Value</dt>
+                <dd class="col-sm-9" id="minValue"></dd>
+
+                <dt class="col-sm-3">Max Value</dt>
+                <dd class="col-sm-9" id="maxValue"></dd>
+
+                <dt class="col-sm-3">Ideal Value</dt>
+                <dd class="col-sm-9" id="idealValue"></dd>
+
+                <dt class="col-sm-3">Warning Threshold</dt>
+                <dd class="col-sm-9" id="warningThreshold"></dd>
+
+                <dt class="col-sm-3">Critical Threshold</dt>
+                <dd class="col-sm-9" id="criticalThreshold"></dd>
+
+                <dt class="col-sm-3">Is Active</dt>
+                <dd class="col-sm-9" id="isActive"></dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9" id="description"></dd>
+
+                <dt class="col-sm-3">Alert Message</dt>
+                <dd class="col-sm-9" id="alertMessage"></dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Extract unit id from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const unitId = urlParams.get('id');
+
+            $.ajax({
+                url: `https://localhost:7050/api/Unit/${unitId}`,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (response) {
+                    const unit = response.data;
+                    // Populate the fields with the fetched data
+                    $('#unitId').text(unit.unitId);
+                    $('#unitName').text(unit.name);
+                    $('#name').text(unit.name);
+                    $('#unitOfMeasure').text(unit.unitOfMeasure);
+                    $('#fullName').text(unit.fullName);
+                    $('#information').text(unit.information);
+                    $('#minValue').text(unit.minValue);
+                    $('#maxValue').text(unit.maxValue);
+                    $('#idealValue').text(unit.idealValue);
+                    $('#warningThreshold').text(unit.warningThreshold);
+                    $('#criticalThreshold').text(unit.criticalThreshold);
+                    $('#isActive').text(unit.isActive ? "Yes" : "No");
+                    $('#description').text(unit.description);
+                    $('#alertMessage').text(unit.alertMessage);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching unit details:', error);
+                }
+            });
+        });
+    </script>
+}

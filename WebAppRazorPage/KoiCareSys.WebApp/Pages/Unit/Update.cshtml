@@ -38,6 +38,36 @@
             <input asp-for="Unit.MaxValue" type="number" class="form-control" />
             <span asp-validation-for="Unit.MaxValue" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            <label asp-for="Unit.IdealValue"></label>
+            <input asp-for="Unit.IdealValue" type="number" class="form-control" />
+            <span asp-validation-for="Unit.IdealValue" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.WarningThreshold"></label>
+            <input asp-for="Unit.WarningThreshold" type="number" class="form-control" />
+            <span asp-validation-for="Unit.WarningThreshold" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.CriticalThreshold"></label>
+            <input asp-for="Unit.CriticalThreshold" type="number" class="form-control" />
+            <span asp-validation-for="Unit.CriticalThreshold" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.IsActive"></label>
+            <input asp-for="Unit.IsActive" type="checkbox" class="form-check-input" />
+            <span asp-validation-for="Unit.IsActive" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.Description"></label>
+            <textarea asp-for="Unit.Description" class="form-control"></textarea>
+            <span asp-validation-for="Unit.Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Unit.AlertMessage"></label>
+            <textarea asp-for="Unit.AlertMessage" class="form-control"></textarea>
+            <span asp-validation-for="Unit.AlertMessage" class="text-danger"></span>
+        </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>
@@ -57,8 +87,14 @@
                     unitOfMeasure: $('input[name="Unit.UnitOfMeasure"]').val(),
                     fullName: $('input[name="Unit.FullName"]').val(),
                     information: $('textarea[name="Unit.Information"]').val(),
-                    minValue: $('input[name="Unit.MinValue"]').val(),
-                    maxValue: $('input[name="Unit.MaxValue"]').val()
+                    minValue: parseFloat($('input[name="Unit.MinValue"]').val()),
+                    maxValue: parseFloat($('input[name="Unit.MaxValue"]').val()),
+                    idealValue: parseFloat($('input[name="Unit.IdealValue"]').val()),
+                    warningThreshold: parseFloat($('input[name="Unit.WarningThreshold"]').val()),
+                    criticalThreshold: parseFloat($('input[name="Unit.CriticalThreshold"]').val()),
+                    isActive: $('input[name="Unit.IsActive"]').is(':checked'),
+                    description: $('textarea[name="Unit.Description"]').val(),
+                    alertMessage: $('textarea[name="Unit.AlertMessage"]').val()
                 };
 
                 $.ajax({
