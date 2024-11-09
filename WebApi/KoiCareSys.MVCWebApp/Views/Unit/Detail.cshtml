@@ -1,0 +1,93 @@
+﻿@model KoiCareSys.MVCWebApp.Models.UnitDto
+
+@{
+    ViewData["Title"] = "Unit Details";
+}
+
+<h2>Unit Details</h2>
+
+<div class="form-group">
+    <label>Id</label>
+    <p id="unitId" class="form-control-static">@Model.UnitId</p>
+</div>
+
+<div class="form-group">
+    <label>Name</label>
+    <p class="form-control-static">@Model.Name</p>
+</div>
+
+<div class="form-group">
+    <label>Unit of Measure</label>
+    <p class="form-control-static">@Model.UnitOfMeasure</p>
+</div>
+
+<div class="form-group">
+    <label>Full Name</label>
+    <p class="form-control-static">@Model.FullName</p>
+</div>
+
+<div class="form-group">
+    <label>Information</label>
+    <p class="form-control-static">@Model.Information</p>
+</div>
+
+<div class="form-group">
+    <label>Min Value</label>
+    <p class="form-control-static">@Model.MinValue</p>
+</div>
+
+<div class="form-group">
+    <label>Max Value</label>
+    <p class="form-control-static">@Model.MaxValue</p>
+</div>
+
+<div class="form-group">
+    <label>Ideal Value</label>
+    <p class="form-control-static">@Model.IdealValue</p>
+</div>
+
+<div class="form-group">
+    <label>Warning Threshold</label>
+    <p class="form-control-static">@Model.WarningThreshold</p>
+</div>
+
+<div class="form-group">
+    <label>Critical Threshold</label>
+    <p class="form-control-static">@Model.CriticalThreshold</p>
+</div>
+
+<div class="form-group">
+    <label>Is Active</label>
+    <p class="form-control-static">@(@Model.IsActive ? "Yes" : "No")</p>
+</div>
+
+<div class="form-group">
+    <label>Description</label>
+    <p class="form-control-static">@Model.Description</p>
+</div>
+
+<div class="form-group">
+    <label>Alert Message</label>
+    <p class="form-control-static">@Model.AlertMessage</p>
+</div>
+
+<div class="form-group">
+    <a id="editLink" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        // Get the 'id' from the URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        // Build the edit link
+        if (id) {
+            document.getElementById('editLink').href = `/Unit/Edit?id=${id}`;
+            document.getElementById('unitId').innerText = id;
+        } else {
+            document.getElementById('editLink').style.display = 'none'; // Hide the link if no ID found
+        }
+    </script>
+}

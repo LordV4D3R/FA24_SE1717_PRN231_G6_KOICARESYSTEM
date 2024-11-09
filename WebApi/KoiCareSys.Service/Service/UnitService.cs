@@ -87,55 +87,6 @@ namespace KoiCareSys.Service.Service
             }
         }
 
-        //public async Task<IBusinessResult> Save(UnitDTO request)
-        //{
-        //    Unit unit = _mapper.Map<Unit>(request);
-
-        //    try
-        //    {
-        //        int result = -1;
-
-        //        var UnitTmp = await _unitOfWork.Unit.GetByIdAsync(unit.UnitId);
-        //        if (UnitTmp != null)
-        //        {
-        //            #region Business rule
-        //            #endregion Business rule
-        //            UnitTmp = _mapper.Map<Unit>(unit);
-        //            _unitOfWork.Unit.Update(UnitTmp);
-        //            result = await _unitOfWork.SaveChangesWithTransactionAsync();
-        //            if (result > 0)
-        //            {
-        //                return new BusinessResult(Const.SUCCESS_UPDATE_CODE, Const.SUCCESS_UPDATE_MSG);
-        //            }
-        //            else
-        //            {
-        //                var unitDTO = _mapper.Map<UnitDTO>(unit);
-        //                return new BusinessResult(Const.FAIL_UPDATE_CODE, Const.FAIL_UPDATE_MSG, unit);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            #region Business rule
-        //            #endregion Business rule
-
-        //            result = await _unitOfWork.Unit.CreateAsync(unit);
-        //            if (result > 0)
-        //            {
-        //                return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
-        //            }
-        //            else
-        //            {
-        //                return new BusinessResult(Const.FAIL_CREATE_CODE, Const.FAIL_CREATE_MSG);
-        //            }
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new BusinessResult(Const.ERROR_EXCEPTION, ex.Message);
-        //    }
-        //}
-
         public async Task<IBusinessResult> DeleteById(Guid unitId)
         {
             #region Business rule

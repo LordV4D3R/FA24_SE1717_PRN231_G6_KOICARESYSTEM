@@ -1,0 +1,173 @@
+﻿@model List<UnitDto>
+
+@{
+    ViewData["Title"] = "Unit Page";
+}
+
+<h1 style="color: black;">
+    Unit Board
+</h1>
+
+<a href="/Unit/Create" class="btn btn-md btn-primary">Create</a>
+
+<form id="searchForm" style="margin-bottom: 20px;">
+    <input type="text" name="name" id="searchNameInput" placeholder="Search by Name"
+           value="" style="width: 300px; padding: 5px;" />
+    <input type="text" name="unitOfMeasure" id="searchMeasureInput" placeholder="Search by Unit of Measure"
+           value="" style="width: 300px; padding: 5px;" />
+    <input type="text" name="fullName" id="searchFullNameInput" placeholder="Search by Full Name"
+           value="" style="width: 300px; padding: 5px;" />
+    <button type="button" class="btn btn-md btn-secondary" id="searchButton">Search</button>
+</form>
+
+<table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Unit Id</th>
+            <th>Name</th>
+            <th>Unit Of Measure</th>
+            <th>Full Name</th>
+            <th>Information</th>
+            <th>Min Value</th>
+            <th>Max Value</th>
+            <th class="text-center" width="110">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="unitTableBody">
+        @foreach (var unit in Model)
+        {
+            <tr>
+                <td></td>
+                <td>@unit.UnitId</td>
+                <td>@unit.Name</td>
+                <td>@unit.UnitOfMeasure</td>
+                <td>@unit.FullName</td>
+                <td>@unit.Information</td>
+                <td>@unit.MinValue</td>
+                <td>@unit.MaxValue</td>
+                <td class="text-center">
+                    <a href="@Url.Action("Edit", "Unit")?id=@unit.UnitId" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="@Url.Action("Detail", "Unit")?id=@unit.UnitId" class="btn btn-sm btn-info">Details</a>
+                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete-btn" data-id="@unit.UnitId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let allUnits = [];
+
+            $('#unitTableBody tr').each(function () {
+                const unitData = {
+                    unitId: $(this).find('td').eq(1).text(),
+                    name: $(this).find('td').eq(2).text(),
+                    unitOfMeasure: $(this).find('td').eq(3).text(),
+                    fullName: $(this).find('td').eq(4).text(),
+                    information: $(this).find('td').eq(5).text(),
+                    minValue: $(this).find('td').eq(6).text(),
+                    maxValue: $(this).find('td').eq(7).text(),
+                };
+                allUnits.push(unitData);
+            });
+
+            function renderTable(units) {
+                $('#unitTableBody').empty();
+
+                $.each(units, function (index, unit) {
+                    const row = `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${unit.unitId}</td>
+                                    <td>${unit.name}</td>
+                                    <td>${unit.unitOfMeasure}</td>
+                                    <td>${unit.fullName}</td>
+                                    <td>${unit.information}</td>
+                                    <td>${unit.minValue}</td>
+                                    <td>${unit.maxValue}</td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Edit", "Unit")?id=${unit.unitId}" class="btn btn-sm btn-warning">Edit</a>
+                                        <a href="@Url.Action("Detail", "Unit")?id=${unit.unitId}" class="btn btn-sm btn-info">Details</a>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger delete-btn" data-id="${unit.unitId}">Delete</a>
+                                    </td>
+                                </tr>`;
+                    $('#unitTableBody').append(row);
+                });
+            }
+
+            $('#searchButton').on('click', function () {
+                const name = $('#searchNameInput').val().toLowerCase();
+                const unitOfMeasure = $('#searchMeasureInput').val().toLowerCase();
+                const fullName = $('#searchFullNameInput').val().toLowerCase();
+
+                let filteredUnits = allUnits;
+
+                if (name) {
+                    filteredUnits = filteredUnits.filter(unit => unit.name.toLowerCase().includes(name));
+                }
+
+                if (unitOfMeasure) {
+                    filteredUnits = filteredUnits.filter(unit => unit.unitOfMeasure.toLowerCase().includes(unitOfMeasure));
+                }
+
+                if (fullName) {
+                    filteredUnits = filteredUnits.filter(unit => unit.fullName.toLowerCase().includes(fullName));
+                }
+
+                renderTable(filteredUnits);
+            });
+
+            function renderTable(units) {
+                $('#unitTableBody').empty();
+
+                $.each(units, function (index, unit) {
+                    const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${unit.unitId}</td>
+                        <td>${unit.name}</td>
+                        <td>${unit.unitOfMeasure}</td>
+                        <td>${unit.fullName}</td>
+                        <td>${unit.information}</td>
+                        <td>${unit.minValue}</td>
+                        <td>${unit.maxValue}</td>
+                        <td class="text-center">
+                            <a href="@Url.Action("Edit", "Unit")?id=${unit.unitId}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="@Url.Action("Detail", "Unit")?id=${unit.unitId}" class="btn btn-sm btn-info">Details</a>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete-btn" data-id="${unit.unitId}">Delete</a>
+                        </td>
+                    </tr>`;
+                    $('#unitTableBody').append(row);
+                });
+            }
+
+            $(document).on('click', '.delete-btn', function () {
+                var unitId = $(this).data('id');
+                var $row = $(this).closest('tr');
+
+                if (confirm('Are you sure you want to delete this unit?')) {
+                    $.ajax({
+                        url: `https://localhost:7051/api/Unit/${unitId}`,
+                        type: 'DELETE',
+                        success: function (response) {
+                            if (response.success) {
+                                alert('Unit deleted successfully!');
+                                $row.remove();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert('An error occurred while deleting the unit.');
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+}

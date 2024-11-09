@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 builder.Services.AddScoped<IFeedingScheduleService, FeedingScheduleService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -53,6 +52,7 @@ builder.Services.AddCors(options =>
             //.AllowAnyOrigin()
             .WithOrigins("https://localhost:7022")
             .WithOrigins("https://localhost:7249")
+            .WithOrigins("https://localhost:7050")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());

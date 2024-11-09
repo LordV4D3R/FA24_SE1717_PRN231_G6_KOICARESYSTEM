@@ -23,6 +23,7 @@ builder.Services.AddHttpClient<ApiService>("MyAPI", client =>
 builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddScoped<IPondService, PondService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
 builder.Services.AddScoped<UnitOfWork>();
 var app = builder.Build();
 

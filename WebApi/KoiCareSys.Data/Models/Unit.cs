@@ -32,6 +32,24 @@ public partial class Unit
     [Column("max_value")]
     public decimal? MaxValue { get; set; }
 
+    [Column("ideal_value")]
+    public decimal? IdealValue { get; set; }
+
+    [Column("warning_threshold")]
+    public decimal? WarningThreshold { get; set; }
+
+    [Column("critical_threshold")]
+    public decimal? CriticalThreshold { get; set; }
+
+    [Column("is_active")]
+    public bool IsActive { get; set; }
+
+    [Column("description")]
+    public string Description { get; set; }
+
+    [Column("alert_message")]
+    public string AlertMessage { get; set; }
+
     [InverseProperty("Unit")]
     public virtual ICollection<MeasureData> MeasureData { get; set; } = new List<MeasureData>();
 }

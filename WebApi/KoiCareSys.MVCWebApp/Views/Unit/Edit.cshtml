@@ -1,0 +1,131 @@
+﻿@model UnitDto
+@{
+    ViewData["Title"] = "Update Unit";
+}
+
+<h2>Update Unit</h2>
+
+<form id="update-unit-form">
+    <input type="hidden" id="Id" value="@Model.UnitId" />
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" value="@Model.Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UnitOfMeasure" class="control-label"></label>
+        <input asp-for="UnitOfMeasure" class="form-control" value="@Model.UnitOfMeasure" />
+        <span asp-validation-for="UnitOfMeasure" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FullName" class="control-label"></label>
+        <input asp-for="FullName" class="form-control" value="@Model.FullName" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Information" class="control-label"></label>
+        <input asp-for="Information" class="form-control" value="@Model.Information" />
+        <span asp-validation-for="Information" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MinValue" class="control-label"></label>
+        <input asp-for="MinValue" class="form-control" value="@Model.MinValue" />
+        <span asp-validation-for="MinValue" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MaxValue" class="control-label"></label>
+        <input asp-for="MaxValue" class="form-control" value="@Model.MaxValue" />
+        <span asp-validation-for="MaxValue" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IdealValue" class="control-label"></label>
+        <input asp-for="IdealValue" class="form-control" value="@Model.IdealValue" />
+        <span asp-validation-for="IdealValue" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="WarningThreshold" class="control-label"></label>
+        <input asp-for="WarningThreshold" class="form-control" value="@Model.WarningThreshold" />
+        <span asp-validation-for="WarningThreshold" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CriticalThreshold" class="control-label"></label>
+        <input asp-for="CriticalThreshold" class="form-control" value="@Model.CriticalThreshold" />
+        <span asp-validation-for="CriticalThreshold" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label"></label>
+        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" value="@Model.Description" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AlertMessage" class="control-label"></label>
+        <input asp-for="AlertMessage" class="form-control" value="@Model.AlertMessage" />
+        <span asp-validation-for="AlertMessage" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<div id="message"></div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#update-unit-form").submit(function(event) {
+                event.preventDefault();
+
+                var unit = {
+                    unitId: new URLSearchParams(window.location.search).get('id'),
+                    name: $("#update-unit-form input[name='Name']").val(),
+                    unitOfMeasure: $("#update-unit-form input[name='UnitOfMeasure']").val(),
+                    fullName: $("#update-unit-form input[name='FullName']").val(),
+                    information: $("#update-unit-form input[name='Information']").val(),
+                    minValue: parseFloat($("#update-unit-form input[name='MinValue']").val()),
+                    maxValue: parseFloat($("#update-unit-form input[name='MaxValue']").val()),
+                    idealValue: parseFloat($("#update-unit-form input[name='IdealValue']").val()),
+                    warningThreshold: parseFloat($("#update-unit-form input[name='WarningThreshold']").val()),
+                    criticalThreshold: parseFloat($("#update-unit-form input[name='CriticalThreshold']").val()),
+                    isActive: $("#update-unit-form input[name='IsActive']").is(":checked"),
+                    description: $("#update-unit-form input[name='Description']").val(),
+                    alertMessage: $("#update-unit-form input[name='AlertMessage']").val()
+                };
+
+                $.ajax({
+                    type: "PUT",
+                    url: '@Url.Action("Update", "Unit")',
+                    contentType: "application/json",
+                    data: JSON.stringify(unit),
+                    success: function(response) {
+                        $("#message").html('<div class="alert alert-success">Unit updated successfully!</div>');
+                        setTimeout(() => {
+                            window.location.href = 'https://localhost:7050/Unit';
+                        }, 3000)
+                    },
+                    error: function(xhr, status, error) {
+                        var errorMessage = xhr.status + ': ' + xhr.statusText;
+                        $("#message").html('<div class="alert alert-danger">Error - ' + errorMessage + '</div>');
+                    }
+                });
+            });
+        });
+    </script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
