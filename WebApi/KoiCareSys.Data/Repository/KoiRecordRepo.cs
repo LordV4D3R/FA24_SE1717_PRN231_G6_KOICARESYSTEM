@@ -1,6 +1,4 @@
 ﻿using KoiCareSys.Data.Base;
-using KoiCareSys.Data.DAO;
-using KoiCareSys.Data.DTO;
 using KoiCareSys.Data.Models;
 using KoiCareSys.Data.Repository.Interface;
 

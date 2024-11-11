@@ -32,11 +32,11 @@ namespace KoiCareSys.Service.Service
                     Physique = request.Physique,
                     Length = request.Length,
                     Weight = request.Weight,
-                    Color = request.Color,
-                    Description = request.Description,
-                    HealthIssue = request.HealthIssue,
-                    Price = request.Price,
-                    RecordName = request.RecordName,
+                    //Color = request.Color,
+                    //Description = request.Description,
+                    //HealthIssue = request.HealthIssue,
+                    //Price = request.Price,
+                    //RecordName = request.RecordName,
                     RecordAt = request.RecordAt,
                     DevelopmentStageId = request.DevelopmentStageId
                 };
@@ -165,11 +165,11 @@ namespace KoiCareSys.Service.Service
                     Length = request.Length,
                     Weight = request.Weight,
                     RecordAt = request.RecordAt,
-                    Color = request.Color,
-                    Description = request.Description,
-                    HealthIssue = request.HealthIssue,
-                    Price = request.Price,
-                    RecordName = request.RecordName,
+                    //Color = request.Color,
+                    //Description = request.Description,
+                    //HealthIssue = request.HealthIssue,
+                    //Price = request.Price,
+                    //RecordName = request.RecordName,
                     DevelopmentStageId = request.DevelopmentStageId
                 };
 

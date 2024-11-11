@@ -47,7 +47,7 @@ namespace KoiCareSys.Service.Service
                     FoodAmount = request.FoodAmount,
                     FoodType = request.FoodType,
                     Note = request.Note,
-                    PondId = request.PondId,
+                    //PondId = request.PondId,
                 };
                 if (await _unitOfWork.FeedingSchedule.CreateAsync(create) > 0)
                     return new BusinessResult(Const.SUCCESS_CREATE_CODE, "Create feeding schedule success", create);
@@ -91,17 +91,17 @@ namespace KoiCareSys.Service.Service
                 if (pond == null)
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, "Pond not found");
 
-                var koiFishList = pond.Koi; // Giả định danh sách cá Koi có trong hồ
+                //var koiFishList = pond.Koi; // Giả định danh sách cá Koi có trong hồ
 
                 decimal totalFoodAmount = 0;
 
 
 
                 // Tính tổng lượng thức ăn cho tất cả cá trong hồ
-                foreach (var koi in koiFishList)
-                {
-                    totalFoodAmount += GetFoodAmountByLength(koi.Length);
-                }
+                //foreach (var koi in koiFishList)
+                //{
+                //    totalFoodAmount += GetFoodAmountByLength(koi.Length);
+                //}
 
                 return new BusinessResult(Const.SUCCESS_BUSSINESS_CODE, "Calculation success", totalFoodAmount);
             }
@@ -123,7 +123,7 @@ namespace KoiCareSys.Service.Service
                     feedingSchedule.FoodAmount = feedingScheduleDTO.FoodAmount;
                     feedingSchedule.FoodType = feedingScheduleDTO.FoodType;
                     feedingSchedule.Note = feedingScheduleDTO.Note;
-                    feedingSchedule.PondId = feedingScheduleDTO.PondId;
+                    //feedingSchedule.PondId = feedingScheduleDTO.PondId;
                     if (await _unitOfWork.FeedingSchedule.UpdateAsync(feedingSchedule) > 0)
                         return new BusinessResult(Const.SUCCESS_UPDATE_CODE, "Update Feeding Schedule success", feedingSchedule);
                     else
