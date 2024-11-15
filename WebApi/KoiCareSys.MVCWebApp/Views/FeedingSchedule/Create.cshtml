@@ -1,0 +1,70 @@
+﻿@model KoiCareSys.MVCWebApp.Models.FeedingScheduleDTO
+
+<h2>Create FeedingSchedule</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Foodcaculate" class="control-label"></label>
+        <input asp-for="Foodcaculate" class="form-control" />
+        <span asp-validation-for="Foodcaculate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FeedAt" class="control-label"></label>
+        <input asp-for="FeedAt" class="form-control" step="0.01" />
+        <span asp-validation-for="FeedAt" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FoodAmount" class="control-label"></label>
+        <input asp-for="FoodAmount" class="form-control" step="0.01" />
+        <span asp-validation-for="FoodAmount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FeedBy" class="control-label"></label>
+        <input asp-for="FeedBy" class="form-control" />
+        <span asp-validation-for="FeedBy" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Temperature" class="control-label"></label>
+        <input asp-for="Temperature" class="form-control" />
+        <span asp-validation-for="Temperature" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FoodType" class="control-label"></label>
+        <input asp-for="FoodType" class="form-control" step="0.01" />
+        <span asp-validation-for="FoodType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Note" class="control-label"></label>
+        <textarea asp-for="Note" class="form-control"></textarea>
+        <span asp-validation-for="Note" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" name="IsQualified" value="false" />
+
+    <div class="form-group">
+        <label asp-for="PondId" class="control-label">Pond</label>
+        <select asp-for="PondId" class="form-control" asp-items="ViewBag.PondId"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

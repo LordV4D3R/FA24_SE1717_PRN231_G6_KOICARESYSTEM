@@ -62,7 +62,7 @@ namespace KoiCareSys.WebAPI.Controllers
         // PUT: api/FeedingSchedules/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFeedingSchedule(Guid id, FeedingScheduleDTO feedingSchedule)
+        public async Task<IActionResult> PutFeedingSchedule(Guid id,[FromBody] FeedingScheduleDTO feedingSchedule)
         {
             try
             {
@@ -94,8 +94,11 @@ namespace KoiCareSys.WebAPI.Controllers
             {
                 var newSchedule = new FeedingScheduleDTO
                 {
+                    Foodcaculate = feedingSchedule.Foodcaculate,
                     FeedAt = feedingSchedule.FeedAt,
                     FoodAmount = feedingSchedule.FoodAmount,
+                    FeedBy = feedingSchedule.FeedBy,
+                    Temperature = feedingSchedule.Temperature,
                     FoodType = feedingSchedule.FoodType,
                     Note = feedingSchedule.Note,
                     PondId = feedingSchedule.PondId

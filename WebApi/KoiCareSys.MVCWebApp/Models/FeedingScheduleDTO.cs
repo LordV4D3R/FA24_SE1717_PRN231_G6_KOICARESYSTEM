@@ -1,4 +1,4 @@
-﻿namespace KoiCareSys.Data.DTO
+﻿namespace KoiCareSys.MVCWebApp.Models
 {
     public class FeedingScheduleDTO
     {
